@@ -17,28 +17,15 @@
 //
 
 using Jaller.Standard.Configuration;
+using Jaller.Standard.Logging;
 
-namespace Jaller.Core.Configuration;
+namespace Jaller.Standard;
 
-public sealed record class JallerDatabaseConfig : IJallerDatabaseConfig
+public interface IJallerCore
 {
-    // ---------------- Constructor ----------------
-
-    public JallerDatabaseConfig()
-    {
-        this.SqliteDatabaseLocation = new FileInfo(
-            Path.Combine(
-                JallerConfig.DefaultPersistenceDirectory.FullName,
-                "jaller.db"
-            )
-        );
-
-        this.SqlitePool = true;
-    }
-
     // ---------------- Properties ----------------
 
-    public FileInfo SqliteDatabaseLocation { get; set; }
+    IJallerConfig Config { get; }
 
-    public bool SqlitePool { get; }
+    IJallerLogger Log { get; }
 }

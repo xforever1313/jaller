@@ -13,6 +13,7 @@
 
   <ItemGroup>
   	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
   	<PackageReference Include="Serilog" />
   </ItemGroup>
 

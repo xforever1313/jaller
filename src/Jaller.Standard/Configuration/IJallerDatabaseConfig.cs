@@ -27,4 +27,19 @@ public interface IJallerDatabaseConfig
     /// inside of a "Jaller" folder.
     /// </summary>
     FileInfo SqliteDatabaseLocation { get; }
+
+    /// <summary>
+    /// Whether or not to enabling pooling for sqlite.  Defaulted
+    /// to true.
+    /// </summary>
+    /// <remarks>
+    /// From here: https://colinchsql.github.io/2023-10-13/10-17-25-480023-sqlite-database-connection-pooling-strategies/
+    /// Connection pooling is a technique that involves creating 
+    /// and maintaining a pool of database connections,
+    /// which are then reused by multiple threads or processes.
+    /// Instead of establishing a new connection each time,
+    /// a thread can request a connection from the pool and 
+    /// return it when it is finished.
+    /// </remarks>
+    bool SqlitePool { get; }
 }

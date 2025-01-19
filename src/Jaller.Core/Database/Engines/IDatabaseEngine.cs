@@ -16,29 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
+using Microsoft.EntityFrameworkCore;
 
-namespace Jaller.Core.Configuration;
+namespace Jaller.Core.Database.Engines;
 
-public sealed record class JallerDatabaseConfig : IJallerDatabaseConfig
+internal interface IDatabaseEngine
 {
-    // ---------------- Constructor ----------------
+    // ---------------- Methods ----------------
 
-    public JallerDatabaseConfig()
-    {
-        this.SqliteDatabaseLocation = new FileInfo(
-            Path.Combine(
-                JallerConfig.DefaultPersistenceDirectory.FullName,
-                "jaller.db"
-            )
-        );
+    void OnConfiguring(DbContextOptionsBuilder optionsBuilder);
 
-        this.SqlitePool = true;
-    }
-
-    // ---------------- Properties ----------------
-
-    public FileInfo SqliteDatabaseLocation { get; set; }
-
-    public bool SqlitePool { get; }
+    void OnModelCreating(ModelBuilder modelBuilder);
 }
