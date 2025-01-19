@@ -3,12 +3,35 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seth.Analyzer", "..\sethcs\Seth.Analyzer\Seth.Analyzer.csproj", "{1F1B6734-72FF-487C-9370-57443E49FF27}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\sethcs\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSethCS", "..\sethcs\LibSethCS\LibSethCS.csproj", "{232C0B8B-2F17-4058-AECD-0A49507870D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1F1B6734-72FF-487C-9370-57443E49FF27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F1B6734-72FF-487C-9370-57443E49FF27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F1B6734-72FF-487C-9370-57443E49FF27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F1B6734-72FF-487C-9370-57443E49FF27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{232C0B8B-2F17-4058-AECD-0A49507870D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{232C0B8B-2F17-4058-AECD-0A49507870D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{232C0B8B-2F17-4058-AECD-0A49507870D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{232C0B8B-2F17-4058-AECD-0A49507870D1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D784E071-19A9-48CE-9240-1C09415A93F5}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\sethcs\SethCS\SethCS.projitems*{232c0b8b-2f17-4058-aecd-0a49507870d1}*SharedItemsImports = 5
+		..\sethcs\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
