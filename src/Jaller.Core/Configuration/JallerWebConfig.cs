@@ -18,12 +18,11 @@
 
 using Jaller.Standard.Configuration;
 
-namespace Jaller.Core.Configuration
-{
-    public sealed record class JallerWebConfig : IJallerWebConfig
-    {
-        public IReadOnlyCollection<string>? AllowedAdminUrlPrefixes { get; set; } = null;
+namespace Jaller.Core.Configuration;
 
-        public bool EnableMetrics { get; set; } = false;
-    }
+public sealed record class JallerWebConfig : IJallerWebConfig
+{
+    public IReadOnlyCollection<string>? AllowedAdminUrlPrefixes { get; set; } = null;
+
+    public bool EnableMetrics { get; set; } = false;
 }

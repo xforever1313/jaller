@@ -16,18 +16,17 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Standard.Configuration
+namespace Jaller.Standard.Configuration;
+
+public interface IJallerConfig
 {
-    public interface IJallerConfig
-    {
-        IJallerDatabaseConfig Database { get; }
+    IJallerDatabaseConfig Database { get; }
 
-        IJallerIpfsGatewayConfig Ipfs { get; }
+    IJallerIpfsGatewayConfig Ipfs { get; }
 
-        IJallerLoggingConfig Logging { get; }
+    IJallerLoggingConfig Logging { get; }
 
-        IJallerUserConfig Users { get; }
+    IJallerUserConfig Users { get; }
 
-        IJallerWebConfig Web { get; }
-    }
+    IJallerWebConfig Web { get; }
 }

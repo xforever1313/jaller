@@ -18,16 +18,15 @@
 
 using Jaller.Standard.Configuration;
 
-namespace Jaller.Core.Configuration
-{
-    public sealed record class JallerUserConfig : IJallerUserConfig
-    {
-        public bool AllowAdminUser { get; set; } = false;
+namespace Jaller.Core.Configuration;
 
-        /// <remarks>
-        /// Empty string is not allowed, this will fail validation intentionally.
-        /// We want the user to set *something*.
-        /// </remarks>
-        public string AdminPassword { get; set; } = "";
-    }
+public sealed record class JallerUserConfig : IJallerUserConfig
+{
+    public bool AllowAdminUser { get; set; } = false;
+
+    /// <remarks>
+    /// Empty string is not allowed, this will fail validation intentionally.
+    /// We want the user to set *something*.
+    /// </remarks>
+    public string AdminPassword { get; set; } = "";
 }

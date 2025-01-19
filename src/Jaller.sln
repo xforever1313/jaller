@@ -9,9 +9,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\sethcs\SethCS\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSethCS", "..\sethcs\LibSethCS\LibSethCS.csproj", "{232C0B8B-2F17-4058-AECD-0A49507870D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jaller.Core", "Jaller.Core\Jaller.Core.csproj", "{E86AD514-025B-4602-A1CB-85388437C4FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jaller.Core", "Jaller.Core\Jaller.Core.csproj", "{E86AD514-025B-4602-A1CB-85388437C4FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jaller.Standard", "Jaller.Standard\Jaller.Standard.csproj", "{99276BCB-6FCC-4C2C-BEED-01E8D56A33DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jaller.Standard", "Jaller.Standard\Jaller.Standard.csproj", "{99276BCB-6FCC-4C2C-BEED-01E8D56A33DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jaller.Server", "Jaller.Server\Jaller.Server.csproj", "{FF72E67E-7E4D-43C5-A762-5A0168499040}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{99276BCB-6FCC-4C2C-BEED-01E8D56A33DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99276BCB-6FCC-4C2C-BEED-01E8D56A33DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99276BCB-6FCC-4C2C-BEED-01E8D56A33DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF72E67E-7E4D-43C5-A762-5A0168499040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF72E67E-7E4D-43C5-A762-5A0168499040}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF72E67E-7E4D-43C5-A762-5A0168499040}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF72E67E-7E4D-43C5-A762-5A0168499040}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

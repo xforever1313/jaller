@@ -18,18 +18,17 @@
 
 using SethCS.Exceptions;
 
-namespace Jaller.Core.Exceptions
-{
-    /// <summary>
-    /// Exception that is thrown when a user has an invalid configuration.
-    /// </summary>
-    public class InvalidConfigurationException : ListedValidationException
-    {
-        // ---------------- Constructor ----------------
+namespace Jaller.Core.Exceptions;
 
-        public InvalidConfigurationException( string context, IEnumerable<string> errors ) :
-            base( context, errors )
-        {
-        }
+/// <summary>
+/// Exception that is thrown when a user has an invalid configuration.
+/// </summary>
+public class InvalidConfigurationException : ListedValidationException
+{
+    // ---------------- Constructor ----------------
+
+    public InvalidConfigurationException( string context, IEnumerable<string> errors ) :
+        base( context, errors )
+    {
     }
 }

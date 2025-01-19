@@ -16,27 +16,26 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Standard.Configuration
-{
-    public interface IJallerWebConfig
-    {
-        /// <summary>
-        /// A list of allowed admin URLs.  If someone tries to login
-        /// to the admin interface and it is not prefixed with one of these URLs,
-        /// they will not be allowed in.
-        /// 
-        /// The use case is if Jaller is running on the public internet, but it is desired
-        /// to make the admin interface appear only on a local network.
-        /// 
-        /// Set to null to have no restrictions.  An empty array means the Admin
-        /// interface will full-stop not work.
-        /// </summary>
-        IReadOnlyCollection<string>? AllowedAdminUrlPrefixes { get; }
+namespace Jaller.Standard.Configuration;
 
-        /// <summary>
-        /// If set to true, this will have metrics appear on /Metrics.
-        /// If set to false, no metrics will appear at /Metrics.
-        /// </summary>
-        bool EnableMetrics { get; }
-    }
+public interface IJallerWebConfig
+{
+    /// <summary>
+    /// A list of allowed admin URLs.  If someone tries to login
+    /// to the admin interface and it is not prefixed with one of these URLs,
+    /// they will not be allowed in.
+    /// 
+    /// The use case is if Jaller is running on the public internet, but it is desired
+    /// to make the admin interface appear only on a local network.
+    /// 
+    /// Set to null to have no restrictions.  An empty array means the Admin
+    /// interface will full-stop not work.
+    /// </summary>
+    IReadOnlyCollection<string>? AllowedAdminUrlPrefixes { get; }
+
+    /// <summary>
+    /// If set to true, this will have metrics appear on /Metrics.
+    /// If set to false, no metrics will appear at /Metrics.
+    /// </summary>
+    bool EnableMetrics { get; }
 }

@@ -18,48 +18,56 @@
 
 using Jaller.Standard.Configuration;
 
-namespace Jaller.Core.Configuration
+namespace Jaller.Core.Configuration;
+
+public sealed record class JallerConfig : IJallerConfig
 {
-    public sealed record class JallerConfig : IJallerConfig
+    // ---------------- Constructor ----------------
+
+    public JallerConfig()
     {
-        // ---------------- Constructor ----------------
+        this.Database = new JallerDatabaseConfig();
+        this.Ipfs = new JallerIpfsGatewayConfig();
+        this.Logging = new JallerLoggingConfig();
+        this.Users = new JallerUserConfig();
+        this.Web = new JallerWebConfig();
+    }
 
-        public JallerConfig()
-        {
-            this.Database = new JallerDatabaseConfig();
-            this.Ipfs = new JallerIpfsGatewayConfig();
-            this.Logging = new JallerLoggingConfig();
-            this.Users = new JallerUserConfig();
-            this.Web = new JallerWebConfig();
-        }
+    static JallerConfig()
+    {
+        DefaultPersistenceDirectory = new DirectoryInfo(
+            Path.Combine(
+                Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
+                nameof( Jaller )
+            )
+        );
+    }
 
-        static JallerConfig()
-        {
-            DefaultPersistenceDirectory = new DirectoryInfo(
-                Path.Combine(
-                    Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
-                    nameof( Jaller )
-                )
-            );
-        }
+    // ---------------- Properties ----------------
 
-        // ---------------- Properties ----------------
+    public static DirectoryInfo DefaultPersistenceDirectory { get; }
 
-        public static DirectoryInfo DefaultPersistenceDirectory { get; }
+    public JallerDatabaseConfig Database { get; }
+    IJallerDatabaseConfig IJallerConfig.Database => this.Database;
 
-        public JallerDatabaseConfig Database { get; }
-        IJallerDatabaseConfig IJallerConfig.Database => this.Database;
+    public JallerLoggingConfig Logging { get; }
+    IJallerLoggingConfig IJallerConfig.Logging => this.Logging;
 
-        public JallerLoggingConfig Logging { get; }
-        IJallerLoggingConfig IJallerConfig.Logging => this.Logging;
+    public JallerIpfsGatewayConfig Ipfs { get; }
+    IJallerIpfsGatewayConfig IJallerConfig.Ipfs => this.Ipfs;
 
-        public JallerIpfsGatewayConfig Ipfs { get; }
-        IJallerIpfsGatewayConfig IJallerConfig.Ipfs => this.Ipfs;
+    public JallerUserConfig Users { get; }
+    IJallerUserConfig IJallerConfig.Users => this.Users;
 
-        public JallerUserConfig Users { get; }
-        IJallerUserConfig IJallerConfig.Users => this.Users;
+    public JallerWebConfig Web { get; }
+    IJallerWebConfig IJallerConfig.Web => this.Web;
+}
 
-        public JallerWebConfig Web { get; }
-        IJallerWebConfig IJallerConfig.Web => this.Web;
+public static class IJallerConfigExtensions
+{
+    public static List<string> TryValidate( this IJallerConfig config )
+    {
+        // TODO: Validate.
+        return new List<string>();
     }
 }

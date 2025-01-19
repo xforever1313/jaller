@@ -16,26 +16,25 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Standard.Configuration
-{
-    public interface IJallerIpfsGatewayConfig
-    {
-        /// <summary>
-        /// The URL to the IPFS gateway server that runs RPC API, including the port.
-        /// This is NOT the URL to the HTTP Gateway, (usually port 8080), but the RPC API
-        /// (usually port 5001).
-        /// </summary>
-        Uri GatwayUrl { get; }
+namespace Jaller.Standard.Configuration;
 
-        /// <summary>
-        /// How much to multiply the default timeout by
-        /// when downloading something from the IPFS gateway in the event
-        /// the network between the two is slow.
-        /// 
-        /// The timeout is calculated by ( <see cref="TimeoutMultiplier"/> * (fileSize / 100Mbps) ) + 100 seconds.
-        /// 
-        /// If this is set to 0, this makes an infinite timeout.
-        /// </summary>
-        uint TimeoutMultiplier { get; }
-    }
+public interface IJallerIpfsGatewayConfig
+{
+    /// <summary>
+    /// The URL to the IPFS gateway server that runs RPC API, including the port.
+    /// This is NOT the URL to the HTTP Gateway, (usually port 8080), but the RPC API
+    /// (usually port 5001).
+    /// </summary>
+    Uri GatwayUrl { get; }
+
+    /// <summary>
+    /// How much to multiply the default timeout by
+    /// when downloading something from the IPFS gateway in the event
+    /// the network between the two is slow.
+    /// 
+    /// The timeout is calculated by ( <see cref="TimeoutMultiplier"/> * (fileSize / 100Mbps) ) + 100 seconds.
+    /// 
+    /// If this is set to 0, this makes an infinite timeout.
+    /// </summary>
+    uint TimeoutMultiplier { get; }
 }

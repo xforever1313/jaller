@@ -16,16 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Standard.Configuration
+namespace Jaller.Standard.Configuration;
+
+public interface IJallerDatabaseConfig
 {
-    public interface IJallerDatabaseConfig
-    {
-        /// <summary>
-        /// The location of where to put the SQLite database.
-        /// 
-        /// This is defaulted to the user's application data folder
-        /// inside of a "Jaller" folder.
-        /// </summary>
-        FileInfo SqliteDatabaseLocation { get; }
-    }
+    /// <summary>
+    /// The location of where to put the SQLite database.
+    /// 
+    /// This is defaulted to the user's application data folder
+    /// inside of a "Jaller" folder.
+    /// </summary>
+    FileInfo SqliteDatabaseLocation { get; }
 }

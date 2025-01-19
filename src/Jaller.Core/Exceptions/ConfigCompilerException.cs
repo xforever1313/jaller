@@ -16,17 +16,16 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Core.Exceptions
+namespace Jaller.Core.Exceptions;
+
+/// <summary>
+/// Exception that is thrown when there's an exception when compiling
+/// that is probably not the user's fault.
+/// </summary>
+public class ConfigCompilerException : Exception
 {
-    /// <summary>
-    /// Exception that is thrown when there's an exception when compiling
-    /// that is probably not the user's fault.
-    /// </summary>
-    public class ConfigCompilerException : Exception
+    public ConfigCompilerException( string message ) :
+        base( message )
     {
-        public ConfigCompilerException( string message ) :
-            base( message )
-        {
-        }
     }
 }

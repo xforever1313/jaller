@@ -16,25 +16,21 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
+using Jaller.Standard.Logging;
+using Serilog.Events;
 
-namespace Jaller.Core.Configuration;
+namespace Jaller.Server.Logging;
 
-public sealed record class JallerDatabaseConfig : IJallerDatabaseConfig
+public static class LoggingEnumsExtensions
 {
-    // ---------------- Constructor ----------------
-
-    public JallerDatabaseConfig()
+    public static LogEventLevel ToSerilogLevel( this JallerLogLevel level ) => level switch
     {
-        this.SqliteDatabaseLocation = new FileInfo(
-            Path.Combine(
-                JallerConfig.DefaultPersistenceDirectory.FullName,
-                "jaller.db"
-            )
-        );
-    }
-
-    // ---------------- Properties ----------------
-
-    public FileInfo SqliteDatabaseLocation { get; set; } 
+        JallerLogLevel.Verbose => LogEventLevel.Verbose,
+        JallerLogLevel.Debug => LogEventLevel.Debug,
+        JallerLogLevel.Information => LogEventLevel.Information,
+        JallerLogLevel.Warning => LogEventLevel.Warning,
+        JallerLogLevel.Error => LogEventLevel.Error,
+        JallerLogLevel.Fatal => LogEventLevel.Fatal,
+        _ => throw new ArgumentException( $"Unknown log level: {level}", nameof( level ) )
+    };
 }
