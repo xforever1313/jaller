@@ -16,14 +16,20 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
+using SethCS.Exceptions;
 
-namespace Jaller.Core.Configuration
+namespace Jaller.Core.Exceptions
 {
-    public sealed record class JallerIpfsGatewayConfig : IJallerIpfsGatewayConfig
+    /// <summary>
+    /// Exception that is thrown when a user has an invalid configuration.
+    /// </summary>
+    public class InvalidConfigurationException : ListedValidationException
     {
-        public Uri GatwayUrl { get; set; } = new Uri( "http://localhost:5001" );
+        // ---------------- Constructor ----------------
 
-        public uint TimeoutMultiplier { get; set; } = 1;
+        public InvalidConfigurationException( string context, IEnumerable<string> errors ) :
+            base( context, errors )
+        {
+        }
     }
 }

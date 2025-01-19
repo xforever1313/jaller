@@ -20,14 +20,14 @@ using Jaller.Standard.Configuration;
 
 namespace Jaller.Core.Configuration
 {
-    public sealed class JallerUserConfig : IJallerUserConfig
+    public sealed record class JallerUserConfig : IJallerUserConfig
     {
-        public bool AllowAdminUser { get; } = false;
+        public bool AllowAdminUser { get; set; } = false;
 
         /// <remarks>
         /// Empty string is not allowed, this will fail validation intentionally.
         /// We want the user to set *something*.
         /// </remarks>
-        public string AdminPassword { get; } = "";
+        public string AdminPassword { get; set; } = "";
     }
 }

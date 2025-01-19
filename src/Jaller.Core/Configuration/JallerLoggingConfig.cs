@@ -21,18 +21,18 @@ using Jaller.Standard.Logging;
 
 namespace Jaller.Core.Configuration
 {
-    public sealed class JallerLoggingConfig : IJallerLoggingConfig
+    public sealed record class JallerLoggingConfig : IJallerLoggingConfig
     {
-        public JallerLogLevel ConsoleLogLevel { get; } = JallerLogLevel.Information;
+        public JallerLogLevel ConsoleLogLevel { get; set; } = JallerLogLevel.Information;
 
-        public FileInfo? LogFile { get; } = null;
+        public FileInfo? LogFile { get; set; } = null;
 
-        public JallerLogLevel LogFileLevel { get; } = JallerLogLevel.Information;
+        public JallerLogLevel LogFileLevel { get; set; } = JallerLogLevel.Information;
 
-        public string? TelegramBotToken { get; } = null;
+        public string? TelegramBotToken { get; set; } = null;
 
-        public string? TelegramChatId { get; } = null;
+        public string? TelegramChatId { get; set; } = null;
 
-        public JallerLogLevel TelegramLogLevel { get; } = JallerLogLevel.Warning;
+        public JallerLogLevel TelegramLogLevel { get; set; } = JallerLogLevel.Warning;
     }
 }

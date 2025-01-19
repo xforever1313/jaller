@@ -16,14 +16,17 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-
-namespace Jaller.Core.Configuration
+namespace Jaller.Core.Exceptions
 {
-    public sealed record class JallerIpfsGatewayConfig : IJallerIpfsGatewayConfig
+    /// <summary>
+    /// Exception that is thrown when there's an exception when compiling
+    /// that is probably not the user's fault.
+    /// </summary>
+    public class ConfigCompilerException : Exception
     {
-        public Uri GatwayUrl { get; set; } = new Uri( "http://localhost:5001" );
-
-        public uint TimeoutMultiplier { get; set; } = 1;
+        public ConfigCompilerException( string message ) :
+            base( message )
+        {
+        }
     }
 }

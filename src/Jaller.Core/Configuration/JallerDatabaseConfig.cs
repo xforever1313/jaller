@@ -20,7 +20,7 @@ using Jaller.Standard.Configuration;
 
 namespace Jaller.Core.Configuration
 {
-    public sealed class JallerDatabaseConfig : IJallerDatabaseConfig
+    public sealed record class JallerDatabaseConfig : IJallerDatabaseConfig
     {
         // ---------------- Constructor ----------------
 

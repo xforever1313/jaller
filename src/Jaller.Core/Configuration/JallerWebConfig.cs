@@ -20,10 +20,10 @@ using Jaller.Standard.Configuration;
 
 namespace Jaller.Core.Configuration
 {
-    public sealed class JallerWebConfig : IJallerWebConfig
+    public sealed record class JallerWebConfig : IJallerWebConfig
     {
-        public IReadOnlyCollection<string>? AllowedAdminUrlPrefixes { get; } = null;
+        public IReadOnlyCollection<string>? AllowedAdminUrlPrefixes { get; set; } = null;
 
-        public bool EnableMetrics { get; } = false;
+        public bool EnableMetrics { get; set; } = false;
     }
 }
