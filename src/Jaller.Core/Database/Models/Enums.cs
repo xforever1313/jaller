@@ -133,3 +133,53 @@ public enum FileDownloadable : byte
     /// </summary>
     Public = 255
 }
+
+/// <summary>
+/// The way a user is expected to login as.
+/// </summary>
+public enum UserAuthenticationMethod : byte
+{
+    Password = 0
+}
+
+/// <summary>
+/// The role of a particular user.
+/// </summary>
+public enum UserRole : byte
+{
+    /// <summary>
+    /// The user can only login and download files.
+    /// They can not modify metadata or upload any files.
+    /// </summary>
+    User = 0,
+
+    /// <summary>
+    /// The user can add, edit, or delete metadata,
+    /// but can not upload files.
+    /// </summary>
+    Editor = 10,
+
+    /// <summary>
+    /// The user can upload files and edit metadata.
+    /// They can not perform admin duties, however.
+    /// </summary>
+    Uploader = 20,
+
+    /// <summary>
+    /// The user can add, remove, or modify users, in addition
+    /// to all the responsibilies of lower roles.
+    /// </summary>
+    Moderator = 100,
+
+    /// <summary>
+    /// The user has full admin access to the application.
+    /// </summary>
+    Admin = 255,
+}
+
+public enum TwoFactorAuthMethod
+{
+    None = 0,
+
+    Totp = 1
+}

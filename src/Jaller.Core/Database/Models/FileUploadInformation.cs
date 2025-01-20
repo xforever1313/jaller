@@ -18,11 +18,14 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Jaller.Core.Database.Models;
 
 internal sealed record class FileUploadInformation
 {
+    // ---------------- Properties ----------------
+
     [Key]
     public int Id { get; set; }
 
@@ -32,10 +35,26 @@ internal sealed record class FileUploadInformation
     /// </summary>
     public DateTime? UploadDate { get; set; } = null;
 
-    // TODO: User that uploaded
+    public int UserId { get; set; }
+
+    /// <summary>
+    /// The user that uploaded the file, if any.
+    /// </summary>
+    [ForeignKey( nameof( UserId ) )]
+    public User? User { get; set; } = null;
 
     public int FileId { get; set; }
 
     [ForeignKey( nameof( FileId ) )]
     public File? File { get; set; } = null;
+
+    // ---------------- Methods ----------------
+
+    internal static void OnModelCreating( ModelBuilder modelBuilder )
+    {
+        modelBuilder.Entity<FileUploadInformation>()
+            .HasOne( file => file.User )
+            .WithMany( user => user.UploadedFiles )
+            .HasForeignKey( file => file.FileId );
+    }
 }
