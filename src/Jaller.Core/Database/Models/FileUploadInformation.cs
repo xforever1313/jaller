@@ -35,13 +35,33 @@ internal sealed record class FileUploadInformation
     /// </summary>
     public DateTime? UploadDate { get; set; } = null;
 
-    public int UserId { get; set; }
+    public int UploadUserId { get; set; }
 
     /// <summary>
     /// The user that uploaded the file, if any.
     /// </summary>
-    [ForeignKey( nameof( UserId ) )]
-    public User? User { get; set; } = null;
+    [ForeignKey( nameof( UploadUserId ) )]
+    public User? UploadUser { get; set; } = null;
+
+    /// <summary>
+    /// The date of the metadata creation.
+    /// </summary>
+    public DateTime? MetadataCreationDate { get; set; } = null;
+
+    public int MetadataCreationUserId { get; set; }
+
+    [ForeignKey( nameof( MetadataCreationUserId ) )]
+    public User? MetadataCreationUser { get; set; } = null;
+
+    /// <summary>
+    /// The date of the last time metadata was edited..
+    /// </summary>
+    public DateTime? MetadataLastModifiedDate { get; set; } = null;
+
+    public int MetadataLastModifiedUserId { get; set; }
+
+    [ForeignKey( nameof( MetadataLastModifiedUserId ) )]
+    public User? MetadataLastModifiedUser { get; set; } = null;
 
     public int FileId { get; set; }
 
@@ -53,8 +73,18 @@ internal sealed record class FileUploadInformation
     internal static void OnModelCreating( ModelBuilder modelBuilder )
     {
         modelBuilder.Entity<FileUploadInformation>()
-            .HasOne( file => file.User )
+            .HasOne( file => file.UploadUser )
             .WithMany( user => user.UploadedFiles )
-            .HasForeignKey( file => file.FileId );
+            .HasForeignKey( file => file.UploadUserId );
+
+        modelBuilder.Entity<FileUploadInformation>()
+            .HasOne( file => file.MetadataCreationUser )
+            .WithMany( user => user.UploadedFiles )
+            .HasForeignKey( file => file.MetadataCreationUserId );
+
+        modelBuilder.Entity<FileUploadInformation>()
+            .HasOne( file => file.MetadataLastModifiedUser )
+            .WithMany( user => user.MetadataLastModifiedFiles )
+            .HasForeignKey( file => file.MetadataLastModifiedUserId );
     }
 }

@@ -52,5 +52,15 @@ namespace Jaller.Core.Database.Models
         /// The files uploaded by this user, if any.
         /// </summary>
         public ICollection<FileUploadInformation>? UploadedFiles { get; set; } = null;
+
+        /// <summary>
+        /// The metadata created by this user, if any.
+        /// </summary>
+        public ICollection<FileUploadInformation>? MetadataCreatedFiles { get; set; } = null;
+
+        /// <summary>
+        /// The metadata last modified by this user, if any.
+        /// </summary>
+        public ICollection<FileUploadInformation>? MetadataLastModifiedFiles { get; set; } = null;
     }
 }
