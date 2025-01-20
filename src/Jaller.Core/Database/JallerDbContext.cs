@@ -73,6 +73,7 @@ internal sealed class JallerDbContext : DbContext
         this.databaseEngine.OnModelCreating( modelBuilder );
 
         Folder.OnModelCreating( modelBuilder );
+        ContentId.OnModelCreating( modelBuilder );
 
         base.OnModelCreating( modelBuilder );
     }

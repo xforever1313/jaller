@@ -76,7 +76,7 @@ public enum FolderDownloadable : byte
     Public = 255
 }
 
-public enum FileMetadata : byte
+public enum FileMetadataPrivacy : byte
 {
     /// <summary>
     /// File metadata is inherited from
