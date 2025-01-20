@@ -52,7 +52,19 @@ internal sealed class JallerDbContext : DbContext
 
     // ---------------- Properties ----------------
 
+    public DbSet<ContentId> Cids { get; set; }
+
+    public DbSet<Models.File> Files { get; set; }
+
+    public DbSet<FileDownloadInformation> FileDownloadInformation { get; set; }
+
+    public DbSet<FileUploadInformation> FileUploadInformation { get; set; }
+
     public DbSet<Folder> Folders { get; set; }
+
+    public DbSet<PasswordAuthentication> Passwords { get; set; }
+
+    public DbSet<User> Users { get; set; }
 
     // ---------------- Methods ----------------
 
@@ -74,6 +86,8 @@ internal sealed class JallerDbContext : DbContext
 
         Folder.OnModelCreating( modelBuilder );
         ContentId.OnModelCreating( modelBuilder );
+        Models.File.OnModelCreating( modelBuilder );
+        PasswordAuthentication.OnModelCreating( modelBuilder );
 
         base.OnModelCreating( modelBuilder );
     }

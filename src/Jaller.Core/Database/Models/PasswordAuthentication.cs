@@ -16,18 +16,16 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Jaller.Core.Database.Models
 {
     internal sealed record class PasswordAuthentication
     {
+        // ---------------- Properties ----------------
+
         [Key]
         public int Id { get; set; }
 
@@ -60,5 +58,15 @@ namespace Jaller.Core.Database.Models
 
         [ForeignKey( nameof( UserId ) )]
         public User? User { get; set; }
+
+        // ---------------- Methods ----------------
+
+        internal static void OnModelCreating( ModelBuilder modelBuilder )
+        {
+            modelBuilder.Entity<PasswordAuthentication>()
+                .HasOne( password => password.User )
+                .WithOne( user => user.PasswordAuthentication )
+                .HasForeignKey<PasswordAuthentication>( password => password.UserId );
+        }
     }
 }

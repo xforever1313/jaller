@@ -22,11 +22,19 @@ namespace Jaller.Core.Database.Models
 {
     internal sealed record class User
     {
+        // ---------------- Fields ----------------
+
+        internal const int MinimumUserNameSize = 3;
+
+        internal const int MaximumUserNameSize = 64;
+
+        // ---------------- Properties ----------------
+
         [Key]
         public int Id { get; set; }
 
         [Required]
-        [StringLength( 64 )]
+        [StringLength( MaximumUserNameSize, MinimumLength = 3 )]
         public string? UserName { get; set; } = "";
 
         /// <summary>
