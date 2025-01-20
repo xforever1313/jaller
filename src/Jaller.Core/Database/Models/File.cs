@@ -54,6 +54,13 @@ internal sealed record class File
     public ICollection<ContentId>? Cids { get; set; } = null;
 
     /// <summary>
+    /// Tags for this file, if any.
+    /// 
+    /// This is the navigation property.
+    /// </summary>
+    public ICollection<FileTag>? Tags { get; set; } = null;
+
+    /// <summary>
     /// The upload information of the file, if any.
     /// Null for none.
     /// </summary>
