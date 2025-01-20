@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+  	<PackageReference Include="Ipfs.Core" Version="0.55.0" />
   	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
   	<PackageReference Include="Serilog" />
