@@ -1,4 +1,4 @@
-//
+﻿//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
 // 
@@ -16,28 +16,28 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Core.Database.Models;
+namespace Jaller.Standard.FolderManagement;
 
-public enum FileMetadataPrivacy : byte
+public enum FolderMetadataPrivacy : byte
 {
     /// <summary>
-    /// File metadata is inherited from
+    /// Folder metadata is inherited from
     /// the parent folder.
     /// </summary>
     Inherited = 0,
-    
+
     /// <summary>
-    /// File metadata is only viewable to logged-in users.
+    /// Metadata is only viewable to logged-in users.
     /// </summary>
     Private = 100,
-    
+
     /// <summary>
     /// The metadata is only viewable in machine-readable
     /// format (e.g. XML or RSS), but will not appear
     /// on the human-facing front-end.
     /// </summary>
     MachinePublic = 200,
-    
+
     /// <summary>
     /// Metadata can be viewed by anyone, even if they
     /// are not logged in.  This does not mean
@@ -47,31 +47,32 @@ public enum FileMetadataPrivacy : byte
     Public = 255
 }
 
-public enum FileDownloadable : byte
+public enum FolderDownloadable : byte
 {
     /// <summary>
-    /// File downloadable flag is inherited from
+    /// Folder downloadable flag is inherited from
     /// the parent folder.
     /// </summary>
     Inherited = 0,
-    
+
     /// <summary>
-    /// File can only be downloaded
+    /// Files within the folder can only be downloaded
     /// by logged-in users.
     /// </summary>
     Private = 100,
-    
+
     /// <summary>
-    /// File can not be downloaded from the gateway
+    /// The files within the folder can not be downloaded from the gateway
     /// even if a user is logged in.
     /// Only metadata can be viewed.
     /// </summary>
     NoDownload = 200,
-    
+
     /// <summary>
-    /// The file can be downloaded by anyone, even if they
-    /// are not logged in.  Do *not* set a file to this
-    /// if you do not have permission to distribute the file.
+    /// The files within the folder can be downloaded by anyone, even if they
+    /// are not logged in.  Do *not* set a folder to this
+    /// if you do not have permission to distribute the files within the folder.
     /// </summary>
     Public = 255
 }
+

@@ -18,6 +18,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Jaller.Standard.FolderManagement;
 using Microsoft.EntityFrameworkCore;
 
 namespace Jaller.Core.Database.Models;
