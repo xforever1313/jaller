@@ -16,19 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
+namespace Jaller.Standard.UserManagement;
 
-namespace Jaller.Standard;
-
-public interface IJallerCore
+public interface IAuthenticationMethod
 {
-    // ---------------- Properties ----------------
-
-    IJallerConfig Config { get; }
-
-    IJallerLogger Log { get; }
-
-    IUserManager UserManager { get; }
 }

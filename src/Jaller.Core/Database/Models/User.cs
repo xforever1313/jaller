@@ -17,6 +17,7 @@
 //
 
 using System.ComponentModel.DataAnnotations;
+using Jaller.Standard.UserManagement;
 
 namespace Jaller.Core.Database.Models
 {
@@ -36,6 +37,8 @@ namespace Jaller.Core.Database.Models
         [Required]
         [StringLength( MaximumUserNameSize, MinimumLength = 3 )]
         public string? UserName { get; set; } = "";
+
+        public UserState UserState { get; set; } = UserState.Active;
 
         /// <summary>
         /// The method for the user to login as.

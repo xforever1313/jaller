@@ -16,19 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
-
-namespace Jaller.Standard;
-
-public interface IJallerCore
+namespace Jaller.Core.Exceptions
 {
-    // ---------------- Properties ----------------
+    public sealed class UserDeletedException : Exception
+    {
+        // ---------------- Constructor ----------------
 
-    IJallerConfig Config { get; }
-
-    IJallerLogger Log { get; }
-
-    IUserManager UserManager { get; }
+        public UserDeletedException( int userId ) :
+            base( $"User with ID {userId} has been deleted!" )
+        {
+        }
+    }
 }

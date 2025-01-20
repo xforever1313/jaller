@@ -16,19 +16,26 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
-
-namespace Jaller.Standard;
-
-public interface IJallerCore
+namespace Jaller.Standard.UserManagement
 {
-    // ---------------- Properties ----------------
+    public record class User
+    {
+        // ---------------- Properties ----------------
 
-    IJallerConfig Config { get; }
+        /// <summary>
+        /// The ID.  If this is 0, it represents a new user.
+        /// Otherwise, it represents an existing user.
+        /// </summary>
+        public int Id { get; internal init; }
 
-    IJallerLogger Log { get; }
+        /// <summary>
+        /// The login of the user.
+        /// Must be case insensitve, and must not contain whitespace.
+        /// </summary>
+        public required string UserName { get; init; }
 
-    IUserManager UserManager { get; }
+        public required IAuthenticationMethod? AuthenticationMethod { get; init; }
+
+        public UserRole Role { get; init; } = UserRole.User;
+    }
 }

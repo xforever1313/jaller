@@ -16,19 +16,16 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
-
-namespace Jaller.Standard;
-
-public interface IJallerCore
+namespace Jaller.Standard.UserManagement
 {
-    // ---------------- Properties ----------------
-
-    IJallerConfig Config { get; }
-
-    IJallerLogger Log { get; }
-
-    IUserManager UserManager { get; }
+    public sealed class UserQueryOptions
+    {
+        /// <summary>
+        /// Includes <see cref="User.AuthenticationMethod"/> if set to true
+        /// whenever querying a user.
+        /// 
+        /// If false, <see cref="User.AuthenticationMethod"/> is set to null.
+        /// </summary>
+        public bool IncludeAuthenticationInfo { get; init; } = false;
+    }
 }
