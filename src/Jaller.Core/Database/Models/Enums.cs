@@ -18,7 +18,7 @@
 
 namespace Jaller.Core.Database.Models;
 
-public enum FolderMetadata : byte
+public enum FolderMetadataPrivacy : byte
 {
     /// <summary>
     /// Folder metadata is inherited from

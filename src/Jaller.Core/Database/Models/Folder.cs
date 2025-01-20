@@ -48,6 +48,17 @@ internal record class Folder
     [MaxLength( nameSize )]
     public string? Slug { get; set; }
 
+    /// <summary>
+    /// How the metadata of the files contained within the folder
+    /// is able to be viewed.
+    /// </summary>
+    public FolderMetadataPrivacy MetadataViewable { get; set; } = FolderMetadataPrivacy.Private;
+
+    /// <summary>
+    /// Are the files within the folder able to be downloaded?
+    /// </summary>
+    public FolderDownloadable Downloadable { get; set; } = FolderDownloadable.Private;
+
     public int? ParentFolderId { get; set; }
 
     /// <summary>
