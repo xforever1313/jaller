@@ -41,14 +41,6 @@ internal record class Folder
     public string Name { get; set; } = "New Folder";
 
     /// <summary>
-    /// The slug for a URL for the folder.
-    /// If null, it uses the default of replacing white space
-    /// or special characters with '_'.
-    /// </summary>
-    [MaxLength( nameSize )]
-    public string? Slug { get; set; }
-
-    /// <summary>
     /// How the metadata of the files contained within the folder
     /// is able to be viewed.
     /// </summary>
