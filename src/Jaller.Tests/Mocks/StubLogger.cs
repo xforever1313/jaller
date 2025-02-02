@@ -16,22 +16,42 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.FileManagement;
 using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
 
-namespace Jaller.Standard;
-
-public interface IJallerCore
+namespace Jaller.Tests.Mocks
 {
-    // ---------------- Properties ----------------
+    internal sealed class StubLogger : IJallerLogger
+    {
+        // ---------------- Constructor ----------------
 
-    IJallerConfig Config { get; }
+        public StubLogger()
+        {
+        }
 
-    IJallerFileManager Files { get; }
+        // ---------------- Methods ----------------
 
-    IJallerLogger Log { get; }
+        public void Debug( string message )
+        {
+        }
 
-    IUserManager UserManager { get; }
+        public void Verbose( string message )
+        {
+        }
+
+        public void Information( string message )
+        {
+        }
+
+        public void Warning( string message )
+        {
+        }
+
+        public void Fatal( string message )
+        {
+        }
+
+        public void Error( string message )
+        {
+        }
+    }
 }

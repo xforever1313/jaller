@@ -17,6 +17,7 @@
 //
 
 using Jaller.Core.Configuration;
+using Jaller.Core.Exceptions;
 using Jaller.Standard.Configuration;
 using LiteDB;
 
@@ -56,6 +57,33 @@ namespace Jaller.Core.Database
         public ILiteCollection<JallerDirectory> Directories { get; }
 
         // ---------------- Methods ----------------
+
+        public void BeginTransaction()
+        {
+            bool success = this.dbConnection.BeginTrans();
+            if( success == false )
+            {
+                throw new DatabaseException( "Failed to being transaction" );
+            }
+        }
+
+        public void Commit()
+        {
+            bool success = this.dbConnection.Commit();
+            if( success == false )
+            {
+                throw new DatabaseException( "Failed to commit transaction" );
+            }
+        }
+
+        public void Rollback()
+        {
+            bool success = this.dbConnection.Rollback();
+            if( success == false )
+            {
+                throw new DatabaseException( "Failed to rollback transaction" );
+            }
+        }
 
         public void Dispose()
         {

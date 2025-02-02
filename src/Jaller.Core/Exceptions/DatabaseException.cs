@@ -16,22 +16,14 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.FileManagement;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
+namespace Jaller.Core.Exceptions;
 
-namespace Jaller.Standard;
-
-public interface IJallerCore
+public class DatabaseException : Exception
 {
-    // ---------------- Properties ----------------
+    // ---------------- Constructor ----------------
 
-    IJallerConfig Config { get; }
-
-    IJallerFileManager Files { get; }
-
-    IJallerLogger Log { get; }
-
-    IUserManager UserManager { get; }
+    public DatabaseException( string message ) :
+        base( message )
+    {
+    }
 }

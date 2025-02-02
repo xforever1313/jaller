@@ -16,22 +16,13 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.FileManagement;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
-
-namespace Jaller.Standard;
-
-public interface IJallerCore
+namespace Jaller.Standard.FileManagement
 {
-    // ---------------- Properties ----------------
-
-    IJallerConfig Config { get; }
-
-    IJallerFileManager Files { get; }
-
-    IJallerLogger Log { get; }
-
-    IUserManager UserManager { get; }
+    public interface IJallerFileManager
+    {
+        /// <summary>
+        /// Deletes the file and its information.
+        /// </summary>
+        void DeleteFile( string fileCid );
+    }
 }

@@ -25,10 +25,19 @@ public interface IFolderManager
     // ---------------- Methods ----------------
 
     /// <summary>
+    /// Returns the total number of folders that have been created.
+    /// </summary>
+    int GetFolderCount();
+
+    /// <summary>
     /// Creates a folder if <see cref="JallerFolder.Id"/> is defaulted,
     /// otherwise modifies an existing folder.
     /// </summary>
-    void ConfigureFolder( JallerFolder folder );
+    /// <returns>
+    /// The ID of the folder.  This will be a new ID if the folder was created,
+    /// otherwise it should be the same ID as the passed in folder.
+    /// </returns>
+    int ConfigureFolder( JallerFolder folder );
 
     /// <summary>
     /// Tries to get all of the contents within a folder.

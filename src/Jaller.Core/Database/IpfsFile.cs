@@ -28,7 +28,7 @@ internal sealed record class IpfsFile
 
     [BsonId( false )]
     [Required]
-    public string? Cid { get; init; } = null;
+    public required string Cid { get; init; }
 
     /// <summary>
     /// The nameof the file.

@@ -18,13 +18,17 @@
 
 using Jaller.Core.Configuration;
 using Jaller.Core.Database;
+using Jaller.Standard;
 using Jaller.Standard.Configuration;
+using Jaller.Standard.FileManagement;
+using Jaller.Standard.FolderManagement;
 using Jaller.Standard.Logging;
+using Jaller.Standard.UserManagement;
 using LiteDB;
 
 namespace Jaller.Core
 {
-    public sealed class JallerCore : IDisposable
+    public sealed class JallerCore : IJallerCore, IDisposable
     {
         // ---------------- Fields ----------------
 
@@ -37,6 +41,8 @@ namespace Jaller.Core
             this.Config = config;
             this.database = new JallerDatabase( this.Config );
 
+            this.Folders = new FolderManager( this, this.database );
+
             this.Log = log;
         }
 
@@ -44,7 +50,13 @@ namespace Jaller.Core
 
         public IJallerConfig Config { get; }
 
+        public IFolderManager Folders { get; }
+
         public IJallerLogger Log { get; }
+
+        public IJallerFileManager Files => throw new NotImplementedException();
+
+        public IUserManager UserManager => throw new NotImplementedException();
 
         // ---------------- Methods ----------------
 

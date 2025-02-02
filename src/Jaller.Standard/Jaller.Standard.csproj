@@ -10,6 +10,9 @@
 	<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 		<_Parameter1>Jaller.Core</_Parameter1>
 	</AssemblyAttribute>
+	<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+		  <_Parameter1>Jaller.Tests</_Parameter1>
+	  </AssemblyAttribute>
   </ItemGroup>
 	
 </Project>
