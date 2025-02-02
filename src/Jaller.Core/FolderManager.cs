@@ -51,9 +51,11 @@ namespace Jaller.Core
         {
             JallerDirectory? dbDirectory = this.db.Directories.FindById( newFolderConfig.Id );
 
+            bool existing;
             int? oldParentId;
             if( dbDirectory is null ) // Directory does not exist create a new one.
             {
+                existing = false;
                 oldParentId = null;
 
                 // This is a new folder
@@ -71,6 +73,7 @@ namespace Jaller.Core
             }
             else // Directory exists, and we want to modify it.
             {
+                existing = true;
                 oldParentId = dbDirectory.ParentFolder;
 
                 dbDirectory = dbDirectory with
@@ -111,14 +114,25 @@ namespace Jaller.Core
             this.db.BeginTransaction();
             try
             {
-                if( this.db.Directories.Upsert( dbDirectory ) == false )
+                if( existing )
                 {
-                    throw new DatabaseException( "Failed to add or update new directory." );
+                    if( this.db.Directories.Update( dbDirectory ) == false )
+                    {
+                        throw new DatabaseException( "Failed to update directory." );
+                    }
+                }
+                else
+                {
+                    if( this.db.Directories.Insert( dbDirectory ) == false )
+                    {
+                        throw new DatabaseException( "Failed to create directory." );
+                    }
                 }
 
                 if( ( oldParentDirectory is not null ) && ( oldParentDirectory.ChildrenFolders is not null ) )
                 {
                     oldParentDirectory.ChildrenFolders.Remove( newFolderConfig.Id );
+                    this.db.Directories.Update( oldParentDirectory );
                 }
 
                 if( newParentDirectory is not null )
@@ -131,6 +145,7 @@ namespace Jaller.Core
                         };
                     }
                     newParentDirectory.ChildrenFolders.Add( dbDirectory.Id );
+                    this.db.Directories.Update( newParentDirectory );
                 }
             }
             catch( Exception )
@@ -237,9 +252,45 @@ namespace Jaller.Core
             };
         }
 
-        public FolderContents TryGetFolderContents( int folderId, FileMetadataPolicy visibility )
+        public FolderContents? TryGetFolderContents( int folderId, FileMetadataPolicy visibility )
         {
-            throw new NotImplementedException();
+            JallerDirectory? directory = this.db.Directories.FindById( folderId );
+            if ( directory is null )
+            {
+                return null;
+            }
+
+            List<JallerFolder>? folders = null;
+            List<int>? childFolders = directory.ChildrenFolders;
+            if( childFolders is not null )
+            {
+                folders = new List<JallerFolder>();
+                foreach( int childId in childFolders )
+                {
+                    JallerDirectory? childDirectory = this.db.Directories.FindById( childId );
+                    if( childDirectory is null )
+                    {
+                        throw new DirectoryNotFoundException(
+                            $"Can not find child with ID of {childId} in parent folder {folderId}."
+                        );
+                    }
+
+                    folders.Add(
+                        new JallerFolder
+                        {
+                            Id = childDirectory.Id,
+                            Name = childDirectory.Name,
+                            ParentFolder = directory.Id,
+                        }
+                    );
+                }
+            }
+
+            return new FolderContents
+            {
+                ChildFolders = folders,
+                Files = null
+            };
         }
     }
 }

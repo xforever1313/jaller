@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Jaller.Core;
 using Jaller.Core.Configuration;
+using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Jaller.Tests.Mocks;
 
@@ -78,6 +79,27 @@ namespace Jaller.Tests.Core.FolderManagement
         // ---------------- Tests ----------------
 
         [TestMethod]
+        public void DeleteFolderThatDoesntExistTest()
+        {
+            // Setup
+            var folder = new JallerFolder
+            {
+                Id = 1,
+                Name = "test",
+                ParentFolder = null
+            };
+
+            // Act
+            JallerFolder? foundFolder = this.Core.Folders.TryGetFolder( folder.Id );
+            this.Core.Folders.DeleteFolder( folder );
+
+            // Check
+            Assert.IsNull( foundFolder );
+            Assert.AreEqual( 0, this.Core.Folders.GetFolderCount() );
+
+        }
+
+        [TestMethod]
         public void SingleFolderCreationTest()
         {
             // Setup
@@ -106,6 +128,67 @@ namespace Jaller.Tests.Core.FolderManagement
         }
 
         [TestMethod]
+        public void ModifyExistingFolderTest()
+        {
+            // Setup
+            var newFolder = new JallerFolder
+            {
+                Name = "Test Folder",
+                ParentFolder = null
+            };
+
+            // Act
+            int newFolderId = this.Core.Folders.ConfigureFolder( newFolder );
+            Assert.AreNotEqual( 0, newFolderId );
+            newFolder = newFolder with
+            {
+                // Need to set the ID since it got updated, and
+                // equals below will fail otherwise.
+                Id = newFolderId,
+                Name = "Changed folder"
+            };
+
+            int newFolderId2 = this.Core.Folders.ConfigureFolder( newFolder );
+            JallerFolder? createdFolder = this.Core.Folders.TryGetFolder( newFolderId2 );
+
+            // Check
+            Assert.AreEqual( 1, this.Core.Folders.GetFolderCount() );
+            Assert.AreEqual( newFolderId, newFolderId2 );
+            Assert.IsNotNull( createdFolder );
+            Assert.AreEqual( newFolder, createdFolder );
+        }
+
+        [TestMethod]
+        public void NoChangesTest()
+        {
+            // Setup
+            var newFolder = new JallerFolder
+            {
+                Name = "Test Folder",
+                ParentFolder = null
+            };
+
+            // Act
+            int newFolderId = this.Core.Folders.ConfigureFolder( newFolder );
+            Assert.AreNotEqual( 0, newFolderId );
+            newFolder = newFolder with
+            {
+                // Need to set the ID since it got updated, and
+                // equals below will fail otherwise.
+                Id = newFolderId,
+            };
+
+            int newFolderId2 = this.Core.Folders.ConfigureFolder( newFolder );
+            JallerFolder? createdFolder = this.Core.Folders.TryGetFolder( newFolderId2 );
+
+            // Check
+            Assert.AreEqual( 1, this.Core.Folders.GetFolderCount() );
+            Assert.AreEqual( newFolderId, newFolderId2 );
+            Assert.IsNotNull( createdFolder );
+            Assert.AreEqual( newFolder, createdFolder );
+        }
+
+        [TestMethod]
         public void CreateThenDeleteSingleFolderTest()
         {
             // Setup
@@ -126,6 +209,115 @@ namespace Jaller.Tests.Core.FolderManagement
             // Check
             Assert.AreEqual( 0, this.Core.Folders.GetFolderCount() );
             Assert.IsNull( createdFolder );
+        }
+
+        [TestMethod]
+        public void CreateFolderTreeTest()
+        {
+            // Setup root
+            var rootFolder = new JallerFolder
+            {
+                Name = "root",
+                ParentFolder = null
+            };
+
+            rootFolder = rootFolder with
+            {
+                Id = this.Core.Folders.ConfigureFolder( rootFolder )
+            };
+            Assert.AreNotEqual( 0, rootFolder.Id );
+
+            // Setup children
+            var child1 = new JallerFolder
+            {
+                Name = "Child 1",
+                ParentFolder = rootFolder.Id
+            };
+
+            child1 = child1 with
+            { 
+                Id = this.Core.Folders.ConfigureFolder( child1 )
+            };
+            Assert.AreNotEqual( 0, child1.Id );
+
+            var child2 = new JallerFolder
+            {
+                Name = "Child 2",
+                ParentFolder = rootFolder.Id
+            };
+
+            child2 = child2 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( child2 )
+            };
+            Assert.AreNotEqual( 0, child2.Id );
+
+            // Setup grandchildren
+            var grandchild1 = new JallerFolder
+            {
+                Name = "Grandchild 1",
+                ParentFolder = child1.Id
+            };
+
+            grandchild1 = grandchild1 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( grandchild1 )
+            };
+            Assert.AreNotEqual( 0, grandchild1.Id );
+
+            var grandchild2 = new JallerFolder
+            {
+                Name = "Grandchild 2",
+                ParentFolder = child1.Id
+            };
+
+            grandchild2 = grandchild2 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( grandchild2 )
+            };
+            Assert.AreNotEqual( 0, grandchild2.Id );
+
+            // Act
+            int totalFolders = this.Core.Folders.GetFolderCount();
+            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
+            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
+            FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, FileMetadataPolicy.Private );
+            FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, FileMetadataPolicy.Private );
+            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, FileMetadataPolicy.Private );
+
+            // Check
+            Assert.AreEqual( 5, totalFolders );
+            Assert.AreEqual( rootFolder, this.Core.Folders.TryGetFolder( rootFolder.Id ) );
+            Assert.AreEqual( child1, this.Core.Folders.TryGetFolder( child1.Id ) );
+            Assert.AreEqual( child2, this.Core.Folders.TryGetFolder( child2.Id ) );
+            Assert.AreEqual( grandchild1, this.Core.Folders.TryGetFolder( grandchild1.Id ) );
+            Assert.AreEqual( grandchild2, this.Core.Folders.TryGetFolder( grandchild2.Id ) );
+
+            Assert.IsNotNull( rootFolderContents );
+            Assert.IsNull( rootFolderContents.Files );
+            Assert.IsNotNull( rootFolderContents.ChildFolders );
+            Assert.AreEqual( 2, rootFolderContents.ChildFolders.Count );
+            Assert.IsTrue( rootFolderContents.ChildFolders.Contains( child1 ) );
+            Assert.IsTrue( rootFolderContents.ChildFolders.Contains( child2 ) );
+
+            Assert.IsNotNull( child1Contents );
+            Assert.IsNull( child1Contents.Files );
+            Assert.IsNotNull( child1Contents.ChildFolders );
+            Assert.AreEqual( 2, child1Contents.ChildFolders.Count );
+            Assert.IsTrue( child1Contents.ChildFolders.Contains( grandchild1 ) );
+            Assert.IsTrue( child1Contents.ChildFolders.Contains( grandchild2 ) );
+
+            Assert.IsNotNull( child2Contents );
+            Assert.IsNull( child2Contents.Files );
+            Assert.IsNull( child2Contents.ChildFolders );
+
+            Assert.IsNotNull( grandchild1Contents );
+            Assert.IsNull( grandchild1Contents.Files );
+            Assert.IsNull( grandchild1Contents.ChildFolders );
+
+            Assert.IsNotNull( grandchild2Contents );
+            Assert.IsNull( grandchild2Contents.Files );
+            Assert.IsNull( grandchild2Contents.ChildFolders );
         }
     }
 }
