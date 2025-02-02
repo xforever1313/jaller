@@ -18,4 +18,8 @@
   	<PackageReference Include="Serilog" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Database\" />
+  </ItemGroup>
+
 </Project>
