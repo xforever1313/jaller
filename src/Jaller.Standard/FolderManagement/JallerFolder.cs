@@ -16,8 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.FileManagement;
-
 namespace Jaller.Standard.FolderManagement;
 
 public sealed record class JallerFolder
