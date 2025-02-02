@@ -21,16 +21,28 @@ namespace Jaller.Standard.Configuration;
 public interface IJallerDatabaseConfig
 {
     /// <summary>
-    /// The location of where to put the SQLite database.
+    /// The location of where to put the LiteDB database.
     /// 
     /// This is defaulted to the user's application data folder
     /// inside of a "Jaller" folder.
+    /// 
+    /// Set to null to use an "in memory" database (NOT RECOMMENDED EXCEPT IN A TEST ENVIRONMENT).
     /// </summary>
-    FileInfo SqliteDatabaseLocation { get; }
+    FileInfo? DatabaseLocation { get; }
 
     /// <summary>
-    /// Whether or not to enabling pooling for sqlite.  Defaulted
-    /// to true.
+    /// How to open the database.
+    /// 
+    /// Set to true for a direct connection, where the engine will
+    /// open the datafile in exclusive mode and will keep 
+    /// it open until Dispose().
+    /// The datafile cannot be opened by another process.
+    /// This is the recommended mode because it’s faster and cachable.
+    /// 
+    /// Set to false to use a shared connection.  The engine will be close 
+    /// the datafile after each operation. 
+    /// Locks are made using Mutex.
+    /// This is more expensive but you can open same file from multiple processes.
     /// </summary>
     /// <remarks>
     /// From here: https://colinchsql.github.io/2023-10-13/10-17-25-480023-sqlite-database-connection-pooling-strategies/
@@ -41,5 +53,27 @@ public interface IJallerDatabaseConfig
     /// a thread can request a connection from the pool and 
     /// return it when it is finished.
     /// </remarks>
-    bool SqlitePool { get; }
+    bool SharedConnection { get; }
+
+    /// <summary>
+    /// If last close database exception result a invalid data state,
+    /// rebuild datafile on next open.
+    /// 
+    /// Defaulted to false.
+    /// </summary>
+    bool AutoRebuild { get; }
+
+    /// <summary>
+    /// Check if datafile is of an older version and upgrade it before opening.
+    /// Defaulted to false.
+    /// This should really only be set to true if instructed to in the release notes
+    /// when upgrading releases.
+    /// </summary>
+    bool AutoUpgradeDb { get; }
+
+    /// <summary>
+    /// Set to a non-null value to AES encrypt the datafile with this password.
+    /// Set to null to use no encryption (default).
+    /// </summary>
+    string? EncryptionPassword { get; }
 }

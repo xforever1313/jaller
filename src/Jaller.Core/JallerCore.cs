@@ -16,27 +16,39 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Core.Configuration;
+using Jaller.Core.Database;
 using LiteDB;
 
 namespace Jaller.Core
 {
     public sealed class JallerCore : IDisposable
     {
+        // ---------------- Fields ----------------
+
+        private readonly JallerDatabase database;
+
         // ---------------- Constructor ----------------
 
-        public JallerCore()
+        public JallerCore( JallerConfig config )
         {
+            this.Config = config;
+            this.database = new JallerDatabase( this.Config );
         }
+
+        // ---------------- Properties ----------------
+
+        public JallerConfig Config { get; }
 
         // ---------------- Methods ----------------
 
         public void Init()
         {
-            BsonMapper.Global.EnumAsInteger = true;
         }
 
         public void Dispose()
         {
+            this.database.Dispose();
         }
     }
 }

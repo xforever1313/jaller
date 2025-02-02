@@ -26,19 +26,28 @@ public sealed record class JallerDatabaseConfig : IJallerDatabaseConfig
 
     public JallerDatabaseConfig()
     {
-        this.SqliteDatabaseLocation = new FileInfo(
+        this.DatabaseLocation = new FileInfo(
             Path.Combine(
                 JallerConfig.DefaultPersistenceDirectory.FullName,
-                "jaller.db"
+                "jaller.ldb"
             )
         );
 
-        this.SqlitePool = true;
+        this.SharedConnection = false;
+        this.AutoRebuild = false;
+        this.AutoUpgradeDb = false;
+        this.EncryptionPassword = null;
     }
 
     // ---------------- Properties ----------------
 
-    public FileInfo SqliteDatabaseLocation { get; set; }
+    public FileInfo? DatabaseLocation { get; set; }
 
-    public bool SqlitePool { get; }
+    public bool SharedConnection { get; set; }
+
+    public bool AutoRebuild { get; set; }
+
+    public bool AutoUpgradeDb { get; set; }
+
+    public string? EncryptionPassword { get; set; }
 }
