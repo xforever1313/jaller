@@ -171,64 +171,83 @@ namespace Jaller.Core
             try
             {
                 this.db.BeginTransaction();
-                // First, need to delete all of the children directories.
-                {
-                    List<int>? childFolders = directory.ChildrenFolders;
-                    if( childFolders is not null )
-                    {
-                        foreach( int childFolder in childFolders )
-                        {
-                            DeleteFolder( childFolder );
-                        }
-                    }
-                }
-
-                // Second, delete all files in this folder.
-                {
-                    List<IpfsFile>? files = directory.Files;
-                    if( files is not null )
-                    {
-                        foreach( IpfsFile file in files )
-                        {
-                            this.core.Files.DeleteFile( file.Cid );
-                        }
-                    }
-                }
-
-                // Next, delete the folder from the parent's folder list,
-                // if there is a parent folder that is.
-                if( directory.ParentFolder is not null )
-                {
-                    JallerDirectory? parentDirectory = this.db.Directories.FindById( directory.ParentFolder );
-                    if( parentDirectory is not null )
-                    {
-                        List<int>? parentsChildFolders = parentDirectory.ChildrenFolders;
-                        if( parentsChildFolders is not null )
-                        {
-                            parentsChildFolders.Remove( directory.Id );
-                        }
-
-                        if( this.db.Directories.Update( parentDirectory ) == false )
-                        {
-                            throw new DatabaseException( "Failed to remove directory marked for deletion from parent folder." );
-                        }
-                    }
-                }
-
-                // Now, we can finally delete this folder.
-                bool deleted = this.db.Directories.Delete( folderId );
-                if( deleted == false )
-                {
-                    throw new DatabaseException( "Failed to delete directory marked for deletion." );
-                }
+                DeleteFolderInternal( folderId );
             }
-            catch( Exception )
+            catch( Exception e1 )
             {
-                this.db.Rollback();
+                try
+                {
+                    this.db.Rollback();
+                }
+                catch( Exception e2 )
+                {
+                    throw new AggregateException( e1, e2 );
+                }
                 throw;
             }
 
             this.db.Commit();
+        }
+
+        private void DeleteFolderInternal( int folderId )
+        {
+            JallerDirectory? directory = this.db.Directories.FindById( folderId );
+            if( directory is null )
+            {
+                // No-op, the directory already doesn't exist.
+                return;
+            }
+
+            // First, need to delete all of the children directories.
+            {
+                List<int>? childFolders = directory.ChildrenFolders;
+                if( childFolders is not null )
+                {
+                    foreach( int childFolder in childFolders )
+                    {
+                        DeleteFolderInternal( childFolder );
+                    }
+                }
+            }
+
+            // Second, delete all files in this folder.
+            {
+                List<IpfsFile>? files = directory.Files;
+                if( files is not null )
+                {
+                    foreach( IpfsFile file in files )
+                    {
+                        this.core.Files.DeleteFile( file.Cid );
+                    }
+                }
+            }
+
+            // Next, delete the folder from the parent's folder list,
+            // if there is a parent folder that is.
+            if( directory.ParentFolder is not null )
+            {
+                JallerDirectory? parentDirectory = this.db.Directories.FindById( directory.ParentFolder );
+                if( parentDirectory is not null )
+                {
+                    List<int>? parentsChildFolders = parentDirectory.ChildrenFolders;
+                    if( parentsChildFolders is not null )
+                    {
+                        parentsChildFolders.Remove( directory.Id );
+                    }
+
+                    if( this.db.Directories.Update( parentDirectory ) == false )
+                    {
+                        throw new DatabaseException( "Failed to remove directory marked for deletion from parent folder." );
+                    }
+                }
+            }
+
+            // Now, we can finally delete this folder.
+            bool deleted = this.db.Directories.Delete( folderId );
+            if( deleted == false )
+            {
+                throw new DatabaseException( "Failed to delete directory marked for deletion." );
+            }
         }
 
         public FolderContents GetRootFolder( FileMetadataPolicy visibility )

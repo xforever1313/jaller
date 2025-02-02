@@ -319,5 +319,81 @@ namespace Jaller.Tests.Core.FolderManagement
             Assert.IsNull( grandchild2Contents.Files );
             Assert.IsNull( grandchild2Contents.ChildFolders );
         }
+
+        [TestMethod]
+        public void DeleteRootFolderTest()
+        {
+            // Setup root
+            var rootFolder = new JallerFolder
+            {
+                Name = "root",
+                ParentFolder = null
+            };
+
+            rootFolder = rootFolder with
+            {
+                Id = this.Core.Folders.ConfigureFolder( rootFolder )
+            };
+            Assert.AreNotEqual( 0, rootFolder.Id );
+
+            // Setup children
+            var child1 = new JallerFolder
+            {
+                Name = "Child 1",
+                ParentFolder = rootFolder.Id
+            };
+
+            child1 = child1 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( child1 )
+            };
+            Assert.AreNotEqual( 0, child1.Id );
+
+            var child2 = new JallerFolder
+            {
+                Name = "Child 2",
+                ParentFolder = rootFolder.Id
+            };
+
+            child2 = child2 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( child2 )
+            };
+            Assert.AreNotEqual( 0, child2.Id );
+
+            // Setup grandchildren
+            var grandchild1 = new JallerFolder
+            {
+                Name = "Grandchild 1",
+                ParentFolder = child1.Id
+            };
+
+            grandchild1 = grandchild1 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( grandchild1 )
+            };
+            Assert.AreNotEqual( 0, grandchild1.Id );
+
+            var grandchild2 = new JallerFolder
+            {
+                Name = "Grandchild 2",
+                ParentFolder = child1.Id
+            };
+
+            grandchild2 = grandchild2 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( grandchild2 )
+            };
+            Assert.AreNotEqual( 0, grandchild2.Id );
+
+            // Act
+            int beforeFolderCount = this.Core.Folders.GetFolderCount();
+            this.Core.Folders.DeleteFolder( rootFolder );
+            int afterFolderCount = this.Core.Folders.GetFolderCount();
+
+            // Check
+            Assert.AreEqual( 5, beforeFolderCount );
+            Assert.AreEqual( 0, afterFolderCount );
+        }
     }
 }
