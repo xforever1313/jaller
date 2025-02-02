@@ -20,7 +20,11 @@ namespace Jaller.Standard.FileManagement;
 
 public sealed record class JallerFile
 {
-    public int Id { get; internal init; }
+    /// <summary>
+    /// The content ID (CID) of the file.
+    /// This must be version 1 of IPFS's CID hashing protocol.
+    /// </summary>
+    public required string CidV1 { get; init; }
 
     public required string Name { get; init; } = "Untitled";
 
