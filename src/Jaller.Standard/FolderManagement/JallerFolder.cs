@@ -29,17 +29,5 @@ public sealed record class JallerFolder
     /// <summary>
     /// The parent folder's ID.  Null if this is a root folder.
     /// </summary>
-    public required JallerFolder? ParentFolder { get; init; }
-
-    /// <summary>
-    /// Children folders, if any.
-    /// Null for no children.
-    /// </summary>
-    public required IReadOnlyList<JallerFolder>? ChildFolders { get; init; }
-
-    /// <summary>
-    /// Files that live in this directory.
-    /// Null for no files.
-    /// </summary>
-    public required IReadOnlyList<JallerFile>? Files { get; init; }
+    public required int? ParentFolder { get; init; }
 }

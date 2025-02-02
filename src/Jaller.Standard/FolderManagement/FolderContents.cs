@@ -21,21 +21,20 @@ using Jaller.Standard.FileManagement;
 namespace Jaller.Standard.FolderManagement;
 
 /// <summary>
-/// The root folder that contains all of Jaller's folders and files.
+/// Contents of a folder.
 /// </summary>
-public sealed record class RootJallerFolder
+public sealed record class FolderContents
 {
     /// <summary>
-    /// List of folders that live at the root-level of the Jaller file
-    /// system.
-    /// 
-    /// Null for no directories.
+    /// Child folders of the <see cref="JallerFolder"/>.
+    /// Set to null if there are no child folders.
     /// </summary>
     public required IReadOnlyList<JallerFolder>? ChildFolders { get; init; }
 
     /// <summary>
-    /// Files that live at the root level of the Jaller file system.
-    /// Null for no files.
+    /// Files that exist in the folder.
+    /// 
+    /// Set to null if there are no files within the folder.
     /// </summary>
     public required IReadOnlyList<JallerFile>? Files { get; init; }
 }

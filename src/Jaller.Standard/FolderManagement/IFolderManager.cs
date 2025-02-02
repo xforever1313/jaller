@@ -16,6 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Standard.FileManagement;
+
 namespace Jaller.Standard.FolderManagement;
 
 public interface IFolderManager
@@ -26,24 +28,32 @@ public interface IFolderManager
     /// Creates a folder if <see cref="JallerFolder.Id"/> is defaulted,
     /// otherwise modifies an existing folder.
     /// </summary>
-    Task ConfigureFolderAsync( JallerFolder folder );
+    void ConfigureFolder( JallerFolder folder );
+
+    /// <summary>
+    /// Tries to get all of the contents within a folder.
+    /// </summary>
+    /// <returns>
+    /// Null if the passed in folder does not exist.
+    /// </returns>
+    FolderContents? TryGetFolderContents( int folderId, FileMetadataPolicy visibility );
 
     /// <summary>
     /// Tries to get a folder by the given id.
     /// Returns null if no folder exists.
     /// </summary>
-    Task<JallerFolder?> TryGetFolderAsync( int id );
+    JallerFolder? TryGetFolder( int id );
 
     /// <summary>
     /// Gets the root folder that contains all other folders.
     /// This folder can not be modified or deleted.
     /// </summary>
-    Task<RootJallerFolder> GetRootFolderAsync();
+    FolderContents GetRootFolder( FileMetadataPolicy visibility );
 
     /// <summary>
     /// Deletes the given folder.
     /// </summary>
-    Task DeleteFolderAsync( int folderId );
+    void DeleteFolder( int folderId );
 }
 
 public static class IFolderManagerExtensions
@@ -51,10 +61,18 @@ public static class IFolderManagerExtensions
     // ---------------- Methods ----------------
 
     /// <summary>
+    /// Tries to get all of the contents within a folder.
+    /// </summary>
+    public static FolderContents? TryGetFolderContents( this IFolderManager mgr, JallerFolder folder, FileMetadataPolicy visibility )
+    {
+        return mgr.TryGetFolderContents( folder.Id, visibility );
+    }
+
+    /// <summary>
     /// Deletes the given folder.
     /// </summary>
-    public static Task DeleteFolderAsync( this IFolderManager mgr, JallerFolder folder )
+    public static void DeleteFolder( this IFolderManager mgr, JallerFolder folder )
     {
-        return mgr.DeleteFolderAsync( folder.Id );
+        mgr.DeleteFolder( folder.Id );
     }
 }
