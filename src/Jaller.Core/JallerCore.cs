@@ -18,6 +18,7 @@
 
 using Jaller.Core.Configuration;
 using Jaller.Core.Database;
+using Jaller.Standard.Configuration;
 using LiteDB;
 
 namespace Jaller.Core
@@ -30,7 +31,7 @@ namespace Jaller.Core
 
         // ---------------- Constructor ----------------
 
-        public JallerCore( JallerConfig config )
+        public JallerCore( IJallerConfig config )
         {
             this.Config = config;
             this.database = new JallerDatabase( this.Config );
@@ -38,7 +39,7 @@ namespace Jaller.Core
 
         // ---------------- Properties ----------------
 
-        public JallerConfig Config { get; }
+        public IJallerConfig Config { get; }
 
         // ---------------- Methods ----------------
 

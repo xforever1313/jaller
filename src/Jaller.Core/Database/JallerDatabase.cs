@@ -17,6 +17,7 @@
 //
 
 using Jaller.Core.Configuration;
+using Jaller.Standard.Configuration;
 using LiteDB;
 
 namespace Jaller.Core.Database
@@ -29,7 +30,7 @@ namespace Jaller.Core.Database
 
         // ---------------- Constructor ----------------
 
-        public JallerDatabase( JallerConfig config )
+        public JallerDatabase( IJallerConfig config )
         {
             BsonMapper.Global.EnumAsInteger = true;
 
