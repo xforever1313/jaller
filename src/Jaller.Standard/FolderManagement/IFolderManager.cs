@@ -29,6 +29,18 @@ public interface IFolderManager
     Task ConfigureFolderAsync( JallerFolder folder );
 
     /// <summary>
+    /// Tries to get a folder by the given id.
+    /// Returns null if no folder exists.
+    /// </summary>
+    Task<JallerFolder?> TryGetFolderAsync( int id );
+
+    /// <summary>
+    /// Gets the root folder that contains all other folders.
+    /// This folder can not be modified or deleted.
+    /// </summary>
+    Task<RootJallerFolder> GetRootFolderAsync();
+
+    /// <summary>
     /// Deletes the given folder.
     /// </summary>
     Task DeleteFolderAsync( int folderId );

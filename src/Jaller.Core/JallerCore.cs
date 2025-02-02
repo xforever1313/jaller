@@ -19,6 +19,7 @@
 using Jaller.Core.Configuration;
 using Jaller.Core.Database;
 using Jaller.Standard.Configuration;
+using Jaller.Standard.Logging;
 using LiteDB;
 
 namespace Jaller.Core
@@ -31,15 +32,19 @@ namespace Jaller.Core
 
         // ---------------- Constructor ----------------
 
-        public JallerCore( IJallerConfig config )
+        public JallerCore( IJallerConfig config, IJallerLogger log )
         {
             this.Config = config;
             this.database = new JallerDatabase( this.Config );
+
+            this.Log = log;
         }
 
         // ---------------- Properties ----------------
 
         public IJallerConfig Config { get; }
+
+        public IJallerLogger Log { get; }
 
         // ---------------- Methods ----------------
 
