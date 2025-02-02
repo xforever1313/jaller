@@ -16,33 +16,23 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Standard.FolderManagement;
+namespace Jaller.Standard.FileManagement;
 
-public interface IFolderManager
+public sealed record class JallerFile
 {
-    // ---------------- Methods ----------------
+    public int Id { get; internal init; }
+
+    public required string Name { get; init; } = "Untitled";
+
+    public string? Description { get; init; } = null;
 
     /// <summary>
-    /// Creates a folder if <see cref="JallerFolder.Id"/> is defaulted,
-    /// otherwise modifies an existing folder.
+    /// Overloads the file name's mime type.  Set to null
+    /// to base the mime type off of the file name's extension.
     /// </summary>
-    Task ConfigureFolderAsync( JallerFolder folder );
+    public string? MimeType { get; init; } = null;
 
-    /// <summary>
-    /// Deletes the given folder.
-    /// </summary>
-    Task DeleteFolderAsync( int folderId );
-}
+    public FileMetadataPolicy MetadataPrivacy { get; init; } = FileMetadataPolicy.Private;
 
-public static class IFolderManagerExtensions
-{
-    // ---------------- Methods ----------------
-
-    /// <summary>
-    /// Deletes the given folder.
-    /// </summary>
-    public static Task DeleteFolderAsync( this IFolderManager mgr, JallerFolder folder )
-    {
-        return mgr.DeleteFolderAsync( folder.Id );
-    }
+    public FileDownloadPolicy DownloadablePolicy { get; init; } = FileDownloadPolicy.Private;
 }

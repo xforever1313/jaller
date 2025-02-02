@@ -16,26 +16,27 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Standard.FolderManagement;
+using LiteDB;
 
-public sealed record class Folder
+namespace Jaller.Core
 {
-    public int Id { get; internal init; }
+    public sealed class JallerCore : IDisposable
+    {
+        // ---------------- Constructor ----------------
 
-    public required string Name { get; init; }
+        public JallerCore()
+        {
+        }
 
-    /// <summary>
-    /// The parent folder's ID.  Null if this is a root folder.
-    /// </summary>
-    public required Folder? ParentFolder { get; init; }
+        // ---------------- Methods ----------------
 
-    /// <summary>
-    /// Children folders, if any.
-    /// Null for no children.
-    /// </summary>
-    public IReadOnlyList<Folder>? ChildFolders { get; init; }
+        public void Init()
+        {
+            BsonMapper.Global.EnumAsInteger = true;
+        }
 
-    public FolderMetadataPrivacy MetadataPrivacy { get; init; } = FolderMetadataPrivacy.Private;
-
-    public FolderDownloadable FolderDownloadablePolicy { get; init; } = FolderDownloadable.Private;
+        public void Dispose()
+        {
+        }
+    }
 }

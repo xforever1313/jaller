@@ -12,14 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-  	<PackageReference Include="Ipfs.Core" Version="0.55.0" />
+  	<PackageReference Include="Ipfs.Core" />
+	<PackageReference Include="LiteDB" />
   	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
   	<PackageReference Include="Serilog" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Database\" />
   </ItemGroup>
 
 </Project>

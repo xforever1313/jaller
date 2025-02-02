@@ -18,31 +18,20 @@
 
 namespace Jaller.Standard.FolderManagement;
 
-public interface IFolderManager
+public sealed record class JallerFolder
 {
-    // ---------------- Methods ----------------
+    public int Id { get; internal init; }
+
+    public required string Name { get; init; }
 
     /// <summary>
-    /// Creates a folder if <see cref="JallerFolder.Id"/> is defaulted,
-    /// otherwise modifies an existing folder.
+    /// The parent folder's ID.  Null if this is a root folder.
     /// </summary>
-    Task ConfigureFolderAsync( JallerFolder folder );
+    public required JallerFolder? ParentFolder { get; init; }
 
     /// <summary>
-    /// Deletes the given folder.
+    /// Children folders, if any.
+    /// Null for no children.
     /// </summary>
-    Task DeleteFolderAsync( int folderId );
-}
-
-public static class IFolderManagerExtensions
-{
-    // ---------------- Methods ----------------
-
-    /// <summary>
-    /// Deletes the given folder.
-    /// </summary>
-    public static Task DeleteFolderAsync( this IFolderManager mgr, JallerFolder folder )
-    {
-        return mgr.DeleteFolderAsync( folder.Id );
-    }
+    public IReadOnlyList<JallerFolder>? ChildFolders { get; init; }
 }

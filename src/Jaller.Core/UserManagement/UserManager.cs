@@ -16,11 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Core.Database;
-using Jaller.Core.Exceptions;
 using Jaller.Standard;
 using Jaller.Standard.UserManagement;
-using Microsoft.EntityFrameworkCore;
 
 namespace Jaller.Core.UserManagement;
 
@@ -41,6 +38,9 @@ public sealed class UserManager : IUserManager
 
     public async Task<int> ConfigureUserAsync( User user )
     {
+        await Task.Delay( 0 );
+        throw new NotImplementedException();
+#if false
         using var context = new JallerDbContext( this.core );
 
         bool add;
@@ -78,6 +78,7 @@ public sealed class UserManager : IUserManager
         await context.SaveChangesAsync();
 
         return dbUser.Id;
+#endif
     }
 
     public async Task<User?> TryGetUserByIdAsync( int id, UserQueryOptions queryOptions )
@@ -94,6 +95,9 @@ public sealed class UserManager : IUserManager
 
     public async Task DeleteUserAsync( int userId )
     {
+        await Task.Delay( 0 );
+        throw new NotImplementedException();
+#if false
         using var context = new JallerDbContext( this.core );
 
         Database.Models.User? user = context.Users.FirstOrDefault( user => user.Id == userId );
@@ -112,5 +116,6 @@ public sealed class UserManager : IUserManager
 
         context.Users.Update( user );
         await context.SaveChangesAsync();
+#endif
     }
 }
