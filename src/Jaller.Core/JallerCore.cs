@@ -30,18 +30,14 @@ namespace Jaller.Core
 {
     public sealed class JallerCore : IJallerCore, IDisposable
     {
-        // ---------------- Fields ----------------
-
-        private readonly JallerDatabase database;
-
         // ---------------- Constructor ----------------
 
         public JallerCore( IJallerConfig config, IJallerLogger log )
         {
             this.Config = config;
-            this.database = new JallerDatabase( this.Config );
+            this.Database = new JallerDatabase( this.Config );
 
-            this.Folders = new FolderManager( this, this.database );
+            this.Folders = new FolderManager( this, this.Database );
 
             this.Log = log;
         }
@@ -58,6 +54,8 @@ namespace Jaller.Core
 
         public IUserManager UserManager => throw new NotImplementedException();
 
+        internal JallerDatabase Database { get; }
+
         // ---------------- Methods ----------------
 
         public void Init()
@@ -66,7 +64,7 @@ namespace Jaller.Core
 
         public void Dispose()
         {
-            this.database.Dispose();
+            this.Database.Dispose();
         }
     }
 }

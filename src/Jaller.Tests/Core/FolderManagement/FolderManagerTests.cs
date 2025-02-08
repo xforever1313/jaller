@@ -16,13 +16,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Jaller.Core;
 using Jaller.Core.Configuration;
+using Jaller.Core.Exceptions;
 using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Jaller.Tests.Mocks;
@@ -235,7 +231,7 @@ namespace Jaller.Tests.Core.FolderManagement
             };
 
             child1 = child1 with
-            { 
+            {
                 Id = this.Core.Folders.ConfigureFolder( child1 )
             };
             Assert.AreNotEqual( 0, child1.Id );
@@ -395,7 +391,7 @@ namespace Jaller.Tests.Core.FolderManagement
             Assert.AreEqual( 5, beforeFolderCount );
             Assert.AreEqual( 0, afterFolderCount );
         }
-        
+
         [TestMethod]
         public void DeleteChildFolderTest()
         {
@@ -471,13 +467,13 @@ namespace Jaller.Tests.Core.FolderManagement
             FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
             FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, FileMetadataPolicy.Private );
             FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, FileMetadataPolicy.Private );
-            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, FileMetadataPolicy.Private );            
-            
+            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, FileMetadataPolicy.Private );
+
             // Check
             Assert.AreEqual( 5, beforeFolderCount );
             // Should be 2: The root and the second child.
             Assert.AreEqual( 2, afterFolderCount );
-            
+
             // Check
             Assert.AreEqual( rootFolder, this.Core.Folders.TryGetFolder( rootFolder.Id ) );
             Assert.IsNull( this.Core.Folders.TryGetFolder( child1.Id ) );
@@ -496,11 +492,11 @@ namespace Jaller.Tests.Core.FolderManagement
             Assert.IsNotNull( child2Contents );
             Assert.IsNull( child2Contents.Files );
             Assert.IsNull( child2Contents.ChildFolders );
-            
+
             Assert.IsNull( grandchild1Contents );
             Assert.IsNull( grandchild2Contents );
         }
-        
+
         [TestMethod]
         public void DeleteGrandChildTest()
         {
@@ -525,7 +521,7 @@ namespace Jaller.Tests.Core.FolderManagement
             };
 
             child1 = child1 with
-            { 
+            {
                 Id = this.Core.Folders.ConfigureFolder( child1 )
             };
             Assert.AreNotEqual( 0, child1.Id );
@@ -576,8 +572,8 @@ namespace Jaller.Tests.Core.FolderManagement
             FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
             FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, FileMetadataPolicy.Private );
             FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, FileMetadataPolicy.Private );
-            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, FileMetadataPolicy.Private );            
-            
+            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, FileMetadataPolicy.Private );
+
             // Check
             Assert.AreEqual( 5, beforeFolderCount );
             Assert.AreEqual( 4, afterFolderCount );
@@ -610,6 +606,304 @@ namespace Jaller.Tests.Core.FolderManagement
             Assert.IsNull( grandchild1Contents.ChildFolders );
 
             Assert.IsNull( grandchild2Contents );
+        }
+
+        /// <summary>
+        /// If a folder had a child folder, but its missing for some reason
+        /// from the database, it will garbage collect it.
+        /// </summary>
+        [TestMethod]
+        public void OrphanedChildTest()
+        {
+            // Setup root
+            var rootFolder = new JallerFolder
+            {
+                Name = "root",
+                ParentFolder = null
+            };
+
+            rootFolder = rootFolder with
+            {
+                Id = this.Core.Folders.ConfigureFolder( rootFolder )
+            };
+            Assert.AreNotEqual( 0, rootFolder.Id );
+
+            // Setup children
+            var child1 = new JallerFolder
+            {
+                Name = "Child 1",
+                ParentFolder = rootFolder.Id
+            };
+
+            child1 = child1 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( child1 )
+            };
+            Assert.AreNotEqual( 0, child1.Id );
+
+            this.Core.Database.Directories.Delete( child1.Id );
+
+            // Act
+            int totalFolders = this.Core.Folders.GetFolderCount();
+            Assert.AreEqual( 1, totalFolders );
+            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
+            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
+
+            // Check
+            totalFolders = this.Core.Folders.GetFolderCount();
+            Assert.AreEqual( 1, totalFolders );
+            Assert.AreEqual( rootFolder, this.Core.Folders.TryGetFolder( rootFolder.Id ) );
+            Assert.IsNull( this.Core.Folders.TryGetFolder( child1.Id ) );
+
+            Assert.IsNotNull( rootFolderContents );
+            Assert.IsNull( rootFolderContents.Files );
+            Assert.IsNull( rootFolderContents.ChildFolders );
+
+            Assert.IsNull( child1Contents );
+        }
+
+        [TestMethod]
+        public void CreateFolderWithNonExistentParentFolderTest()
+        {
+            // Setup
+            var folder = new JallerFolder
+            {
+                Name = "New Folder",
+                ParentFolder = 100
+            };
+
+            // Act
+            Assert.ThrowsException<FolderNotFoundDirectory>( () => this.Core.Folders.ConfigureFolder( folder ) );
+
+            // Check
+            Assert.AreEqual( 0, this.Core.Folders.GetFolderCount() );
+        }
+
+        /// <summary>
+        /// If updating a folder results in a parent folder that does not exist,
+        /// </summary>
+        [TestMethod]
+        public void OrphanedParentTest()
+        {
+            // Setup root
+            var rootFolder = new JallerFolder
+            {
+                Name = "root",
+                ParentFolder = null
+            };
+
+            rootFolder = rootFolder with
+            {
+                Id = this.Core.Folders.ConfigureFolder( rootFolder )
+            };
+            Assert.AreNotEqual( 0, rootFolder.Id );
+
+            // Setup children
+            var child1 = new JallerFolder
+            {
+                Name = "Child 1",
+                ParentFolder = rootFolder.Id
+            };
+
+            child1 = child1 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( child1 )
+            };
+            Assert.AreNotEqual( 0, child1.Id );
+
+            // Delete root folder.
+            this.Core.Database.Directories.Delete( rootFolder.Id );
+
+            child1 = child1 with
+            {
+                Name = "New Name"
+            };
+
+            JallerFolder expectedChild1 = child1 with
+            {
+                ParentFolder = null
+            };
+
+            // Act
+            this.Core.Folders.ConfigureFolder( child1 );
+            int folderCount = this.Core.Folders.GetFolderCount();
+            JallerFolder? actualChild1 = this.Core.Folders.TryGetFolder( child1.Id );
+
+            // Check
+            Assert.AreEqual( folderCount, this.Core.Folders.GetFolderCount() );
+            Assert.IsNotNull( actualChild1 );
+            Assert.AreEqual( expectedChild1, actualChild1 );
+        }
+
+        [TestMethod]
+        public void MoveFolderTreeTest()
+        {
+            // Setup root
+            var rootFolder = new JallerFolder
+            {
+                Name = "root",
+                ParentFolder = null
+            };
+
+            rootFolder = rootFolder with
+            {
+                Id = this.Core.Folders.ConfigureFolder( rootFolder )
+            };
+            Assert.AreNotEqual( 0, rootFolder.Id );
+
+            // Setup children
+            var child1 = new JallerFolder
+            {
+                Name = "Child 1",
+                ParentFolder = rootFolder.Id
+            };
+
+            child1 = child1 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( child1 )
+            };
+            Assert.AreNotEqual( 0, child1.Id );
+
+            var child2 = new JallerFolder
+            {
+                Name = "Child 2",
+                ParentFolder = rootFolder.Id
+            };
+
+            child2 = child2 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( child2 )
+            };
+            Assert.AreNotEqual( 0, child2.Id );
+
+            // Setup grandchildren
+            var grandchild1 = new JallerFolder
+            {
+                Name = "Grandchild 1",
+                ParentFolder = child1.Id
+            };
+
+            grandchild1 = grandchild1 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( grandchild1 )
+            };
+            Assert.AreNotEqual( 0, grandchild1.Id );
+
+            var grandchild2 = new JallerFolder
+            {
+                Name = "Grandchild 2",
+                ParentFolder = child1.Id
+            };
+
+            grandchild2 = grandchild2 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( grandchild2 )
+            };
+            Assert.AreNotEqual( 0, grandchild2.Id );
+
+            // Act - Move grandchild 2 to child 2.
+            grandchild2 = grandchild2 with
+            {
+                ParentFolder = child2.Id
+            };
+            this.Core.Folders.ConfigureFolder( grandchild2 );
+
+            int totalFolders = this.Core.Folders.GetFolderCount();
+            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
+            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
+            FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, FileMetadataPolicy.Private );
+            FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, FileMetadataPolicy.Private );
+            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, FileMetadataPolicy.Private );
+
+            // Check
+            Assert.AreEqual( 5, totalFolders );
+            Assert.AreEqual( rootFolder, this.Core.Folders.TryGetFolder( rootFolder.Id ) );
+            Assert.AreEqual( child1, this.Core.Folders.TryGetFolder( child1.Id ) );
+            Assert.AreEqual( child2, this.Core.Folders.TryGetFolder( child2.Id ) );
+            Assert.AreEqual( grandchild1, this.Core.Folders.TryGetFolder( grandchild1.Id ) );
+            Assert.AreEqual( grandchild2, this.Core.Folders.TryGetFolder( grandchild2.Id ) );
+
+            Assert.IsNotNull( rootFolderContents );
+            Assert.IsNull( rootFolderContents.Files );
+            Assert.IsNotNull( rootFolderContents.ChildFolders );
+            Assert.AreEqual( 2, rootFolderContents.ChildFolders.Count );
+            Assert.IsTrue( rootFolderContents.ChildFolders.Contains( child1 ) );
+            Assert.IsTrue( rootFolderContents.ChildFolders.Contains( child2 ) );
+
+            Assert.IsNotNull( child1Contents );
+            Assert.IsNull( child1Contents.Files );
+            Assert.IsNotNull( child1Contents.ChildFolders );
+            Assert.AreEqual( 1, child1Contents.ChildFolders.Count );
+            Assert.IsTrue( child1Contents.ChildFolders.Contains( grandchild1 ) );
+            Assert.IsFalse( child1Contents.ChildFolders.Contains( grandchild2 ) );
+
+            Assert.IsNotNull( child2Contents );
+            Assert.IsNull( child2Contents.Files );
+            Assert.IsNotNull( child2Contents.ChildFolders );
+            Assert.AreEqual( 1, child2Contents.ChildFolders.Count );
+            Assert.IsFalse( child2Contents.ChildFolders.Contains( grandchild1 ) );
+            Assert.IsTrue( child2Contents.ChildFolders.Contains( grandchild2 ) );
+
+            Assert.IsNotNull( grandchild1Contents );
+            Assert.IsNull( grandchild1Contents.Files );
+            Assert.IsNull( grandchild1Contents.ChildFolders );
+
+            Assert.IsNotNull( grandchild2Contents );
+            Assert.IsNull( grandchild2Contents.Files );
+            Assert.IsNull( grandchild2Contents.ChildFolders );
+        }
+
+        [TestMethod]
+        public void MoveFolderToRootTest()
+        {
+            // Setup root
+            var rootFolder = new JallerFolder
+            {
+                Name = "root",
+                ParentFolder = null
+            };
+
+            rootFolder = rootFolder with
+            {
+                Id = this.Core.Folders.ConfigureFolder( rootFolder )
+            };
+            Assert.AreNotEqual( 0, rootFolder.Id );
+
+            // Setup children
+            var child1 = new JallerFolder
+            {
+                Name = "Child 1",
+                ParentFolder = rootFolder.Id
+            };
+
+            child1 = child1 with
+            {
+                Id = this.Core.Folders.ConfigureFolder( child1 )
+            };
+            Assert.AreNotEqual( 0, child1.Id );
+
+            // Act
+            child1 = child1 with
+            {
+                ParentFolder = null
+            };
+            this.Core.Folders.ConfigureFolder( child1 );
+
+            // Check
+            int totalFolders = this.Core.Folders.GetFolderCount();
+            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
+            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
+
+            // Check
+            Assert.AreEqual( 2, totalFolders );
+
+            Assert.IsNotNull( rootFolderContents );
+            Assert.IsNull( rootFolderContents.ChildFolders );
+            Assert.IsNull( rootFolderContents.Files );
+
+            Assert.IsNotNull( child1Contents );
+            Assert.IsNull( child1Contents.ChildFolders );
+            Assert.IsNull( child1Contents.Files );
         }
     }
 }

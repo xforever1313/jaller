@@ -86,17 +86,29 @@ namespace Jaller.Core
             JallerDirectory? oldParentDirectory = null;
             JallerDirectory? newParentDirectory = null;
 
-            if( oldParentId != newFolderConfig.ParentFolder )
+            if( oldParentId == newFolderConfig.ParentFolder )
+            {
+                if( oldParentId is not null )
+                {
+                    if( this.db.Directories.FindById( oldParentId.Value ) is null )
+                    {
+                        // If a parent folder does not exist, consider it orphaned
+                        // and move the folder to the root.
+                        dbDirectory = dbDirectory with
+                        {
+                            ParentFolder = null
+                        };
+                    }
+                }
+            }
+            else if( oldParentId != newFolderConfig.ParentFolder )
             {
                 if( oldParentId is not null )
                 {
                     oldParentDirectory = this.db.Directories.FindById( oldParentId.Value );
-                    if( oldParentDirectory is null )
-                    {
-                        throw new DirectoryNotFoundException(
-                            $"Can not the original parent directory with an ID of {oldParentId}."
-                        );
-                    }
+
+                    // Leave it null if it does not exist.
+                    // We'll have to garbage collect the old directory.
                 }
 
                 if( newFolderConfig.ParentFolder is not null )
@@ -104,7 +116,7 @@ namespace Jaller.Core
                     newParentDirectory = this.db.Directories.FindById( newFolderConfig.ParentFolder );
                     if( newParentDirectory is null )
                     {
-                        throw new DirectoryNotFoundException(
+                        throw new FolderNotFoundDirectory(
                             $"Can not the new parent directory with an ID of {oldParentId}."
                         );
                     }
@@ -280,29 +292,57 @@ namespace Jaller.Core
             }
 
             List<JallerFolder>? folders = null;
-            List<int>? childFolders = directory.ChildrenFolders;
-            if( childFolders is not null )
+            bool garbageCollected = false;
+            List<int>? childDirectories = directory.ChildrenFolders;
+            if( childDirectories is not null )
             {
                 folders = new List<JallerFolder>();
-                foreach( int childId in childFolders )
+                foreach( int childId in childDirectories.ToList() )
                 {
                     JallerDirectory? childDirectory = this.db.Directories.FindById( childId );
                     if( childDirectory is null )
                     {
-                        throw new DirectoryNotFoundException(
-                            $"Can not find child with ID of {childId} in parent folder {folderId}."
+                        // If we can't find the child directory, it probably got deleted
+                        // or the app crashed.  Garbage collect it since it no longer exists.
+                        garbageCollected = true;
+                        if( childDirectories.Remove( childId ) == false )
+                        {
+                            throw new DatabaseException( $"Failed to garbage collect orphaned child folder with ID {childId}." );
+                        }
+                    }
+                    else
+                    {
+                        folders.Add(
+                            new JallerFolder
+                            {
+                                Id = childDirectory.Id,
+                                Name = childDirectory.Name,
+                                ParentFolder = directory.Id,
+                            }
                         );
                     }
-
-                    folders.Add(
-                        new JallerFolder
-                        {
-                            Id = childDirectory.Id,
-                            Name = childDirectory.Name,
-                            ParentFolder = directory.Id,
-                        }
-                    );
                 }
+
+                // If there are no more child folders due to being
+                // garbage collected, null it out to save on space.
+                if( childDirectories.Any() == false )
+                {
+                    childDirectories = null;
+                }
+
+                if( folders.Any() == false )
+                {
+                    folders = null;
+                }
+            }
+
+            if( garbageCollected )
+            {
+                directory = directory with
+                {
+                    ChildrenFolders = childDirectories
+                };
+                this.db.Directories.Update( directory );
             }
 
             return new FolderContents
