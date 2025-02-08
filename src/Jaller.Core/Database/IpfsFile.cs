@@ -30,8 +30,10 @@ internal sealed record class IpfsFile
     [Required]
     public required string Cid { get; init; }
 
+    public int? ParentFolder { get; init; }
+
     /// <summary>
-    /// The nameof the file.
+    /// The name of the file.
     /// </summary>
     public string FileName { get; init; } = "Untitled";
 
@@ -49,11 +51,4 @@ internal sealed record class IpfsFile
     public FileMetadataPolicy MetadataPrivacy { get; init; } = FileMetadataPolicy.Private;
 
     public FileDownloadPolicy DownloadablePolicy { get; init; } = FileDownloadPolicy.Private;
-
-    // ---------------- Methods ----------------
-
-    internal static void RegisterTypeWithDb()
-    {
-        BsonMapper.Global.EnumAsInteger = true;
-    }
 }

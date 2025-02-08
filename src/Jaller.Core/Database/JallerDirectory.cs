@@ -31,6 +31,9 @@ internal sealed record class JallerDirectory
 
     public List<int>? ChildrenFolders { get; init; } = null;
 
-    [BsonRef( "files" )]
-    public List<IpfsFile>? Files { get; init; } = null;
+    /// <summary>
+    /// CID of files that this folder contains.
+    /// Null for no files.
+    /// </summary>
+    public List<string>? Files { get; init; } = null;
 }

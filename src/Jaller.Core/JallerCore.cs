@@ -16,15 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Core.Configuration;
 using Jaller.Core.Database;
+using Jaller.Core.FileManagement;
+using Jaller.Core.FolderManagement;
 using Jaller.Standard;
 using Jaller.Standard.Configuration;
 using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Jaller.Standard.Logging;
 using Jaller.Standard.UserManagement;
-using LiteDB;
 
 namespace Jaller.Core
 {
@@ -37,6 +37,7 @@ namespace Jaller.Core
             this.Config = config;
             this.Database = new JallerDatabase( this.Config );
 
+            this.Files = new JallerFileManager( this, this.Database );
             this.Folders = new FolderManager( this, this.Database );
 
             this.Log = log;
@@ -50,7 +51,7 @@ namespace Jaller.Core
 
         public IJallerLogger Log { get; }
 
-        public IJallerFileManager Files => throw new NotImplementedException();
+        public IJallerFileManager Files { get; }
 
         public IUserManager UserManager => throw new NotImplementedException();
 

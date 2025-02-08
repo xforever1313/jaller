@@ -26,6 +26,11 @@ public sealed record class JallerFile
     /// </summary>
     public required string CidV1 { get; init; }
 
+    /// <summary>
+    /// The parent folder folder's ID.  Null if this goes inside of the root folder.
+    /// </summary>
+    public required int? ParentFolder { get; init; }
+
     public required string Name { get; init; } = "Untitled";
 
     public string? Description { get; init; } = null;

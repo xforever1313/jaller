@@ -63,7 +63,7 @@ namespace Jaller.Core.Database
             bool success = this.dbConnection.BeginTrans();
             if( success == false )
             {
-                throw new DatabaseException( "Failed to being transaction" );
+                throw new DatabaseException( "Failed to begin transaction" );
             }
         }
 
