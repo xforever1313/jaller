@@ -25,7 +25,7 @@ using Jaller.Standard.FolderManagement;
 
 namespace Jaller.Core.FolderManagement;
 
-internal sealed class FolderManager : IFolderManager
+internal sealed class JallerFolderManager : IJallerFolderManager
 {
     // ---------------- Fields ----------------
 
@@ -35,7 +35,7 @@ internal sealed class FolderManager : IFolderManager
 
     // ---------------- Constructor ----------------
 
-    public FolderManager( IJallerCore core, JallerDatabase db )
+    public JallerFolderManager( IJallerCore core, JallerDatabase db )
     {
         this.core = core;
         this.db = db;

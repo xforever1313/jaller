@@ -20,7 +20,7 @@ using Jaller.Standard.FileManagement;
 
 namespace Jaller.Standard.FolderManagement;
 
-public interface IFolderManager
+public interface IJallerFolderManager
 {
     // ---------------- Methods ----------------
 
@@ -72,7 +72,7 @@ public static class IFolderManagerExtensions
     /// <summary>
     /// Tries to get all of the contents within a folder.
     /// </summary>
-    public static FolderContents? TryGetFolderContents( this IFolderManager mgr, JallerFolder folder, FileMetadataPolicy visibility )
+    public static FolderContents? TryGetFolderContents( this IJallerFolderManager mgr, JallerFolder folder, FileMetadataPolicy visibility )
     {
         return mgr.TryGetFolderContents( folder.Id, visibility );
     }
@@ -80,7 +80,7 @@ public static class IFolderManagerExtensions
     /// <summary>
     /// Deletes the given folder.
     /// </summary>
-    public static void DeleteFolder( this IFolderManager mgr, JallerFolder folder )
+    public static void DeleteFolder( this IJallerFolderManager mgr, JallerFolder folder )
     {
         mgr.DeleteFolder( folder.Id );
     }

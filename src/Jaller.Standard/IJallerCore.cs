@@ -30,7 +30,7 @@ public interface IJallerCore
 
     IJallerConfig Config { get; }
 
-    IFolderManager Folders { get; }
+    IJallerFolderManager Folders { get; }
 
     IJallerFileManager Files { get; }
 

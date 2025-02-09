@@ -38,7 +38,7 @@ namespace Jaller.Core
             this.Database = new JallerDatabase( this.Config );
 
             this.Files = new JallerFileManager( this, this.Database );
-            this.Folders = new FolderManager( this, this.Database );
+            this.Folders = new JallerFolderManager( this, this.Database );
 
             this.Log = log;
         }
@@ -47,7 +47,7 @@ namespace Jaller.Core
 
         public IJallerConfig Config { get; }
 
-        public IFolderManager Folders { get; }
+        public IJallerFolderManager Folders { get; }
 
         public IJallerLogger Log { get; }
 

@@ -26,7 +26,7 @@ using Jaller.Tests.Mocks;
 namespace Jaller.Tests.Core.FolderManagement
 {
     [TestClass]
-    public sealed class FolderManagerTests
+    public sealed class JallerFolderManagerTests
     {
         // ---------------- Fields ----------------
 
