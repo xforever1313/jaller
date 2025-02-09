@@ -18,6 +18,7 @@
 
 using Jaller.Core.Database;
 using Jaller.Core.Exceptions;
+using Jaller.Core.FileManagement;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
@@ -119,7 +120,7 @@ internal sealed class FolderManager : IFolderManager
                     newParentDirectory = db.Directories.FindById( newFolderConfig.ParentFolder );
                     if( newParentDirectory is null )
                     {
-                        throw new FolderNotFoundDirectory(
+                        throw new FolderNotFoundException(
                             $"Can not the new parent directory with an ID of {oldParentId}."
                         );
                     }
@@ -264,7 +265,27 @@ internal sealed class FolderManager : IFolderManager
 
     public FolderContents GetRootFolder( FileMetadataPolicy visibility )
     {
-        throw new NotImplementedException();
+        IEnumerable<JallerDirectory> rootDirs = this.db.Directories.Find( d => d.ParentFolder.HasValue == false );
+        IEnumerable<IpfsFile> rootIpfsFiles = this.db.Files.Find( d => d.ParentFolder.HasValue == false );
+
+        List<JallerFolder>? rootFolders = null;
+        List<JallerFile>? rootFiles = null;
+
+        if( rootDirs.Any() )
+        {
+            rootFolders = rootDirs.Select( d => d.ToPublicModel() ).ToList();
+        }
+
+        if( rootIpfsFiles.Any() )
+        {
+            rootFiles = rootIpfsFiles.Select( f => f.ToPublicModel() ).ToList();
+        }
+
+        return new FolderContents
+        {
+            ChildFolders = rootFolders,
+            Files = rootFiles
+        };
     }
 
     public JallerFolder? TryGetFolder( int id )
@@ -292,63 +313,101 @@ internal sealed class FolderManager : IFolderManager
         }
 
         List<JallerFolder>? folders = null;
-        bool garbageCollected = false;
-        List<int>? childDirectories = directory.ChildrenFolders;
-        if( childDirectories is not null )
         {
-            folders = new List<JallerFolder>();
-            foreach( int childId in childDirectories.ToList() )
+            bool garbageCollected = false;
+            List<int>? childDirectories = directory.ChildrenFolders;
+            if( childDirectories is not null )
             {
-                JallerDirectory? childDirectory = db.Directories.FindById( childId );
-                if( childDirectory is null )
+                folders = new List<JallerFolder>();
+                foreach( int childId in childDirectories.ToList() )
                 {
-                    // If we can't find the child directory, it probably got deleted
-                    // or the app crashed.  Garbage collect it since it no longer exists.
-                    garbageCollected = true;
-                    if( childDirectories.Remove( childId ) == false )
+                    JallerDirectory? childDirectory = db.Directories.FindById( childId );
+                    if( childDirectory is null )
                     {
-                        throw new DatabaseException( $"Failed to garbage collect orphaned child folder with ID {childId}." );
+                        // If we can't find the child directory, it probably got deleted
+                        // or the app crashed.  Garbage collect it since it no longer exists.
+                        garbageCollected = true;
+                        if( childDirectories.Remove( childId ) == false )
+                        {
+                            throw new DatabaseException( $"Failed to garbage collect orphaned child folder with ID {childId}." );
+                        }
+                    }
+                    else
+                    {
+                        folders.Add( childDirectory.ToPublicModel() );
                     }
                 }
-                else
+
+                // If there are no more child folders due to being
+                // garbage collected, null it out to save on space.
+                if( childDirectories.Any() == false )
                 {
-                    folders.Add(
-                        new JallerFolder
-                        {
-                            Id = childDirectory.Id,
-                            Name = childDirectory.Name,
-                            ParentFolder = directory.Id,
-                        }
+                    childDirectories = null;
+                }
+
+                if( folders.Any() == false )
+                {
+                    folders = null;
+                }
+            }
+
+            if( garbageCollected )
+            {
+                directory = directory with
+                {
+                    ChildrenFolders = childDirectories
+                };
+                if( db.Directories.Update( directory ) == false )
+                {
+                    throw new DatabaseException(
+                        "Unable to garbage collect an orphaned directory from parent directory."
                     );
                 }
             }
-
-            // If there are no more child folders due to being
-            // garbage collected, null it out to save on space.
-            if( childDirectories.Any() == false )
-            {
-                childDirectories = null;
-            }
-
-            if( folders.Any() == false )
-            {
-                folders = null;
-            }
         }
 
-        if( garbageCollected )
+        List<JallerFile>? files = null;
         {
-            directory = directory with
+            bool garbageCollected = false;
+            List<string>? fileCids = directory.Files;
+            if( fileCids is not null )
             {
-                ChildrenFolders = childDirectories
-            };
-            db.Directories.Update( directory );
+                files = new List<JallerFile>();
+                foreach( string cid in fileCids.ToList() )
+                {
+                    IpfsFile? file = this.db.Files.FindById( cid );
+                    if( file is null )
+                    {
+                        fileCids.Remove( cid );
+                        garbageCollected = true;
+                    }
+                    else
+                    {
+                        files.Add( file.ToPublicModel() );
+                    }
+                }
+            }
+
+            if( garbageCollected )
+            {
+                directory = directory with
+                {
+                    Files = fileCids
+                };
+
+                if( db.Directories.Update( directory ) == false )
+                {
+                    throw new DatabaseException(
+                        "Unable to garbage collect an orphaned file from directory."
+                    );
+                }
+            }
         }
 
         return new FolderContents
         {
             ChildFolders = folders,
-            Files = null
+            Files = files
         };
     }
 }

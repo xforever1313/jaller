@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.IO;
 using Jaller.Core.Database;
 using Jaller.Core.Exceptions;
 using Jaller.Standard;
@@ -69,12 +70,147 @@ internal sealed class JallerFileManager : IJallerFileManager
 
     public void ConfigureFile( JallerFile file )
     {
-        throw new NotImplementedException();
+        JallerDirectory? newParentDirectory = null;
+        if( file.ParentFolder is not null )
+        {
+            newParentDirectory = this.db.Directories.FindById( file.ParentFolder );
+            if( newParentDirectory is null )
+            {
+                throw new FolderNotFoundException( $"Parent folder file needs to go to does not exist." );
+            }
+        }
+
+        this.db.BeginTransaction();
+        try
+        {
+            bool existing;
+            int? oldFolderId;
+            IpfsFile? dbFile = this.db.Files.FindById( file.CidV1 );
+            if( dbFile is null )
+            {
+                existing = false;
+                oldFolderId = null;
+
+                dbFile = new IpfsFile
+                {
+                    Cid = file.CidV1
+                };
+            }
+            else
+            {
+                existing = true;
+                oldFolderId = dbFile.ParentFolder;
+            }
+
+            dbFile = dbFile with
+            {
+                Description = file.Description,
+                DownloadablePolicy = file.DownloadablePolicy,
+                MetadataPrivacy = file.MetadataPrivacy,
+                MimeType = file.MimeType,
+                FileName = file.Name,
+                ParentFolder = file.ParentFolder,
+                Tags = file.Tags
+            };
+
+            JallerDirectory? oldParentDirectory = null;
+
+            if( ( oldFolderId == dbFile.ParentFolder ) && oldFolderId.HasValue )
+            {
+                if( this.db.Directories.FindById( dbFile.ParentFolder ) is null )
+                {
+                    // If the parent folder no longer does exists,
+                    // consider it orphaned and move the file to the root.
+                    dbFile = dbFile with
+                    {
+                        ParentFolder = null
+                    };
+                }
+            }
+            else if( oldFolderId != dbFile.ParentFolder )
+            {
+                if( oldFolderId is not null )
+                {
+                    oldParentDirectory = this.db.Directories.FindById( oldFolderId.Value );
+
+                    // Leave null if the old directory does not exist,
+                    // we'll have to garbage collect the old directory eventually.
+                }
+            }
+
+            // First add the file.
+            if( existing )
+            {
+                if( this.db.Files.Update( dbFile ) == false )
+                {
+                    throw new DatabaseException( "Failed to update file." );
+                }
+            }
+            else
+            {
+                this.db.Files.Insert( dbFile );
+            }
+
+            // Update the directory to include the file in its child files.
+            if( newParentDirectory is not null )
+            {
+                List<string>? files = newParentDirectory.Files;
+                if( files is null )
+                {
+                    files = new List<string>();
+                }
+                files.Add( dbFile.Cid );
+
+                newParentDirectory = newParentDirectory with
+                {
+                    Files = files
+                };
+
+                if( this.db.Directories.Update( newParentDirectory ) == false )
+                {
+                    throw new DatabaseException( "Unable to add file to parent directory." );
+                }
+            }
+
+            // Remove from old parent directory.
+            if( oldParentDirectory is not null )
+            {
+                List<string>? files = oldParentDirectory.Files;
+                if( files is not null )
+                {
+                    files.Remove( dbFile.Cid );
+                    if( files.Any() == false )
+                    {
+                        files = null;
+                    }
+
+                    oldParentDirectory = oldParentDirectory with
+                    {
+                        Files = files
+                    };
+
+                    if( this.db.Directories.Update( oldParentDirectory ) == false )
+                    {
+                        throw new DatabaseException( "Unable to remove file from old parent directory." );
+                    }
+                }
+                else
+                {
+                    // Somehow null?  Shouldn't be the case if the file was here,
+                    // but I guess we'll let it go.
+                }
+            }
+        }
+        catch( Exception )
+        {
+            this.db.Rollback();
+            throw;
+        }
+        this.db.Commit();
     }
 
     public void DeleteFile( string fileCid )
     {
-
         IpfsFile? file = this.db.Files.FindById( fileCid );
         if( file is null )
         {
@@ -82,7 +218,7 @@ internal sealed class JallerFileManager : IJallerFileManager
             return;
         }
 
-        db.BeginTransaction();
+        this.db.BeginTransaction();
         try
         {
             JallerDirectory? parentFolder = null;
@@ -129,9 +265,9 @@ internal sealed class JallerFileManager : IJallerFileManager
         }
         catch( Exception )
         {
-            db.Rollback();
+            this.db.Rollback();
             throw;
         }
-        db.Commit();
+        this.db.Commit();
     }
 }

@@ -16,25 +16,33 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Jaller.Core.Database;
 using Jaller.Standard.FileManagement;
-using Jaller.Standard.FolderManagement;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
 
-namespace Jaller.Standard;
+namespace Jaller.Core.FileManagement;
 
-public interface IJallerCore
+internal static class IpfsFileExtensions
 {
-    // ---------------- Properties ----------------
-
-    IJallerConfig Config { get; }
-
-    IFolderManager Folders { get; }
-
-    IJallerFileManager Files { get; }
-
-    IJallerLogger Log { get; }
-
-    IUserManager UserManager { get; }
+    /// <summary>
+    /// Transforms the database model to the public API model.
+    /// </summary>
+    public static JallerFile ToPublicModel( this IpfsFile file )
+    {
+        return new JallerFile
+        {
+            CidV1 = file.Cid,
+            Description = file.Description,
+            DownloadablePolicy = file.DownloadablePolicy,
+            MetadataPrivacy = file.MetadataPrivacy,
+            MimeType = file.MimeType,
+            Name = file.FileName,
+            ParentFolder = file.ParentFolder,
+            Tags = file.Tags
+        };
+    }
 }

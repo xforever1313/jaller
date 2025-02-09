@@ -51,4 +51,10 @@ internal sealed record class IpfsFile
     public FileMetadataPolicy MetadataPrivacy { get; init; } = FileMetadataPolicy.Private;
 
     public FileDownloadPolicy DownloadablePolicy { get; init; } = FileDownloadPolicy.Private;
+
+    /// <summary>
+    /// Tags for this file, if any.
+    /// Set to null if no tags are associated with this file.
+    /// </summary>
+    public HashSet<string>? Tags { get; init; }
 }

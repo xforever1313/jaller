@@ -16,25 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.FileManagement;
-using Jaller.Standard.FolderManagement;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
-
-namespace Jaller.Standard;
-
-public interface IJallerCore
+namespace Jaller.Core.Exceptions
 {
-    // ---------------- Properties ----------------
+    public class FolderNotFoundException : Exception
+    {
+        // ---------------- Constructor -----------------
 
-    IJallerConfig Config { get; }
-
-    IFolderManager Folders { get; }
-
-    IJallerFileManager Files { get; }
-
-    IJallerLogger Log { get; }
-
-    IUserManager UserManager { get; }
+        public FolderNotFoundException( string message ) :
+            base( message )
+        {
+        }
+    }
 }

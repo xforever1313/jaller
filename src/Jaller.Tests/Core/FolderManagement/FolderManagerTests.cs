@@ -96,6 +96,17 @@ namespace Jaller.Tests.Core.FolderManagement
         }
 
         [TestMethod]
+        public void GetRootFolderWithNoDirectoriesOrFilesTest()
+        {
+            // Act
+            FolderContents rootContents = this.Core.Folders.GetRootFolder( FileMetadataPolicy.Private );
+
+            // Check
+            Assert.IsNull( rootContents.ChildFolders );
+            Assert.IsNull( rootContents.Files );
+        }
+
+        [TestMethod]
         public void SingleFolderCreationTest()
         {
             // Setup
@@ -673,7 +684,7 @@ namespace Jaller.Tests.Core.FolderManagement
             };
 
             // Act
-            Assert.ThrowsException<FolderNotFoundDirectory>( () => this.Core.Folders.ConfigureFolder( folder ) );
+            Assert.ThrowsException<FolderNotFoundException>( () => this.Core.Folders.ConfigureFolder( folder ) );
 
             // Check
             Assert.AreEqual( 0, this.Core.Folders.GetFolderCount() );

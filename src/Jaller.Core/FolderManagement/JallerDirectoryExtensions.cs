@@ -16,25 +16,23 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.FileManagement;
+using Jaller.Core.Database;
 using Jaller.Standard.FolderManagement;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
 
-namespace Jaller.Standard;
+namespace Jaller.Core.FolderManagement;
 
-public interface IJallerCore
+internal static class JallerDirectoryExtensions
 {
-    // ---------------- Properties ----------------
-
-    IJallerConfig Config { get; }
-
-    IFolderManager Folders { get; }
-
-    IJallerFileManager Files { get; }
-
-    IJallerLogger Log { get; }
-
-    IUserManager UserManager { get; }
+    /// <summary>
+    /// Transforms the database model to the public API model.
+    /// </summary>
+    public static JallerFolder ToPublicModel( this JallerDirectory dir )
+    {
+        return new JallerFolder
+        {
+            Id = dir.Id,
+            Name = dir.Name,
+            ParentFolder = dir.ParentFolder,
+        };
+    }
 }

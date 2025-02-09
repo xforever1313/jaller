@@ -21,7 +21,10 @@ namespace Jaller.Standard.FileManagement;
 /// <summary>
 /// Is the metadata of a file viewable?
 /// </summary>
-public enum FileMetadataPolicy : byte
+/// <remarks>
+/// Must be int instead of byte or a casting exception happens with LiteDB.
+/// </remarks>
+public enum FileMetadataPolicy : int
 {
     /// <summary>
     /// Metadata is only viewable to logged-in users.
@@ -46,7 +49,13 @@ public enum FileMetadataPolicy : byte
     Public = 255
 }
 
-public enum FileDownloadPolicy : byte
+/// <summary>
+/// Is the file downloadable from this gateway?
+/// </summary>
+/// <remarks>
+/// Must be int instead of byte or a casting exception happens with LiteDB.
+/// </remarks>
+public enum FileDownloadPolicy : int
 {
     /// <summary>
     /// File can only be downloaded

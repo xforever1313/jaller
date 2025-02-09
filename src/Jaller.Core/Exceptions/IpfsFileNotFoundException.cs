@@ -16,15 +16,20 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Core.Exceptions
-{
-    public class FolderNotFoundDirectory : Exception
-    {
-        // ---------------- Constructor -----------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-        public FolderNotFoundDirectory( string message ) :
-            base( message )
-        {
-        }
+namespace Jaller.Core.Exceptions;
+
+public class IpfsFileNotFoundException : Exception
+{
+    // ---------------- Constructor ----------------
+
+    public IpfsFileNotFoundException( string message )
+        : base( message )
+    {
     }
 }
