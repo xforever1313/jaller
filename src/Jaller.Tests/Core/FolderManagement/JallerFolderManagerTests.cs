@@ -99,7 +99,7 @@ namespace Jaller.Tests.Core.FolderManagement
         public void GetRootFolderWithNoDirectoriesOrFilesTest()
         {
             // Act
-            FolderContents rootContents = this.Core.Folders.GetRootFolder( FileMetadataPolicy.Private );
+            FolderContents rootContents = this.Core.Folders.GetRootFolder( MetadataPolicy.Private );
 
             // Check
             Assert.IsNull( rootContents.ChildFolders );
@@ -287,11 +287,11 @@ namespace Jaller.Tests.Core.FolderManagement
 
             // Act
             int totalFolders = this.Core.Folders.GetFolderCount();
-            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
-            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
-            FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, FileMetadataPolicy.Private );
-            FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, FileMetadataPolicy.Private );
-            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, FileMetadataPolicy.Private );
+            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, MetadataPolicy.Private );
+            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, MetadataPolicy.Private );
+            FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, MetadataPolicy.Private );
+            FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, MetadataPolicy.Private );
+            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, MetadataPolicy.Private );
 
             // Check
             Assert.AreEqual( 5, totalFolders );
@@ -475,11 +475,11 @@ namespace Jaller.Tests.Core.FolderManagement
             this.Core.Folders.DeleteFolder( child1 );
             int afterFolderCount = this.Core.Folders.GetFolderCount();
 
-            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
-            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
-            FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, FileMetadataPolicy.Private );
-            FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, FileMetadataPolicy.Private );
-            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, FileMetadataPolicy.Private );
+            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, MetadataPolicy.Private );
+            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, MetadataPolicy.Private );
+            FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, MetadataPolicy.Private );
+            FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, MetadataPolicy.Private );
+            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, MetadataPolicy.Private );
 
             // Check
             Assert.AreEqual( 5, beforeFolderCount );
@@ -580,11 +580,11 @@ namespace Jaller.Tests.Core.FolderManagement
             this.Core.Folders.DeleteFolder( grandchild2 );
             int afterFolderCount = this.Core.Folders.GetFolderCount();
 
-            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
-            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
-            FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, FileMetadataPolicy.Private );
-            FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, FileMetadataPolicy.Private );
-            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, FileMetadataPolicy.Private );
+            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, MetadataPolicy.Private );
+            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, MetadataPolicy.Private );
+            FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, MetadataPolicy.Private );
+            FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, MetadataPolicy.Private );
+            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, MetadataPolicy.Private );
 
             // Check
             Assert.AreEqual( 5, beforeFolderCount );
@@ -658,8 +658,8 @@ namespace Jaller.Tests.Core.FolderManagement
             // Act
             int totalFolders = this.Core.Folders.GetFolderCount();
             Assert.AreEqual( 1, totalFolders );
-            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
-            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
+            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, MetadataPolicy.Private );
+            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, MetadataPolicy.Private );
 
             // Check
             totalFolders = this.Core.Folders.GetFolderCount();
@@ -821,11 +821,11 @@ namespace Jaller.Tests.Core.FolderManagement
             this.Core.Folders.ConfigureFolder( grandchild2 );
 
             int totalFolders = this.Core.Folders.GetFolderCount();
-            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
-            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
-            FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, FileMetadataPolicy.Private );
-            FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, FileMetadataPolicy.Private );
-            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, FileMetadataPolicy.Private );
+            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, MetadataPolicy.Private );
+            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, MetadataPolicy.Private );
+            FolderContents? child2Contents = this.Core.Folders.TryGetFolderContents( child2.Id, MetadataPolicy.Private );
+            FolderContents? grandchild1Contents = this.Core.Folders.TryGetFolderContents( grandchild1.Id, MetadataPolicy.Private );
+            FolderContents? grandchild2Contents = this.Core.Folders.TryGetFolderContents( grandchild2.Id, MetadataPolicy.Private );
 
             // Check
             Assert.AreEqual( 5, totalFolders );
@@ -903,8 +903,8 @@ namespace Jaller.Tests.Core.FolderManagement
 
             // Check
             int totalFolders = this.Core.Folders.GetFolderCount();
-            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
-            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
+            FolderContents? rootFolderContents = this.Core.Folders.TryGetFolderContents( rootFolder.Id, MetadataPolicy.Private );
+            FolderContents? child1Contents = this.Core.Folders.TryGetFolderContents( child1.Id, MetadataPolicy.Private );
 
             // Check
             Assert.AreEqual( 2, totalFolders );

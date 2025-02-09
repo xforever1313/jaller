@@ -24,7 +24,7 @@ namespace Jaller.Standard.FileManagement;
 /// <remarks>
 /// Must be int instead of byte or a casting exception happens with LiteDB.
 /// </remarks>
-public enum FileMetadataPolicy : int
+public enum MetadataPolicy : int
 {
     /// <summary>
     /// Metadata is only viewable to logged-in users.
@@ -50,15 +50,15 @@ public enum FileMetadataPolicy : int
 }
 
 /// <summary>
-/// Is the file downloadable from this gateway?
+/// Is the file or folder contents downloadable from this gateway?
 /// </summary>
 /// <remarks>
 /// Must be int instead of byte or a casting exception happens with LiteDB.
 /// </remarks>
-public enum FileDownloadPolicy : int
+public enum DownloadPolicy : int
 {
     /// <summary>
-    /// File can only be downloaded
+    /// File or folder contents can only be downloaded
     /// by logged-in users.
     /// 
     /// This is the default.
@@ -66,14 +66,14 @@ public enum FileDownloadPolicy : int
     Private = 0,
 
     /// <summary>
-    /// The file can not be downloaded from the gateway
+    /// The file or folder contents can not be downloaded from the gateway
     /// even if a user is logged in.
     /// Only metadata can be viewed.
     /// </summary>
     NoDownload = 200,
 
     /// <summary>
-    /// The file can be downloaded by anyone, even if they
+    /// The file or folder contents can be downloaded by anyone, even if they
     /// are not logged in.  Do *not* set a folder to this
     /// if you do not have permission to distribute the files within the folder.
     /// </summary>

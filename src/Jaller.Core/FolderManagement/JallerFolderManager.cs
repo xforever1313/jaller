@@ -272,7 +272,7 @@ internal sealed class JallerFolderManager : IJallerFolderManager
         }
     }
 
-    public FolderContents GetRootFolder( FileMetadataPolicy visibility )
+    public FolderContents GetRootFolder( MetadataPolicy visibility )
     {
         IEnumerable<JallerDirectory> rootDirs = this.db.Directories.Find( d => d.ParentFolder.HasValue == false );
         IEnumerable<IpfsFile> rootIpfsFiles = this.db.Files.Find( d => d.ParentFolder.HasValue == false );
@@ -313,7 +313,7 @@ internal sealed class JallerFolderManager : IJallerFolderManager
         };
     }
 
-    public FolderContents? TryGetFolderContents( int folderId, FileMetadataPolicy visibility )
+    public FolderContents? TryGetFolderContents( int folderId, MetadataPolicy visibility )
     {
         JallerDirectory? directory = db.Directories.FindById( folderId );
         if( directory is null )

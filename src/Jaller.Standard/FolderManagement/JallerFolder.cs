@@ -16,6 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Standard.FileManagement;
+
 namespace Jaller.Standard.FolderManagement;
 
 public sealed record class JallerFolder
@@ -28,4 +30,14 @@ public sealed record class JallerFolder
     /// The parent folder's ID.  Null if this is a root folder.
     /// </summary>
     public required int? ParentFolder { get; init; }
+
+    /// <summary>
+    /// The publicity of the contents of this folder.
+    /// </summary>
+    public MetadataPolicy MetadataPrivacy { get; init; } = MetadataPolicy.Private;
+
+    /// <summary>
+    /// If the contents of this folder are downloadable.
+    /// </summary>
+    public DownloadPolicy DownloadablePolicy { get; init; } = DownloadPolicy.Private;
 }

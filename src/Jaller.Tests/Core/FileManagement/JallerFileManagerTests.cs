@@ -131,7 +131,7 @@ public sealed class JallerFileManagerTests
 
         int totalFiles = this.Core.Files.GetFileCount();
         JallerFile? actualFile = this.Core.Files.TryGetFile( file.CidV1 );
-        FolderContents rootContents = this.Core.Folders.GetRootFolder( FileMetadataPolicy.Private );
+        FolderContents rootContents = this.Core.Folders.GetRootFolder( MetadataPolicy.Private );
 
         // Check
         Assert.AreEqual( 1, totalFiles );
@@ -174,7 +174,7 @@ public sealed class JallerFileManagerTests
 
         int totalFiles = this.Core.Files.GetFileCount();
         JallerFile? actualFile = this.Core.Files.TryGetFile( file.CidV1 );
-        FolderContents? folderContents = this.Core.Folders.TryGetFolderContents( newFolderId, FileMetadataPolicy.Private );
+        FolderContents? folderContents = this.Core.Folders.TryGetFolderContents( newFolderId, MetadataPolicy.Private );
 
         // Check
         Assert.AreEqual( 1, totalFiles );
@@ -233,8 +233,8 @@ public sealed class JallerFileManagerTests
 
         int totalFilesBeforeMove = this.Core.Files.GetFileCount();
         JallerFile? actualFileBeforeMove = this.Core.Files.TryGetFile( file.CidV1 );
-        FolderContents? rootFolderContentsBeforeMove = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
-        FolderContents? childFolderContentsBeforeMove = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
+        FolderContents? rootFolderContentsBeforeMove = this.Core.Folders.TryGetFolderContents( rootFolder.Id, MetadataPolicy.Private );
+        FolderContents? childFolderContentsBeforeMove = this.Core.Folders.TryGetFolderContents( child1.Id, MetadataPolicy.Private );
 
         // Perform move
         JallerFile fileAfterMove = file with
@@ -246,8 +246,8 @@ public sealed class JallerFileManagerTests
 
         int totalFilesAfterMove = this.Core.Files.GetFileCount();
         JallerFile? actualFileAfterMove = this.Core.Files.TryGetFile( fileAfterMove.CidV1 );
-        FolderContents? rootFolderContentsAfterMove = this.Core.Folders.TryGetFolderContents( rootFolder.Id, FileMetadataPolicy.Private );
-        FolderContents? childFolderContentsAfterMove = this.Core.Folders.TryGetFolderContents( child1.Id, FileMetadataPolicy.Private );
+        FolderContents? rootFolderContentsAfterMove = this.Core.Folders.TryGetFolderContents( rootFolder.Id, MetadataPolicy.Private );
+        FolderContents? childFolderContentsAfterMove = this.Core.Folders.TryGetFolderContents( child1.Id, MetadataPolicy.Private );
 
         // Check
 
@@ -317,8 +317,8 @@ public sealed class JallerFileManagerTests
 
         int totalFilesBeforeMove = this.Core.Files.GetFileCount();
         JallerFile? actualFileBeforeMove = this.Core.Files.TryGetFile( file.CidV1 );
-        FolderContents rootFolderContentsBeforeMove = this.Core.Folders.GetRootFolder( FileMetadataPolicy.Private );
-        FolderContents? childFolderContentsBeforeMove = this.Core.Folders.TryGetFolderContents( childFolder.Id, FileMetadataPolicy.Private );
+        FolderContents rootFolderContentsBeforeMove = this.Core.Folders.GetRootFolder( MetadataPolicy.Private );
+        FolderContents? childFolderContentsBeforeMove = this.Core.Folders.TryGetFolderContents( childFolder.Id, MetadataPolicy.Private );
 
         // Perform move
         JallerFile fileAfterMove = file with
@@ -330,8 +330,8 @@ public sealed class JallerFileManagerTests
 
         int totalFilesAfterMove = this.Core.Files.GetFileCount();
         JallerFile? actualFileAfterMove = this.Core.Files.TryGetFile( fileAfterMove.CidV1 );
-        FolderContents rootFolderContentsAfterMove = this.Core.Folders.GetRootFolder( FileMetadataPolicy.Private );
-        FolderContents? childFolderContentsAfterMove = this.Core.Folders.TryGetFolderContents( childFolder.Id, FileMetadataPolicy.Private );
+        FolderContents rootFolderContentsAfterMove = this.Core.Folders.GetRootFolder( MetadataPolicy.Private );
+        FolderContents? childFolderContentsAfterMove = this.Core.Folders.TryGetFolderContents( childFolder.Id, MetadataPolicy.Private );
 
         // Check
 
@@ -400,8 +400,8 @@ public sealed class JallerFileManagerTests
 
         int totalFilesBeforeMove = this.Core.Files.GetFileCount();
         JallerFile? actualFileBeforeMove = this.Core.Files.TryGetFile( file.CidV1 );
-        FolderContents rootFolderContentsBeforeMove = this.Core.Folders.GetRootFolder( FileMetadataPolicy.Private );
-        FolderContents? childFolderContentsBeforeMove = this.Core.Folders.TryGetFolderContents( childFolder.Id, FileMetadataPolicy.Private );
+        FolderContents rootFolderContentsBeforeMove = this.Core.Folders.GetRootFolder( MetadataPolicy.Private );
+        FolderContents? childFolderContentsBeforeMove = this.Core.Folders.TryGetFolderContents( childFolder.Id, MetadataPolicy.Private );
 
         // Perform move
         JallerFile fileAfterMove = file with
@@ -413,8 +413,8 @@ public sealed class JallerFileManagerTests
 
         int totalFilesAfterMove = this.Core.Files.GetFileCount();
         JallerFile? actualFileAfterMove = this.Core.Files.TryGetFile( fileAfterMove.CidV1 );
-        FolderContents rootFolderContentsAfterMove = this.Core.Folders.GetRootFolder( FileMetadataPolicy.Private );
-        FolderContents? childFolderContentsAfterMove = this.Core.Folders.TryGetFolderContents( childFolder.Id, FileMetadataPolicy.Private );
+        FolderContents rootFolderContentsAfterMove = this.Core.Folders.GetRootFolder( MetadataPolicy.Private );
+        FolderContents? childFolderContentsAfterMove = this.Core.Folders.TryGetFolderContents( childFolder.Id, MetadataPolicy.Private );
 
         // Check
 
@@ -503,7 +503,7 @@ public sealed class JallerFileManagerTests
         Assert.AreEqual( 1, this.Core.Files.GetFileCount() );
 
         this.Core.Files.DeleteFile( file.CidV1 );
-        FolderContents? folderContents = this.Core.Folders.TryGetFolderContents( newFolder.Id, FileMetadataPolicy.Private );
+        FolderContents? folderContents = this.Core.Folders.TryGetFolderContents( newFolder.Id, MetadataPolicy.Private );
 
         // Check
         Assert.AreEqual( 0, this.Core.Files.GetFileCount() );

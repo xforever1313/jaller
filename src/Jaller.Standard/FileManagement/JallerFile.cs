@@ -41,9 +41,9 @@ public sealed record class JallerFile
     /// </summary>
     public string? MimeType { get; init; } = null;
 
-    public FileMetadataPolicy MetadataPrivacy { get; init; } = FileMetadataPolicy.Private;
+    public MetadataPolicy MetadataPrivacy { get; init; } = MetadataPolicy.Private;
 
-    public FileDownloadPolicy DownloadablePolicy { get; init; } = FileDownloadPolicy.Private;
+    public DownloadPolicy DownloadablePolicy { get; init; } = DownloadPolicy.Private;
 
     /// <summary>
     /// Tags for this file, if any.

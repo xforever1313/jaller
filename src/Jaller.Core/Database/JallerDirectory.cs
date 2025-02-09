@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Standard.FileManagement;
 using LiteDB;
 
 namespace Jaller.Core.Database;
@@ -28,6 +29,16 @@ internal sealed record class JallerDirectory
     public string Name { get; init; } = "Untitled Folder";
 
     public int? ParentFolder { get; init; } = null;
+
+    /// <summary>
+    /// The publicity of the contents of this folder.
+    /// </summary>
+    public MetadataPolicy MetadataPrivacy { get; init; } = MetadataPolicy.Private;
+
+    /// <summary>
+    /// If the contents of this folder are downloadable.
+    /// </summary>
+    public DownloadPolicy DownloadablePolicy { get; init; } = DownloadPolicy.Private;
 
     public List<int>? ChildrenFolders { get; init; } = null;
 

@@ -45,7 +45,7 @@ public interface IJallerFolderManager
     /// <returns>
     /// Null if the passed in folder does not exist.
     /// </returns>
-    FolderContents? TryGetFolderContents( int folderId, FileMetadataPolicy visibility );
+    FolderContents? TryGetFolderContents( int folderId, MetadataPolicy visibility );
 
     /// <summary>
     /// Tries to get a folder by the given id.
@@ -57,7 +57,7 @@ public interface IJallerFolderManager
     /// Gets the root folder that contains all other folders.
     /// This folder can not be modified or deleted.
     /// </summary>
-    FolderContents GetRootFolder( FileMetadataPolicy visibility );
+    FolderContents GetRootFolder( MetadataPolicy visibility );
 
     /// <summary>
     /// Deletes the given folder.
@@ -72,7 +72,7 @@ public static class IFolderManagerExtensions
     /// <summary>
     /// Tries to get all of the contents within a folder.
     /// </summary>
-    public static FolderContents? TryGetFolderContents( this IJallerFolderManager mgr, JallerFolder folder, FileMetadataPolicy visibility )
+    public static FolderContents? TryGetFolderContents( this IJallerFolderManager mgr, JallerFolder folder, MetadataPolicy visibility )
     {
         return mgr.TryGetFolderContents( folder.Id, visibility );
     }
