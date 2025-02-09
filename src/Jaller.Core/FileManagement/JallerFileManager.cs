@@ -244,6 +244,10 @@ internal sealed class JallerFileManager : IJallerFileManager
                 if( files is not null )
                 {
                     files.Remove( file.Cid );
+                    if( files.Any() == false )
+                    {
+                        files = null;
+                    }
                 }
                 parentFolder = parentFolder with
                 {

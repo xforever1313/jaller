@@ -221,6 +221,7 @@ namespace Jaller.Tests.Core.FolderManagement
         [TestMethod]
         public void CreateFolderTreeTest()
         {
+            // Setup
             // Setup root
             var rootFolder = new JallerFolder
             {

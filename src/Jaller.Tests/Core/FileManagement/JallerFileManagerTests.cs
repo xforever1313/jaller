@@ -16,17 +16,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jaller.Core.Configuration;
 using Jaller.Core;
-using Jaller.Tests.Mocks;
+using Jaller.Core.Configuration;
+using Jaller.Core.Exceptions;
 using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
-using Jaller.Core.Exceptions;
+using Jaller.Tests.Mocks;
 
 namespace Jaller.Tests.Core.FileManagement;
 
@@ -456,5 +451,102 @@ public sealed class JallerFileManagerTests
         Assert.IsNotNull( childFolderContentsAfterMove.Files );
         Assert.AreEqual( 1, childFolderContentsAfterMove.Files.Count );
         Assert.AreEqual( fileAfterMove, childFolderContentsAfterMove.Files.First() );
+    }
+
+    [TestMethod]
+    public void DeleteFileFromRootTest()
+    {
+        // Setup
+        var file = new JallerFile
+        {
+            CidV1 = "1234",
+            Name = "file.txt",
+            ParentFolder = null
+        };
+
+        // Act
+        this.Core.Files.ConfigureFile( file );
+        Assert.AreEqual( 1, this.Core.Files.GetFileCount() );
+
+        this.Core.Files.DeleteFile( file.CidV1 );
+
+        // Check
+        Assert.AreEqual( 0, this.Core.Files.GetFileCount() );
+        Assert.IsNull( this.Core.Files.TryGetFile( file.CidV1 ) );
+    }
+
+    [TestMethod]
+    public void DeleteFileFromFolderTest()
+    {
+        // Setup
+        var newFolder = new JallerFolder
+        {
+            Name = "Test Folder",
+            ParentFolder = null
+        };
+
+        newFolder = newFolder with
+        {
+            Id = this.Core.Folders.ConfigureFolder( newFolder )
+        };
+        Assert.AreNotEqual( 0, newFolder.Id );
+
+        var file = new JallerFile
+        {
+            CidV1 = "1234",
+            Name = "file.txt",
+            ParentFolder = newFolder.Id
+        };
+
+        // Act
+        this.Core.Files.ConfigureFile( file );
+        Assert.AreEqual( 1, this.Core.Files.GetFileCount() );
+
+        this.Core.Files.DeleteFile( file.CidV1 );
+        FolderContents? folderContents = this.Core.Folders.TryGetFolderContents( newFolder.Id, FileMetadataPolicy.Private );
+
+        // Check
+        Assert.AreEqual( 0, this.Core.Files.GetFileCount() );
+        Assert.IsNull( this.Core.Files.TryGetFile( file.CidV1 ) );
+        
+        Assert.IsNotNull( folderContents );
+        Assert.IsNull( folderContents.ChildFolders );
+        Assert.IsNull( folderContents.Files );
+    }
+
+    [TestMethod]
+    public void FolderDeletionDeletesFilesTest()
+    {
+        // Setup
+        // Setup folder
+        var folder = new JallerFolder
+        {
+            Name = "root",
+            ParentFolder = null
+        };
+
+        folder = folder with
+        {
+            Id = this.Core.Folders.ConfigureFolder( folder )
+        };
+        Assert.AreNotEqual( 0, folder.Id );
+
+        var file = new JallerFile
+        {
+            CidV1 = "1234",
+            Name = "file.txt",
+            ParentFolder = folder.Id
+        };
+
+        // Act
+        this.Core.Files.ConfigureFile( file );
+        Assert.AreEqual( 1, this.Core.Folders.GetFolderCount() );
+        Assert.AreEqual( 1, this.Core.Files.GetFileCount() );
+
+        this.Core.Folders.DeleteFolder( folder.Id );
+
+        // Check
+        Assert.AreEqual( 0, this.Core.Folders.GetFolderCount() );
+        Assert.AreEqual( 0, this.Core.Files.GetFileCount() );
     }
 }

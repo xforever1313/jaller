@@ -230,7 +230,16 @@ internal sealed class JallerFolderManager : IJallerFolderManager
             {
                 foreach( string file in files )
                 {
-                    core.Files.DeleteFile( file );
+                    IpfsFile? dbFile = this.db.Files.FindById( file );
+                    if( dbFile is not null )
+                    {
+                        if( this.db.Files.Delete( file ) == false )
+                        {
+                            throw new DatabaseException(
+                                "Failed to delete file inside of diretory being deleted."
+                            );
+                        }
+                    }
                 }
             }
         }
