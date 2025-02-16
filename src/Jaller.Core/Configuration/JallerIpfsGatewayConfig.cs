@@ -22,7 +22,7 @@ namespace Jaller.Core.Configuration;
 
 public sealed record class JallerIpfsGatewayConfig : IJallerIpfsGatewayConfig
 {
-    public Uri GatwayUrl { get; set; } = new Uri( "http://localhost:5001" );
+    public Uri GatewayUrl { get; set; } = new Uri( "http://localhost:5001" );
 
     public uint TimeoutMultiplier { get; set; } = 1;
 }

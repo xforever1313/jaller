@@ -22,32 +22,20 @@ namespace Jaller.Core.Configuration;
 
 public sealed record class JallerDatabaseConfig : IJallerDatabaseConfig
 {
-    // ---------------- Constructor ----------------
-
-    public JallerDatabaseConfig()
-    {
-        this.DatabaseLocation = new FileInfo(
-            Path.Combine(
-                JallerConfig.DefaultPersistenceDirectory.FullName,
-                "jaller.ldb"
-            )
-        );
-
-        this.SharedConnection = false;
-        this.AutoRebuild = false;
-        this.AutoUpgradeDb = false;
-        this.EncryptionPassword = null;
-    }
-
     // ---------------- Properties ----------------
 
-    public FileInfo? DatabaseLocation { get; set; }
+    public FileInfo? DatabaseLocation { get; set; } = new FileInfo(
+        Path.Combine(
+            JallerConfig.DefaultPersistenceDirectory.FullName,
+            "jaller.ldb"
+        )
+    );
 
-    public bool SharedConnection { get; set; }
+    public bool SharedConnection { get; set; } = false;
 
-    public bool AutoRebuild { get; set; }
+    public bool AutoRebuild { get; set; } = false;
 
-    public bool AutoUpgradeDb { get; set; }
+    public bool AutoUpgradeDb { get; set; } = false;
 
-    public string? EncryptionPassword { get; set; }
+    public string? EncryptionPassword { get; set; } = null;
 }
