@@ -5,6 +5,8 @@
     <PackageReference Update="System.ServiceModel.Syndication" Version="9.0.0" />
     <PackageReference Update="Ipfs.Core" Version="0.55.0" />
     <PackageReference Update="LiteDB" Version="5.0.21" />
+    <PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.13" />
+    <PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.13" />
     <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
     <PackageReference Update="Microsoft.Extensions.Hosting" Version="8.0.1" />
     <PackageReference Update="Mono.Options" Version="6.12.0.148" />

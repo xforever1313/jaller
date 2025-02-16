@@ -70,15 +70,21 @@ namespace Jaller.Server
                 var builder = WebApplication.CreateBuilder( args );
 
                 // Add services to the container.
-                builder.Services.AddControllersWithViews();
+                builder.Services.AddMvc();
 
                 var app = builder.Build();
 
                 // Configure the HTTP request pipeline.
-                if( !app.Environment.IsDevelopment() )
+                if( app.Environment.IsDevelopment() )
                 {
-                    app.UseExceptionHandler( "/Home/Error" );
+                    app.UseWebAssemblyDebugging();
                 }
+                else
+                {
+                    app.UseExceptionHandler( "/Error" );
+                }
+
+                app.UseDefaultFiles();
                 app.UseStaticFiles();
 
                 app.UseRouting();
@@ -102,10 +108,12 @@ namespace Jaller.Server
                 // Unsure what we're doing about this yet...
                 //app.UseAuthorization();
 
-                app.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}" );
-
+                app.UseBlazorFrameworkFiles();
+#if false
+                app.MapRazorComponents<App>()
+                    .AddInteractiveWebAssemblyRenderMode()
+                    .AddAdditionalAssemblies( typeof( Jaller.Client._Imports ).Assembly );
+#endif
                 if( options.UseEnterToExit )
                 {
                     Console.WriteLine( RunningMessage );

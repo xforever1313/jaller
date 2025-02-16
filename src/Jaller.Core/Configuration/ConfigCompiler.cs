@@ -168,7 +168,7 @@ public sealed class ConfigCompiler
 $@"{namespaceBuilder}
 namespace Jaller.Config
 {{
-    public sealed class JallerUserConfig : JallerConfig
+    public sealed record class JallerUserConfig : JallerConfig
     {{
         public JallerUserConfig() :
             base()
