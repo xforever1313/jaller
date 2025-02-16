@@ -16,7 +16,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Core;
 using Jaller.Core.Configuration;
+using Jaller.Server.Logging;
+using Jaller.Standard;
 using Jaller.Standard.Configuration;
 using Mono.Options;
 using Prometheus;
@@ -69,8 +72,12 @@ namespace Jaller.Server
 
                 var builder = WebApplication.CreateBuilder( args );
 
+                using var core = new JallerCore( config, new JallerLogger( log ) );
+                core.Init();
+
                 // Add services to the container.
                 builder.Services.AddMvc();
+                builder.Services.AddSingleton<IJallerCore>( core );
 
                 var app = builder.Build();
                 app.MapControllers();

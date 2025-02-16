@@ -19,10 +19,12 @@
 using Jaller.Core.Database;
 using Jaller.Core.FileManagement;
 using Jaller.Core.FolderManagement;
+using Jaller.Core.Ipfs;
 using Jaller.Standard;
 using Jaller.Standard.Configuration;
 using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
+using Jaller.Standard.Ipfs;
 using Jaller.Standard.Logging;
 using Jaller.Standard.UserManagement;
 
@@ -30,17 +32,27 @@ namespace Jaller.Core
 {
     public sealed class JallerCore : IJallerCore, IDisposable
     {
+        // ---------------- Fields ----------------
+
+        private readonly HttpClient ipfsGatewayClient;
+
         // ---------------- Constructor ----------------
 
         public JallerCore( IJallerConfig config, IJallerLogger log )
         {
             this.Config = config;
+            this.Log = log;
+
+            this.ipfsGatewayClient = new HttpClient
+            {
+                BaseAddress = config.Ipfs.GatewayUrl
+            };
+
             this.Database = new JallerDatabase( this.Config );
 
             this.Files = new JallerFileManager( this, this.Database );
             this.Folders = new JallerFolderManager( this, this.Database );
-
-            this.Log = log;
+            this.Ipfs = new JallerIpfsManager( this, this.ipfsGatewayClient );
         }
 
         // ---------------- Properties ----------------
@@ -48,6 +60,8 @@ namespace Jaller.Core
         public IJallerConfig Config { get; }
 
         public IJallerFolderManager Folders { get; }
+
+        public IJallerIpfsManager Ipfs { get; }
 
         public IJallerLogger Log { get; }
 
@@ -66,6 +80,7 @@ namespace Jaller.Core
         public void Dispose()
         {
             this.Database.Dispose();
+            this.ipfsGatewayClient.Dispose();
         }
     }
 }

@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jaller.Tests", "Jaller.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jaller.Client", "Jaller.Client\Jaller.Client.csproj", "{5121045D-80E3-4D1C-9135-FB04231F266D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jaller.Contracts", "Jaller.Contracts\Jaller.Contracts.csproj", "{20A15875-9A69-45C2-A585-7E5AF54867D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{5121045D-80E3-4D1C-9135-FB04231F266D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5121045D-80E3-4D1C-9135-FB04231F266D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5121045D-80E3-4D1C-9135-FB04231F266D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20A15875-9A69-45C2-A585-7E5AF54867D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20A15875-9A69-45C2-A585-7E5AF54867D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20A15875-9A69-45C2-A585-7E5AF54867D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20A15875-9A69-45C2-A585-7E5AF54867D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

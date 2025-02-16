@@ -16,28 +16,26 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.FileManagement;
-using Jaller.Standard.FolderManagement;
-using Jaller.Standard.Ipfs;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
+using System.Text.Json.Serialization;
 
-namespace Jaller.Standard;
+namespace Jaller.Contracts.Ipfs;
 
-public interface IJallerCore
+public sealed class IpfsVersionInfo
 {
-    // ---------------- Properties ----------------
+    // ---------------- Version ----------------
 
-    IJallerConfig Config { get; }
+    [JsonPropertyName( "Commit" )]
+    public string? Commit { get; set; }
 
-    IJallerFolderManager Folders { get; }
+    [JsonPropertyName( "Golang" )]
+    public string? Golang { get; set; }
 
-    IJallerFileManager Files { get; }
+    [JsonPropertyName( "Repo" )]
+    public string? Repo { get; set; }
 
-    IJallerIpfsManager Ipfs { get; }
+    [JsonPropertyName( "System" )]
+    public string? System { get; set; }
 
-    IJallerLogger Log { get; }
-
-    IUserManager UserManager { get; }
+    [JsonPropertyName( "Version" )]
+    public string? Version { get; set; }
 }

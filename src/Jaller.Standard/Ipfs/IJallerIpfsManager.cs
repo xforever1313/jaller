@@ -16,28 +16,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard.Configuration;
-using Jaller.Standard.FileManagement;
-using Jaller.Standard.FolderManagement;
-using Jaller.Standard.Ipfs;
-using Jaller.Standard.Logging;
-using Jaller.Standard.UserManagement;
+namespace Jaller.Standard.Ipfs;
 
-namespace Jaller.Standard;
-
-public interface IJallerCore
+public interface IJallerIpfsManager
 {
-    // ---------------- Properties ----------------
-
-    IJallerConfig Config { get; }
-
-    IJallerFolderManager Folders { get; }
-
-    IJallerFileManager Files { get; }
-
-    IJallerIpfsManager Ipfs { get; }
-
-    IJallerLogger Log { get; }
-
-    IUserManager UserManager { get; }
+    /// <summary>
+    /// Retrieves the version information from the gateway.
+    /// </summary>
+    Stream GetVersionInfo();
 }

@@ -16,19 +16,37 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Standard;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jaller.Server.Controllers;
 
-[Route( "api/[controller]" )]
+[Route( "api/ipfs_info" )]
 [ApiController]
-public sealed class IpfsController : ControllerBase
+public sealed class IpfsInfoController : ControllerBase
 {
+    // ---------------- Fields ----------------
+
+    private readonly IJallerCore core;
+
+    // ---------------- Constructor ----------------
+
+    public IpfsInfoController( IJallerCore core )
+    {
+        this.core = core;
+    }
+
     // ---------------- Methods ----------------
 
-    [HttpGet( "{cid}" )]
-    public IActionResult Download( string cid )
+    [HttpGet( "version.json" )]
+    public async Task<IActionResult> Version()
     {
-        return Ok( cid );
+        Stream stream = await Task.Run(
+            () => this.core.Ipfs.GetVersionInfo()
+        );
+
+        this.HttpContext.Response.ContentType = "application/json";
+
+        return Ok( stream );
     }
 }

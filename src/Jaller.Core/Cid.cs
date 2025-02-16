@@ -16,6 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using PackgeIpfs = Ipfs;
+
 namespace Jaller.Core
 {
     /// <summary>
@@ -56,7 +58,7 @@ namespace Jaller.Core
 
         public static Cid Parse( string hash )
         {
-            Ipfs.Cid innerCid = Ipfs.Cid.Decode( hash );
+            PackgeIpfs.Cid innerCid = PackgeIpfs.Cid.Decode( hash );
 
             string version0;
             string version1;

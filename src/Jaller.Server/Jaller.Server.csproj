@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Jaller.Client\Jaller.Client.csproj" />
+    <ProjectReference Include="..\Jaller.Contracts\Jaller.Contracts.csproj" />
     <ProjectReference Include="..\Jaller.Core\Jaller.Core.csproj" />
     <ProjectReference Include="..\Jaller.Standard\Jaller.Standard.csproj" />
   </ItemGroup>
