@@ -1,9 +1,48 @@
 ﻿@inherits LayoutComponentBase
 
-@Body
-
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
+<div id="wrapper">
+    <!-- Top row -->
+    <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+        <h1 id="main-title" style="padding:0.5em;">Jaller - An advanced IPFS Gateway</h1>
+    </nav>
+    <!-- Main Page -->
+    <div id="page-wrapper">
+        <article id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-head-line">Jaller</h1>
+                    <div id="blazor-error-ui">
+                        An unhandled error has occurred.
+                        <a href="" class="reload">Reload</a>
+                        <a class="dismiss">🗙</a>
+                    </div>
+                    @Body
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="row">
+                <div class="col-md-12">
+                    <p>TODO: Insert Folders</p>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+<!-- Footer -->
+<div id="footer-sec">
+    <div class="row">
+        <div class="col-md-4">
+            <p class="footertitle"><strong>About Jaller</strong></p>
+            <ul class="no-bullets">
+                <li>License</li>
+                <li>Third Party Credits</li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <p class="footertitle"><strong>About IPFS</strong></p>
+            <ul class="no-bullets">
+                <li>Website</li>
+            </ul>
+        </div>
+    </div>
 </div>

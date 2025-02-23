@@ -1,0 +1,191 @@
+.thumbnailimage{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+p.footertitle{
+    margin-bottom:0;
+}
+
+p.footersentence{
+    margin-bottom:0;
+}
+
+ul.no-bullets {
+    list-style-type: none;
+    padding: 0;
+    margin-top:0;
+    margin-left: 1em;
+}
+
+.tags {
+    list-style: none;
+    margin: 0px;
+    padding-left: 0px;
+}
+
+.tags li {
+    float: left;
+    padding: 3px 15px;
+    margin: 5px;
+    border: 1px solid rgb(221, 221, 221);
+}
+
+.post-bottom-hr {
+    margin-bottom: 0px;
+}
+
+/* Overriding shendrick.net's theme */
+
+#postmeta {
+    padding-top: 0.5em;
+    /*
+        Apparently border-bottom is based on the padding.
+        If we want padding of 0.5 on bottom and top, and 1 em
+        is the text size, then we need 2 em.
+    */
+    padding-bottom: 2em;
+    font-style: italic;
+    margin-bottom: 1em;
+    border-bottom: 1px dashed #ff0000;
+}
+
+.page-head-line {
+    border-bottom: 2px solid rgb(255, 0, 0);
+}
+
+/* Color scheme chosen from: https://coolors.co/013300 */
+
+/* 
+    The bar at the top of the site.
+    Leave it the default, it looks good.
+*/
+
+/*
+.navbar-cls-top {
+    background: rgb(0, 51, 102);
+}
+
+.navbar-default {
+
+}
+*/
+
+/*
+    Includes the sidebar, but not the links contained within.
+*/
+#wrapper {
+    background: #015400;
+}
+
+/* Includes the sidebar links */
+
+.sidebar-collapse .nav > li > a {
+    color: #fff;
+    background: #013300;
+    border-bottom: 1px solid #FFFFCC;
+}
+
+.sidebar-collapse .nav > li > a:hover,
+.sidebar-collapse .nav > li > a:focus {
+    background: #001A00;
+    outline: 0;
+}
+
+/*
+    Includes the area surrounding the article area
+*/
+#page-wrapper {
+    background-color: #fdd555;
+}
+
+
+/*
+   Includes the area where the article text is located.
+*/
+
+#page-inner {
+    background-color: #fffeee;
+}
+
+/*
+    Includes the entire footer.
+*/
+#footer-sec {
+    background: #331900;
+    font-size: 14px;
+}
+
+#footer-sec a {
+    color: #ccc;
+}
+
+.panel-footer {
+    background-color: #faf2e5
+}
+
+table {
+    box-sizing: border-box;
+    border-spacing: 0;
+    border-collapse: collapse;
+    background-color: transparent;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+
+.mapTitle {
+    font-size: large;
+}
+
+.mapDescription {
+    font-size: medium;
+}
+
+.panel-footer {
+    background-color: #faf2e5
+}
+
+.editor-notes-details {
+    display: flex;
+    justify-content: space-between;
+}
+
+.editor-notes-summary {
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.editor-notes-summary::-webkit-details-marker {
+    display: none;
+}
+
+.editor-notes-button {
+    margin-right: 0.5em;
+}
+  
+.editor-notes-content {
+  padding: 10px;
+}
+  
+/* Optional: Animation for smooth expansion */
+details[open] .editor-notes-content {
+  animation: editorNotesSlideDown 0.3s ease-out;
+}
+  
+@keyframes editorNotesSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
