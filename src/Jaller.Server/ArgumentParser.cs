@@ -168,25 +168,19 @@ internal class ArgumentParser
 
     private static void PrintCredits()
     {
-        string str = AssemblyResourceReader.ReadStringResource(
-            typeof( Program ).Assembly, $"{nameof( Jaller )}.{nameof( Server )}.Credits.md"
-        );
+        string str = Resources.GetCredits();
         Console.WriteLine( str );
     }
 
     private static void PrintLicense()
     {
-        string str = AssemblyResourceReader.ReadStringResource(
-            typeof( Program ).Assembly, $"{nameof( Jaller )}.{nameof( Server )}.License.md"
-        );
+        string str = Resources.GetLicense();
         Console.WriteLine( str );
     }
 
     private static void PrintReadme()
     {
-        string str = AssemblyResourceReader.ReadStringResource(
-            typeof( Program ).Assembly, $"{nameof( Jaller )}.{nameof( Server )}.Readme.md"
-        );
+        string str = Resources.GetReadme();
         Console.WriteLine( str );
     }
 
