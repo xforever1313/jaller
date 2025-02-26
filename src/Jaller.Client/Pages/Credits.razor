@@ -1,0 +1,45 @@
+﻿@page "/Credits"
+@inject HttpClient httpCLient;
+@inject ILogger<License> log;
+
+<PageTitle>Third Party Credits</PageTitle>
+
+@if( creditsCached )
+{
+    @((MarkupString)creditsText)
+}
+else
+{
+    <p>@creditsText</p>
+}
+
+@code {
+    // ---------------- Fields ----------------
+
+    private static string creditsText = "Loading credits text...";
+
+    private static bool creditsCached = false;
+
+    // ---------------- Methods ----------------
+
+    protected override async Task OnInitializedAsync()
+    {
+        if( creditsCached )
+        {
+            return;
+        }
+
+        HttpResponseMessage versionResponse = await this.httpCLient.GetAsync( "/api/about/credits.txt" );
+        if( versionResponse.IsSuccessStatusCode )
+        {
+            creditsCached = true;
+            string markdownText = await versionResponse.Content.ReadAsStringAsync();
+            creditsText = MarkdownToHtmlConverter.Convert( markdownText );
+        }
+        else
+        {
+            string errorString = await versionResponse.Content.ReadAsStringAsync();
+            creditsText = $"Error getting credits information: {errorString}";
+        }
+    }
+}
