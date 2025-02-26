@@ -1,0 +1,45 @@
+﻿@page "/License"
+@inject HttpClient httpCLient;
+@inject ILogger<License> log;
+
+<PageTitle>License</PageTitle>
+
+@if( licensedCached )
+{
+    @((MarkupString)licenseText)
+}
+else
+{
+    <p>@licenseText</p>
+}
+
+@code {
+    // ---------------- Fields ----------------
+
+    private static string licenseText = "Loading license text...";
+
+    private static bool licensedCached = false;
+
+    // ---------------- Methods ----------------
+
+    protected override async Task OnInitializedAsync()
+    {
+        if( licensedCached )
+        {
+            return;
+        }
+
+        HttpResponseMessage versionResponse = await this.httpCLient.GetAsync( "/api/about/license.txt" );
+        if( versionResponse.IsSuccessStatusCode )
+        {
+            licensedCached = true;
+            string markdownText = await versionResponse.Content.ReadAsStringAsync();
+            licenseText = MarkdownToHtmlConverter.Convert( markdownText );
+        }
+        else
+        {
+            string errorString = await versionResponse.Content.ReadAsStringAsync();
+            licenseText = $"Error getting License information: {errorString}";
+        }
+    }
+}

@@ -1,4 +1,4 @@
-//
+﻿//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
 // 
@@ -16,29 +16,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Microsoft.AspNetCore.Mvc;
+namespace Jaller.Client;
 
-namespace Jaller.Server.Controllers;
-
-[Route( "api/about" )]
-[ApiController]
-public class AboutController : ControllerBase
+internal static class HtmlFormatter
 {
-    // ---------------- Methods ----------------
+    public static readonly string ATagRelProperties = @"noopener noreferrer nofollow";
 
-    [HttpGet( "license.txt" )]
-    public IActionResult License()
-    {
-        this.HttpContext.Response.ContentType = "text/plain";
-
-        return Ok( Resources.GetLicense() );
-    }
-    
-    [HttpGet( "credits.txt" )]
-    public IActionResult Credits()
-    {
-        this.HttpContext.Response.ContentType = "text/plain";
-
-        return Ok( Resources.GetCredits() );
-    }
+    public static readonly string ATagProperties =
+        $@"target=""_blank"" rel=""{ATagRelProperties}""";
 }
