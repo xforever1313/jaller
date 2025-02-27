@@ -34,8 +34,22 @@ public interface IJallerWebConfig
     IReadOnlyCollection<string>? AllowedAdminUrlPrefixes { get; }
 
     /// <summary>
+    /// If set to false, a URL that contains a port number
+    /// will be rejected.  This should generally be set to
+    /// true in a development environment or if behind
+    /// a reverse proxy.
+    /// </summary>
+    bool AllowPortsInUrl { get; }
+    
+    /// <summary>
     /// If set to true, this will have metrics appear on /Metrics.
     /// If set to false, no metrics will appear at /Metrics.
     /// </summary>
     bool EnableMetrics { get; }
+    
+    /// <summary>
+    /// If set to true, if the requested URL that contains "//" this will
+    /// rewrite the URL so each "//" becomes "/" instead.
+    /// </summary>
+    bool RewriteDoubleSlashes { get; }
 }

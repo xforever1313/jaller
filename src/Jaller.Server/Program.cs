@@ -80,6 +80,40 @@ namespace Jaller.Server
                 builder.Services.AddSingleton<IJallerCore>( core );
 
                 var app = builder.Build();
+                
+                if( config.Web.AllowPortsInUrl == false )
+                {
+                    app.Use(
+                        ( HttpContext context, RequestDelegate next ) =>
+                        {
+                            int? port = context.Request.Host.Port;
+                            if( port is not null )
+                            {
+                                // Kill the connection,
+                                // and stop all processing.
+                                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                                context.Connection.RequestClose();
+                                return Task.CompletedTask;
+                            }
+
+                            return next( context );
+                        }
+                    );
+                }
+                
+                if( config.Web.RewriteDoubleSlashes )
+                {
+                    app.Use( ( context, next ) =>
+                    {
+                        string? value = context.Request.Path.Value;
+                        if( ( value is not null ) && value.StartsWith( "//" ) )
+                        {
+                            context.Request.Path = new PathString( value.Replace( "//", "/" ) );
+                        }
+                        return next();
+                    } );
+                }
+                
                 app.MapControllers();
 
                 // Configure the HTTP request pipeline.
