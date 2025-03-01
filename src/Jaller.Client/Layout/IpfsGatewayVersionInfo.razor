@@ -17,33 +17,35 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 *@
-@inject HttpClient httpClient;
-@inject ILogger<VersionInformation> log;
 
-<ul class="no-bullets">
-    <li>- <strong>Client Version: </strong> @VersionInfo.Version</li>
-    @if ( versionInfo is null )
-    {
-        <li>- <strong>Core Version:</strong> Loading...</li>
-        <li>- <strong>Contracts Version:</strong> Loading...</li>
-        <li>- <strong>Server Version:</strong> Loading...</li>
-        <li>- <strong>Standard Version:</strong> Loading...</li>
-    }
-    else
-    {
-        <li>- <strong>Core Version:</strong> @versionInfo.CoreVersion</li>
-        <li>- <strong>Contracts Version:</strong> @versionInfo.ContractsVersion</li>
-        <li>- <strong>Server Version:</strong> @versionInfo.ServerVersion</li>
-        <li>- <strong>Standard Version:</strong> @versionInfo.StandardVersion</li>
-    }
-</ul>
+@inject HttpClient httpCLient;
+@inject ILogger<IpfsGatewayVersionInfo> log;
+
+@if( versionInfo is null )
+{
+    <p>@versionLoadMessage</p>
+}
+else
+{
+    <p><strong>Version:</strong> @versionInfo.Version</p>
+    <p><strong>Commit:</strong> @versionInfo.Commit</p>
+    <p><strong>Repo:</strong> @versionInfo.Repo</p>
+    <p><strong>Golang:</strong> @versionInfo.Golang</p>
+    <p><strong>System:</strong> @versionInfo.System</p>
+}
 
 @code {
+    // ---------------- Fields ----------------
+
+    private string versionLoadMessage = "Loading version information...";
+
     /// <remarks>
     /// Static since it should never change, and we don't want to
     /// query the API every time the page loads.
     /// </remarks>
-    private static JallerVersionInfo? versionInfo = null;
+    private static IpfsVersionInfo? versionInfo = null;
+
+    // ---------------- Methods ----------------
 
     protected override async Task OnInitializedAsync()
     {
@@ -52,15 +54,16 @@
             return;
         }
 
-        HttpResponseMessage versionResponse = await this.httpClient.GetAsync( "/api/about/version.json" );
+        HttpResponseMessage versionResponse = await this.httpCLient.GetAsync( "/api/ipfs_info/version.json" );
         if( versionResponse.IsSuccessStatusCode )
         {
-            versionInfo = await versionResponse.Content.ReadFromJsonAsync<JallerVersionInfo>();
+            versionInfo = await versionResponse.Content.ReadFromJsonAsync<IpfsVersionInfo>();
+            this.versionLoadMessage = "";
         }
         else
         {
             string errorString = await versionResponse.Content.ReadAsStringAsync();
-            this.log.LogError( errorString );
+            this.versionLoadMessage = $"Error getting version information: {errorString}";
         }
     }
 }

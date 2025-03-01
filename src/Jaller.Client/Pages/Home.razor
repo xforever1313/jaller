@@ -27,41 +27,6 @@
 
 Welcome to your new app.
 
-<h2>Version Information</h2>
-@if( this.versionInfo is null )
-{
-    <p>@versionLoadMessage</p>
-}
-else
-{
-    <p><strong>Version:</strong> @this.versionInfo.Version</p>
-    <p><strong>Commit:</strong> @this.versionInfo.Commit</p>
-    <p><strong>Repo:</strong> @this.versionInfo.Repo</p>
-    <p><strong>Golang:</strong> @this.versionInfo.Golang</p>
-    <p><strong>System:</strong> @this.versionInfo.System</p>
-}
-
 @code {
-    // ---------------- Fields ----------------
 
-    private string versionLoadMessage = "Loading version information...";
-
-    private IpfsVersionInfo? versionInfo = null;
-
-    // ---------------- Methods ----------------
-
-    protected override async Task OnInitializedAsync()
-    {
-        HttpResponseMessage versionResponse = await this.httpCLient.GetAsync( "/api/ipfs_info/version.json" );
-        if( versionResponse.IsSuccessStatusCode )
-        {
-            this.versionInfo = await versionResponse.Content.ReadFromJsonAsync<IpfsVersionInfo>();
-            this.versionLoadMessage = "";
-        }
-        else
-        {
-            string errorString = await versionResponse.Content.ReadAsStringAsync();
-            this.versionLoadMessage = $"Error getting version information: {errorString}";
-        }
-    }
 }
