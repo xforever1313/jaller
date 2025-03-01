@@ -41,4 +41,12 @@ public class AboutController : ControllerBase
 
         return Ok( Resources.GetCredits() );
     }
+
+    [HttpGet( "version.json" )]
+    public IActionResult ServerVersion()
+    {
+        this.HttpContext.Response.ContentType = "application/json";
+
+        return Ok( Resources.GetVersionInfo() );
+    }
 }

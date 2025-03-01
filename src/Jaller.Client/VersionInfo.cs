@@ -16,26 +16,14 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System.Text.Json.Serialization;
+namespace Jaller.Client;
 
-namespace Jaller.Contracts.Ipfs;
-
-public sealed class IpfsVersionInfo
+internal static class VersionInfo
 {
-    // ---------------- Properties ----------------
-
-    [JsonPropertyName( "Commit" )]
-    public string? Commit { get; set; }
-
-    [JsonPropertyName( "Golang" )]
-    public string? Golang { get; set; }
-
-    [JsonPropertyName( "Repo" )]
-    public string? Repo { get; set; }
-
-    [JsonPropertyName( "System" )]
-    public string? System { get; set; }
-
-    [JsonPropertyName( "Version" )]
-    public string? Version { get; set; }
+    /// <summary>
+    /// The version of Jaller.Client.
+    /// Needs to be there and not in the .csproj since Blazor WASM
+    /// doesn't seem to do reflection well.
+    /// </summary>
+    internal const string Version = "1.0.0";
 }

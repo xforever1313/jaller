@@ -16,26 +16,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System.Text.Json.Serialization;
-
-namespace Jaller.Contracts.Ipfs;
-
-public sealed class IpfsVersionInfo
+namespace Jaller.Contracts
 {
-    // ---------------- Properties ----------------
-
-    [JsonPropertyName( "Commit" )]
-    public string? Commit { get; set; }
-
-    [JsonPropertyName( "Golang" )]
-    public string? Golang { get; set; }
-
-    [JsonPropertyName( "Repo" )]
-    public string? Repo { get; set; }
-
-    [JsonPropertyName( "System" )]
-    public string? System { get; set; }
-
-    [JsonPropertyName( "Version" )]
-    public string? Version { get; set; }
+    /// <summary>
+    /// Dummy class used so we can reference the assemlby.
+    /// </summary>
+    public static class JallerContracts
+    {
+    }
 }

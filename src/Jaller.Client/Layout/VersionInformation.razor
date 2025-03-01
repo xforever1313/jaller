@@ -1,0 +1,57 @@
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+@inject HttpClient httpClient;
+@inject ILogger<VersionInformation> log;
+
+<ul class="no-bullets">
+    <li>- <strong>Client Version: </strong> @VersionInfo.Version</li>
+    @if ( this.versionInfo is null )
+    {
+        <li>- <strong>Core Version:</strong> Loading...</li>
+        <li>- <strong>Contracts Version:</strong> Loading...</li>
+        <li>- <strong>Server Version:</strong> Loading...</li>
+        <li>- <strong>Standard Version:</strong> Loading...</li>
+    }
+    else
+    {
+        <li>- <strong>Core Version:</strong> @versionInfo.CoreVersion</li>
+        <li>- <strong>Contracts Version:</strong> @versionInfo.ContractsVersion</li>
+        <li>- <strong>Server Version:</strong> @versionInfo.ServerVersion</li>
+        <li>- <strong>Standard Version:</strong> @versionInfo.StandardVersion</li>
+    }
+</ul>
+
+@code {
+    private JallerVersionInfo? versionInfo = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        HttpResponseMessage versionResponse = await this.httpClient.GetAsync( "/api/about/version.json" );
+        if( versionResponse.IsSuccessStatusCode )
+        {
+            this.versionInfo = await versionResponse.Content.ReadFromJsonAsync<JallerVersionInfo>();
+        }
+        else
+        {
+            string errorString = await versionResponse.Content.ReadAsStringAsync();
+            this.log.LogError( errorString );
+        }
+    }
+}

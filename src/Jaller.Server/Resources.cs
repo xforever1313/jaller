@@ -16,12 +16,43 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Contracts;
+using Jaller.Contracts.About;
+using Jaller.Core;
+using Jaller.Standard.Configuration;
 using SethCS.IO;
 
 namespace Jaller.Server;
 
 public class Resources
 {
+    // ---------------- Constructor ----------------
+
+    static Resources()
+    {
+        ContractsVersion = typeof( JallerContracts ).Assembly.GetName()?.Version?.ToString( 3 ) ?? "Unknown";
+        CoreVersion = typeof( JallerCore ).Assembly.GetName()?.Version?.ToString( 3 ) ?? "Unknown";
+        ServerVersion = typeof( Resources ).Assembly.GetName()?.Version?.ToString( 3 ) ?? "Unknown";
+        StandardVersion = typeof( IJallerConfig ).Assembly.GetName()?.Version?.ToString( 3 ) ?? "Unknown";
+    }
+
+    // ---------------- Properties ----------------
+
+    public static string ContractsVersion { get; }
+
+    public static string CoreVersion { get; }
+
+    public static string ServerVersion { get; }
+
+    public static string StandardVersion { get; }
+
+    // ---------------- Methods ----------------
+
+    public static JallerVersionInfo GetVersionInfo()
+    {
+        return new JallerVersionInfo( ContractsVersion, CoreVersion, ServerVersion, StandardVersion );
+    }
+
     public static string GetLicense()
     {
         string str = AssemblyResourceReader.ReadStringResource(

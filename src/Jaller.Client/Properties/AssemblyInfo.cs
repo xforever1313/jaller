@@ -16,26 +16,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System.Text.Json.Serialization;
+// We probably can't use reflection in Razor,
+// so make this equal to the version information
+// class.
+using Jaller.Client;
+using System.Reflection;
 
-namespace Jaller.Contracts.Ipfs;
-
-public sealed class IpfsVersionInfo
-{
-    // ---------------- Properties ----------------
-
-    [JsonPropertyName( "Commit" )]
-    public string? Commit { get; set; }
-
-    [JsonPropertyName( "Golang" )]
-    public string? Golang { get; set; }
-
-    [JsonPropertyName( "Repo" )]
-    public string? Repo { get; set; }
-
-    [JsonPropertyName( "System" )]
-    public string? System { get; set; }
-
-    [JsonPropertyName( "Version" )]
-    public string? Version { get; set; }
-}
+[assembly: AssemblyVersion( VersionInfo.Version )]
