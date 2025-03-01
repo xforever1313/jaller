@@ -1,4 +1,23 @@
-﻿@inherits LayoutComponentBase
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+@inherits LayoutComponentBase
 
 <div id="wrapper">
     <!-- Top row -->
@@ -18,13 +37,12 @@
                         <a href="" class="reload">Reload</a>
                         <a class="dismiss">🗙</a>
                     </div>
-                    @Body
                 </div>
             </div>
             <!-- Main Content -->
             <div class="row">
                 <div class="col-md-12">
-                    <p>TODO: Insert Folders</p>
+                    @Body
                 </div>
             </div>
         </article>
@@ -36,14 +54,17 @@
         <div class="col-md-4">
             <p class="footertitle"><strong>About Jaller</strong></p>
             <ul class="no-bullets">
-                <li><NavLink href="/License">License</NavLink></li>
-                <li><NavLink href="/Credits">Third Party Credits</NavLink></li>
+                <li><NavLink href="/License"><i class="fa-solid fa-gavel"></i> License</NavLink></li>
+                <li><NavLink href="/Credits"><i class="fa-solid fa-users"></i> Third-Party Credits</NavLink></li>
+                <li><ExternalLink Href="https://github.com/xforever1313/jaller"><i class="fa fa-file-text"></i> View Source Code</ExternalLink></li>
             </ul>
         </div>
         <div class="col-md-4">
             <p class="footertitle"><strong>About IPFS</strong></p>
             <ul class="no-bullets">
-                <li>Website</li>
+                <li><ExternalLink href="https://ipfs.tech/"><i class="fa-solid fa-earth-americas"></i> Website</ExternalLink></li>
+                <li><ExternalLink href="https://github.com/ipfs"><i class="fa-brands fa-square-github"></i> IPFS GitHub</ExternalLink></li>
+                <li><ExternalLink href="https://bsky.app/profile/ipfs.tech"><i class="fa-brands fa-bluesky"></i> IPFS Bluesky</ExternalLink></li>
             </ul>
         </div>
     </div>
