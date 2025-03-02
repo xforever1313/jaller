@@ -21,7 +21,7 @@ using Jaller.Standard.FileManagement;
 
 namespace Jaller.Standard.Bulk
 {
-    public interface IBulkOperations
+    public interface IJallerBulkOperations
     {
         /// <summary>
         /// Bluk adds metadata for files using an XML format.

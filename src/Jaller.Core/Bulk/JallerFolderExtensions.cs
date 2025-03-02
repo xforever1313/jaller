@@ -45,6 +45,22 @@ namespace Jaller.Core.Bulk
                 ParentFolder = parentFolder
             };
 
+            foreach( XAttribute attribute in element.Attributes() )
+            {
+                string attrName = attribute.Name.LocalName;
+                if( string.IsNullOrEmpty( attrName ) )
+                {
+                    continue;
+                }
+                else if( "name".EqualsIgnoreCase( attrName ) )
+                {
+                    folder = folder with
+                    {
+                        Name = attribute.Value
+                    };
+                }
+            }
+
             foreach( XElement childElement in element.Elements() )
             {
                 string childName = childElement.Name.LocalName;
@@ -66,13 +82,6 @@ namespace Jaller.Core.Bulk
                         MetadataPrivacy = Enum.Parse<MetadataPolicy>( childElement.Value )
                     };
                 }
-                else if( "foldername".EqualsIgnoreCase( childName ) )
-                {
-                    folder = folder with
-                    { 
-                        Name = childElement.Value
-                    };
-                }
             }
 
             return folder;
@@ -85,7 +94,7 @@ namespace Jaller.Core.Bulk
                 // Don't care about ID; we'll probably end up making a new ID if the directory is added.
                 new XElement( "downloadable", folder.DownloadablePolicy ),
                 new XElement( "metadata", folder.MetadataPrivacy ),
-                new XElement( "foldername", folder.Name )
+                new XAttribute( "name", folder.Name )
                 // Don't worry about parent folder, that's determined by the parent XML node.
             );
 

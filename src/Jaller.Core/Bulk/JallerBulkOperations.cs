@@ -24,7 +24,7 @@ using Jaller.Standard.FolderManagement;
 
 namespace Jaller.Core.Bulk
 {
-    internal sealed class JallerBulkOperations : IBulkOperations
+    internal sealed class JallerBulkOperations : IJallerBulkOperations
     {
         // ---------------- Fields ----------------
 
@@ -68,16 +68,16 @@ namespace Jaller.Core.Bulk
 
         public XDocument BulkGetAllMetaData( MetadataPolicy policy )
         {
-            var doc = new XDocument();
-
             var dec = new XDeclaration( "1.0", "utf-8", "yes" );
-            doc.Add( dec );
+            var doc = new XDocument( dec );
 
             var root = new XElement( rootXmlElementName );
             root.Add( new XAttribute( "version", currentXmlSchemaVersion ) );
             doc.Add( root );
 
             FolderContents rootContents = this.core.Folders.GetRootFolder( policy );
+
+            rootContents.ToXml( root, this.core, policy );
 
             return doc;
         }

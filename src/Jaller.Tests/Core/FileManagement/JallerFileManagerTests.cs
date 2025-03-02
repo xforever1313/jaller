@@ -80,7 +80,7 @@ public sealed class JallerFileManagerTests
         // Setup
         var file = new JallerFile
         {
-            CidV1 = "1234",
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             Name = "file.txt",
             ParentFolder = null
         };
@@ -101,7 +101,7 @@ public sealed class JallerFileManagerTests
         // Setup
         var file = new JallerFile
         {
-            CidV1 = "1234",
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             Name = "Does not exist.txt",
             ParentFolder = 124
         };
@@ -123,7 +123,7 @@ public sealed class JallerFileManagerTests
         // Setup
         var file = new JallerFile
         {
-            CidV1 = "1234",
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             Name = "file.txt",
             ParentFolder = null
         };
@@ -159,7 +159,7 @@ public sealed class JallerFileManagerTests
 
         var file = new JallerFile
         {
-            CidV1 = "1234",
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             Name = "file.txt",
             ParentFolder = null
         };
@@ -227,7 +227,7 @@ public sealed class JallerFileManagerTests
         // Setup File
         var file = new JallerFile
         {
-            CidV1 = "1234",
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             Name = "file.txt",
             ParentFolder = rootFolder.Id
         };
@@ -311,7 +311,7 @@ public sealed class JallerFileManagerTests
         // Setup Folder
         var file = new JallerFile
         {
-            CidV1 = "1234",
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             Name = "file.txt",
             ParentFolder = childFolder.Id
         };
@@ -394,7 +394,7 @@ public sealed class JallerFileManagerTests
         // Setup File
         var file = new JallerFile
         {
-            CidV1 = "1234",
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             Name = "file.txt",
             ParentFolder = null
         };
@@ -463,7 +463,7 @@ public sealed class JallerFileManagerTests
         // Setup
         var file = new JallerFile
         {
-            CidV1 = "1234",
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             Name = "file.txt",
             ParentFolder = null
         };
@@ -497,7 +497,7 @@ public sealed class JallerFileManagerTests
 
         var file = new JallerFile
         {
-            CidV1 = "1234",
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             Name = "file.txt",
             ParentFolder = newFolder.Id
         };
@@ -537,7 +537,7 @@ public sealed class JallerFileManagerTests
 
         var file = new JallerFile
         {
-            CidV1 = "1234",
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             Name = "file.txt",
             ParentFolder = folder.Id
         };

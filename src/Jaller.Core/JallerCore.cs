@@ -16,11 +16,13 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Core.Bulk;
 using Jaller.Core.Database;
 using Jaller.Core.FileManagement;
 using Jaller.Core.FolderManagement;
 using Jaller.Core.Ipfs;
 using Jaller.Standard;
+using Jaller.Standard.Bulk;
 using Jaller.Standard.Configuration;
 using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
@@ -50,12 +52,15 @@ namespace Jaller.Core
 
             this.Database = new JallerDatabase( this.Config );
 
+            this.BulkOperations = new JallerBulkOperations( this );
             this.Files = new JallerFileManager( this, this.Database );
             this.Folders = new JallerFolderManager( this, this.Database );
             this.Ipfs = new JallerIpfsManager( this, this.ipfsGatewayClient );
         }
 
         // ---------------- Properties ----------------
+
+        public IJallerBulkOperations BulkOperations { get; }
 
         public IJallerConfig Config { get; }
 

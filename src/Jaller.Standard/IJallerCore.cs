@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Standard.Bulk;
 using Jaller.Standard.Configuration;
 using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
@@ -28,6 +29,8 @@ namespace Jaller.Standard;
 public interface IJallerCore
 {
     // ---------------- Properties ----------------
+
+    IJallerBulkOperations BulkOperations { get; }
 
     IJallerConfig Config { get; }
 

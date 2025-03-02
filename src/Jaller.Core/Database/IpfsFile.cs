@@ -56,5 +56,5 @@ internal sealed record class IpfsFile
     /// Tags for this file, if any.
     /// Set to null if no tags are associated with this file.
     /// </summary>
-    public HashSet<string>? Tags { get; init; }
+    public TagSet? Tags { get; init; }
 }

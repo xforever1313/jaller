@@ -21,7 +21,6 @@ using Jaller.Standard;
 using Jaller.Standard.Bulk;
 using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Jaller.Core.Bulk
 {
@@ -65,6 +64,8 @@ namespace Jaller.Core.Bulk
                 else if( JallerFileExtensions.XmlElementName == childName )
                 {
                     JallerFile file = element.ToJallerFile( parentFolder?.Id ?? null );
+
+                    // If the file already exists, only overwrite it if the user wants us to.
                     if( core.Files.FileExists( file.CidV1 ) )
                     {
                         if( overwriteExistingFiles )
@@ -76,6 +77,10 @@ namespace Jaller.Core.Bulk
                         {
                             errors.Add( $"File with CID {file.CidV1} already exists in the database, and was not added." );
                         }
+                    }
+                    else // File does not exist, safe to add in.
+                    {
+                        core.Files.ConfigureFile( file );
                     }
                 }
                 else if( JallerFolderExtensions.XmlElementName == childName )
@@ -145,6 +150,7 @@ namespace Jaller.Core.Bulk
                 // I don't love the recursion here, but I also don't know what else to do for
                 // walking a tree like this...
                 childContents?.ToXml( folderElement, core, policy );
+                parentElement.Add( folderElement );
             }
         }
     }

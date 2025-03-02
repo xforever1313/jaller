@@ -18,6 +18,7 @@
 
 using System.Xml.Linq;
 using Jaller.Standard.FileManagement;
+using Org.BouncyCastle.Asn1.X509;
 using SethCS.Extensions;
 
 namespace Jaller.Core.Bulk
@@ -56,6 +57,22 @@ namespace Jaller.Core.Bulk
                 Name = "Untitled"
             };
 
+            foreach( XAttribute attribute in element.Attributes() )
+            {
+                string attrName = attribute.Name.LocalName;
+                if( string.IsNullOrEmpty( attrName ) )
+                {
+                    continue;
+                }
+                else if( "name".EqualsIgnoreCase( attrName ) )
+                {
+                    file = file with
+                    {
+                        Name = attribute.Value
+                    };
+                }
+            }
+
             foreach( XElement childElement in element.Elements() )
             {
                 string childName = childElement.Name.LocalName;
@@ -84,16 +101,9 @@ namespace Jaller.Core.Bulk
                         MetadataPrivacy = Enum.Parse<MetadataPolicy>( childElement.Value )
                     };
                 }
-                else if( "filename".EqualsIgnoreCase( childName ) )
-                {
-                    file = file with
-                    {
-                        Name = childElement.Value
-                    };
-                }
                 else if( "tags".EqualsIgnoreCase( childName ) )
                 {
-                    var tags = new HashSet<string>();
+                    var tags = new TagSet();
                     foreach( XElement tagElement in childElement.Elements() )
                     {
                         string tagElementName = tagElement.Name.LocalName;
@@ -103,7 +113,7 @@ namespace Jaller.Core.Bulk
                         }
                         else if( "tag".EqualsIgnoreCase( tagElementName ) )
                         {
-                            tags.Add( tagElementName );
+                            tags.Add( tagElement.Value );
                         }
                     }
                     file = file with
@@ -125,7 +135,7 @@ namespace Jaller.Core.Bulk
                 new XElement( "downloadable", file.DownloadablePolicy ),
                 new XElement( "metadata", file.MetadataPrivacy ),
                 new XElement( "mimetype", file.MimeType ),
-                new XElement( "filename", file.Name )
+                new XAttribute( "name", file.Name )
                 // Ignore directory ID; that's determined by the parent XML node.
             );
 

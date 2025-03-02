@@ -16,7 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System.IO;
 using Jaller.Core.Database;
 using Jaller.Core.Exceptions;
 using Jaller.Standard;
@@ -49,7 +48,9 @@ internal sealed class JallerFileManager : IJallerFileManager
 
     public JallerFile? TryGetFile( string cid )
     {
-        IpfsFile? file = this.db.Files.FindById( cid );
+        Cid realCid = Cid.Parse( cid );
+
+        IpfsFile? file = this.db.Files.FindById( realCid.Version1Cid );
         if( file is null )
         {
             return null;
@@ -63,7 +64,8 @@ internal sealed class JallerFileManager : IJallerFileManager
             MetadataPrivacy = file.MetadataPrivacy,
             MimeType = file.MimeType,
             Name = file.FileName,
-            ParentFolder = file.ParentFolder
+            ParentFolder = file.ParentFolder,
+            Tags = file.Tags
         };
     }
 
@@ -211,7 +213,9 @@ internal sealed class JallerFileManager : IJallerFileManager
 
     public void DeleteFile( string fileCid )
     {
-        IpfsFile? file = this.db.Files.FindById( fileCid );
+        Cid realCid = Cid.Parse( fileCid );
+
+        IpfsFile? file = this.db.Files.FindById( realCid.Version1Cid );
         if( file is null )
         {
             // File is already deleted, no need to continue.
