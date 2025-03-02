@@ -16,24 +16,22 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System.Xml.Linq;
-using Jaller.Standard.FileManagement;
-
 namespace Jaller.Standard.Bulk
 {
-    public interface IBulkOperations
+    public sealed class BulkAddResult
     {
-        /// <summary>
-        /// Bluk adds metadata for files using an XML format.
-        /// </summary>
-        /// <returns>
-        /// The result of adding the metadata, including warning and error messages.
-        /// </returns>
-        BulkAddResult BulkAddMetaData( XDocument doc, bool overwriteExistingFiles );
+        // ---------------- Constructor ----------------
 
-        /// <summary>
-        /// Creates an XML file that contains all files in an XML format.
-        /// </summary>
-        XDocument BulkGetAllMetaData( MetadataPolicy policy );
+        public BulkAddResult( IReadOnlyList<string> warnings, IReadOnlyList<string> errors )
+        {
+            this.Errors = errors;
+            this.Warnings = warnings;
+        }
+
+        // ---------------- Properties ----------------
+
+        public IReadOnlyList<string> Warnings { get; }
+
+        public IReadOnlyList<string> Errors { get; }
     }
 }

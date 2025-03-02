@@ -42,3 +42,14 @@ public interface IJallerFileManager
     /// </summary>
     void DeleteFile( string fileCid );
 }
+
+public static class IJallerFileManagerExtensions
+{
+    /// <summary>
+    /// Returns true if a file of the given CID exists.
+    /// </summary>
+    public static bool FileExists( this IJallerFileManager files, string cid )
+    {
+        return files.TryGetFile( cid ) is not null;
+    }
+}

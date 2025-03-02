@@ -54,6 +54,17 @@ public interface IJallerFolderManager
     JallerFolder? TryGetFolder( int id );
 
     /// <summary>
+    /// Tries to find a folder by looking in the database and finding
+    /// the folder that matches the folder based on the given parent folder ID and
+    /// the folder name.
+    /// </summary>
+    /// <returns>
+    /// The folder as it exists in the database, otherwise null if no
+    /// folder was found.
+    /// </returns>
+    JallerFolder? TryGetFolderByName( int? parentFolderId, string folderName );
+
+    /// <summary>
     /// Gets the root folder that contains all other folders.
     /// This folder can not be modified or deleted.
     /// </summary>

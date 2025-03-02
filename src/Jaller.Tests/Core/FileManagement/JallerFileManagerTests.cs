@@ -1,7 +1,7 @@
 ﻿//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
-// 
+// m
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
@@ -91,6 +91,7 @@ public sealed class JallerFileManagerTests
 
         // Check
         Assert.IsNull( foundFile );
+        Assert.IsFalse( this.Core.Files.FileExists( file.CidV1 ) );
         Assert.AreEqual( 0, this.Core.Files.GetFileCount() );
     }
 
@@ -112,6 +113,7 @@ public sealed class JallerFileManagerTests
 
         // Check
         Assert.AreEqual( 0, fileCount );
+        Assert.IsFalse( this.Core.Files.FileExists( file.CidV1 ) );
         Assert.IsNull( actualFile );
     }
 
@@ -137,7 +139,8 @@ public sealed class JallerFileManagerTests
         Assert.AreEqual( 1, totalFiles );
         Assert.IsNotNull( actualFile );
         Assert.AreEqual( file, actualFile );
-        
+        Assert.IsTrue( this.Core.Files.FileExists( file.CidV1 ) );
+
         Assert.IsNull( rootContents.ChildFolders );
         Assert.IsNotNull( rootContents.Files );
         Assert.AreEqual( 1, rootContents.Files.Count() );
@@ -180,6 +183,7 @@ public sealed class JallerFileManagerTests
         Assert.AreEqual( 1, totalFiles );
         Assert.IsNotNull( actualFile );
         Assert.AreEqual( file, actualFile );
+        Assert.IsTrue( this.Core.Files.FileExists( file.CidV1 ) );
 
         Assert.IsNotNull( folderContents );
         Assert.IsNull( folderContents.ChildFolders );

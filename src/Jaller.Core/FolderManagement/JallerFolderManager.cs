@@ -313,6 +313,22 @@ internal sealed class JallerFolderManager : IJallerFolderManager
         };
     }
 
+    public JallerFolder? TryGetFolderByName( int? parentId, string name )
+    {
+        JallerDirectory? dir = db.Directories.FindOne( d => ( d.ParentFolder == parentId ) && ( d.Name == name ) );
+        if( dir is null )
+        {
+            return null;
+        }
+
+        return new JallerFolder
+        {
+            Id = dir.Id,
+            Name = dir.Name,
+            ParentFolder = dir.ParentFolder
+        };
+    }
+
     public FolderContents? TryGetFolderContents( int folderId, MetadataPolicy visibility )
     {
         JallerDirectory? directory = db.Directories.FindById( folderId );

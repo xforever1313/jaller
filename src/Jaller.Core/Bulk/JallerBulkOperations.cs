@@ -43,8 +43,27 @@ namespace Jaller.Core.Bulk
 
         // ---------------- Methods ----------------
 
-        public void BulkAddMetaData( XDocument doc )
+        public BulkAddResult BulkAddMetaData( XDocument doc, bool overwriteExistingFiles )
         {
+            XElement? root = doc.Root;
+            if( root is null )
+            {
+                throw new ArgumentException(
+                    "Passed in XML document contains no root element.",
+                    nameof( doc )
+                );
+            }
+
+            if( rootXmlElementName != root.Name.LocalName )
+            {
+                throw new ArgumentException(
+                    "Got a root XML node that was unexpected.  Is this the right type of XML file?",
+                    nameof( doc )
+                );
+            }
+
+            BulkAddResult result = root.LoadFromXml( null, this.core, overwriteExistingFiles );
+            return result;
         }
 
         public XDocument BulkGetAllMetaData( MetadataPolicy policy )

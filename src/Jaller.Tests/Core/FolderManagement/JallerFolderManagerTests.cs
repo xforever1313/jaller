@@ -87,10 +87,12 @@ namespace Jaller.Tests.Core.FolderManagement
 
             // Act
             JallerFolder? foundFolder = this.Core.Folders.TryGetFolder( folder.Id );
+            JallerFolder? folderByName = this.Core.Folders.TryGetFolderByName( folder.ParentFolder, folder.Name );
             this.Core.Folders.DeleteFolder( folder );
 
             // Check
             Assert.IsNull( foundFolder );
+            Assert.IsNull( folderByName );
             Assert.AreEqual( 0, this.Core.Folders.GetFolderCount() );
 
         }
@@ -127,11 +129,13 @@ namespace Jaller.Tests.Core.FolderManagement
             };
 
             JallerFolder? createdFolder = this.Core.Folders.TryGetFolder( newFolderId );
+            JallerFolder? folderByName = this.Core.Folders.TryGetFolderByName( null, newFolder.Name );
 
             // Check
             Assert.AreEqual( 1, this.Core.Folders.GetFolderCount() );
             Assert.IsNotNull( createdFolder );
             Assert.AreEqual( newFolder, createdFolder );
+            Assert.AreEqual( newFolder, folderByName );
         }
 
         [TestMethod]
@@ -157,12 +161,14 @@ namespace Jaller.Tests.Core.FolderManagement
 
             int newFolderId2 = this.Core.Folders.ConfigureFolder( newFolder );
             JallerFolder? createdFolder = this.Core.Folders.TryGetFolder( newFolderId2 );
+            JallerFolder? folderByName = this.Core.Folders.TryGetFolderByName( null, newFolder.Name );
 
             // Check
             Assert.AreEqual( 1, this.Core.Folders.GetFolderCount() );
             Assert.AreEqual( newFolderId, newFolderId2 );
             Assert.IsNotNull( createdFolder );
             Assert.AreEqual( newFolder, createdFolder );
+            Assert.AreEqual( newFolder, folderByName );
         }
 
         [TestMethod]
