@@ -16,43 +16,23 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Microsoft.AspNetCore.Mvc;
+namespace Jaller.Contracts.Bulk;
 
-namespace Jaller.Server.Controllers;
-
-[Route( "api/about" )]
-[ApiController]
-public sealed class AboutController : ControllerBase
+public sealed class ImportResult
 {
     // ---------------- Constructor ----------------
 
-    public AboutController()
+    public ImportResult( IEnumerable<string> warnings, IEnumerable<string> errors )
     {
+        this.Warnings = warnings.ToArray();
+        this.Errors = errors.ToArray();
     }
     
-    // ---------------- Methods ----------------
+    // ---------------- Properties ----------------
 
-    [HttpGet( "license.txt" )]
-    public IActionResult License()
-    {
-        this.HttpContext.Response.ContentType = "text/plain";
-
-        return Ok( Resources.GetLicense() );
-    }
+    public bool Success => this.Errors.Any() == false;
     
-    [HttpGet( "credits.txt" )]
-    public IActionResult Credits()
-    {
-        this.HttpContext.Response.ContentType = "text/plain";
-
-        return Ok( Resources.GetCredits() );
-    }
-
-    [HttpGet( "version.json" )]
-    public IActionResult ServerVersion()
-    {
-        this.HttpContext.Response.ContentType = "application/json";
-
-        return Ok( Resources.GetVersionInfo() );
-    }
+    public string[] Warnings { get; }
+    
+    public string[] Errors { get; }
 }
