@@ -27,9 +27,9 @@ using SethCS.Extensions;
 
 namespace Jaller.Server.Controllers;
 
-[Route( "api/bluk" )]
+[Route( "api/bulk" )]
 [ApiController]
-public sealed class BlukController : ControllerBase
+public sealed class BulkController : ControllerBase
 {
     // ---------------- Fields ----------------
 
@@ -37,7 +37,7 @@ public sealed class BlukController : ControllerBase
     
     // ---------------- Constructor ----------------
 
-    public BlukController( IJallerCore core )
+    public BulkController( IJallerCore core )
     {
         this.core = core;
     }
@@ -58,7 +58,7 @@ public sealed class BlukController : ControllerBase
         return Ok( doc.ToString() );
     }
 
-    [HttpPost( "import" )]
+    [HttpPost( "import.xml" )]
     public async Task<IActionResult> Import( [FromForm] ImportModel model )
     {
         if( "POST".EqualsIgnoreCase( this.Request.Method ) == false )
@@ -82,22 +82,6 @@ public sealed class BlukController : ControllerBase
         );
 
         var response = new ImportResult( result.Warnings, result.Errors );
-        if( response.Errors.Any() )
-        {
-            // There was an error, report a bad request.
-            return BadRequest( response );
-        }
-        else if( response.Warnings.Any() )
-        {
-            return new OkObjectResult( response )
-            {
-                // Success, but there are warnings.
-                StatusCode = 213
-            };
-        }
-        else
-        {
-            return Ok( response );
-        }
+        return Ok( response );
     }
 }

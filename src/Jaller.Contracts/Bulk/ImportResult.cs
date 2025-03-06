@@ -16,23 +16,30 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.Text.Json.Serialization;
+
 namespace Jaller.Contracts.Bulk;
 
 public sealed class ImportResult
 {
     // ---------------- Constructor ----------------
 
+    public ImportResult() :
+        this( Array.Empty<string>(), Array.Empty<string>() )
+    {
+    }
+
     public ImportResult( IEnumerable<string> warnings, IEnumerable<string> errors )
     {
-        this.Warnings = warnings.ToArray();
-        this.Errors = errors.ToArray();
+        this.Warnings = warnings.Any() ? warnings.ToArray() : null;
+        this.Errors = errors.Any() ? errors.ToArray() : null;
     }
-    
+
     // ---------------- Properties ----------------
 
-    public bool Success => this.Errors.Any() == false;
-    
-    public string[] Warnings { get; }
-    
-    public string[] Errors { get; }
+    [JsonPropertyName( "warnings" )]
+    public string[]? Warnings { get; }
+
+    [JsonPropertyName( "errors" )]
+    public string[]? Errors { get; }
 }

@@ -151,11 +151,7 @@ namespace Jaller.Server
                 //app.UseAuthorization();
 
                 app.UseBlazorFrameworkFiles();
-#if false
-                app.MapRazorComponents<App>()
-                    .AddInteractiveWebAssemblyRenderMode()
-                    .AddAdditionalAssemblies( typeof( Jaller.Client._Imports ).Assembly );
-#endif
+
                 if( options.UseEnterToExit )
                 {
                     Console.WriteLine( RunningMessage );
