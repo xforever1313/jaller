@@ -25,11 +25,11 @@ public static class FolderContentsExtensions
 {
     // ---------------- Methods ----------------
 
-    public static JallerFolderContentsInfo ToFolderContentsInfo( this FolderContents contents, JallerFolder? folder )
+    public static JallerFolderContentsInfo ToFolderContentsInfo( this FolderContents contents, int? folderId )
     {
         return new JallerFolderContentsInfo
         {
-            FolderId = folder?.Id ?? null,
+            FolderId = folderId,
             Files = contents.Files?.Select( f => f.ToFileInfo() ).ToArray() ?? null,
             Folders = contents.ChildFolders?.Select( f => f.ToFolderInfo() ).ToArray() ?? null
         };
