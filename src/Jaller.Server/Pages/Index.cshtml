@@ -17,24 +17,30 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 *@
-@inherits LayoutComponentBase
+@page
+@model HomeModel
 
-<div class="row">
-    <div class="col-md-12">
-        <h1 class="page-head-line">Jaller</h1>
-        <div id="blazor-error-ui">
-            An unhandled error has occurred.
-            <a href="" class="reload">Reload</a>
-            <a class="dismiss">🗙</a>
-        </div>
-    </div>
-</div>
-<!-- Main Content -->
-<div class="row">
-    <div class="col-md-12">
-        @Body
-    </div>
-</div>
-<div>
-    <p><strong>Client Version: </strong> @VersionInfo.Version</p>
+@{
+    Layout = "_Content";
+}
+
+@section extrahead {
+    <!-- Blazor Stuff -->
+    <base href="/" />
+    <link href="/css/blazor.css" rel="stylesheet" />
+}
+
+@section scripts {
+    <script src="_framework/blazor.webassembly.js"></script>
+}
+
+<noscript>
+    JavaScript is required run this application.
+</noscript>
+<div id="app">
+    <svg class="loading-progress">
+        <circle r="40%" cx="50%" cy="50%" />
+        <circle r="40%" cx="50%" cy="50%" />
+    </svg>
+    <div class="loading-progress-text"></div>
 </div>

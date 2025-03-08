@@ -1,0 +1,109 @@
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+@{
+    Layout = "_Layout";
+}
+
+@model BasePageModel;
+
+@section extrahead {
+    @RenderSection("extrahead", required: false)
+}
+
+@section scripts {
+    @RenderSection("scripts", required: false)
+}
+
+<div id="wrapper">
+    <!-- Top row -->
+    <nav class="navbar navbar-default navbar-cls-top" role="navigation" style="margin-bottom: 0">
+        <!-- Top-left -->
+        <div class="jaller-navbar-header">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <h1 id="main-title" style="padding:0.5em;">Jaller - An advanced IPFS Gateway</h1>
+    </nav>
+
+    <!-- Side Bar -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse collapse in" style="">
+            <ul class="nav" id="main-menu">
+                <li>
+                    <a href="/"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li>
+                    <a href="/Search"><i class="fa fa-search"></i> Search</a>
+                </li>
+                <li>
+                    <a href="/Admin"><i class="fa-solid fa-user-tie"></i> Admin Panel</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- Main Page -->
+    <div id="page-wrapper">
+        <article id="page-inner">
+            @RenderSection("beforemain", required: false)
+            <!-- Main Content -->
+            <div class="row">
+                <div class="col-md-12">
+                    @RenderBody()
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+<!-- Footer -->
+<div id="footer-sec">
+    <div class="row">
+        <div class="col-md-4">
+            <p class="footertitle"><strong>About Jaller</strong></p>
+            <ul class="no-bullets">
+                <li><a href="/License"><i class="fa-solid fa-gavel"></i> License</a></li>
+                <li><a href="/Credits"><i class="fa-solid fa-users"></i> Third-Party Credits</a></li>
+                <li><a href="https://github.com/xforever1313/jaller" target="_blank" rel="noopener noreferrer nofollow"><i class="fa fa-file-text"></i> View Source Code</a></li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <p class="footertitle"><strong>About IPFS</strong></p>
+            <ul class="no-bullets">
+                <li><a href="https://ipfs.tech/" target="_blank" rel="noopener noreferrer nofollow"><i class="fa-solid fa-earth-americas"></i> Website</a></li>
+                <li><a href="https://github.com/ipfs" target="_blank" rel="noopener noreferrer nofollow"><i class="fa-brands fa-square-github"></i> IPFS GitHub</a></li>
+                <li><a href="https://bsky.app/profile/ipfs.tech" target="_blank" rel="noopener noreferrer nofollow"><i class="fa-brands fa-bluesky"></i> IPFS Bluesky</a></li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <p class="footertitle"><strong>Software Version</strong></p>
+            <ul class="no-bullets">
+                <li>- <strong>Core Version:</strong> @this.Model.JallerVersionInfo.CoreVersion</li>
+                <li>- <strong>Contracts Version:</strong> @this.Model.JallerVersionInfo.ContractsVersion</li>
+                <li>- <strong>Server Version:</strong> @this.Model.JallerVersionInfo.ServerVersion</li>
+                <li>- <strong>Standard Version:</strong> @this.Model.JallerVersionInfo.StandardVersion</li>
+            </ul>
+        </div>
+    </div>
+</div>

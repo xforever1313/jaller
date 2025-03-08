@@ -77,10 +77,11 @@ namespace Jaller.Server
 
                 // Add services to the container.
                 builder.Services.AddMvc();
+                builder.Services.AddRazorPages();
                 builder.Services.AddSingleton<IJallerCore>( core );
 
                 var app = builder.Build();
-                
+
                 if( config.Web.AllowPortsInUrl == false )
                 {
                     app.Use(
@@ -149,6 +150,8 @@ namespace Jaller.Server
 
                 // Unsure what we're doing about this yet...
                 //app.UseAuthorization();
+
+                app.MapRazorPages();
 
                 app.UseBlazorFrameworkFiles();
 

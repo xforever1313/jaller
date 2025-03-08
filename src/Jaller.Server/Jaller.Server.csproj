@@ -31,7 +31,6 @@
 	</AssemblyAttribute>
   </ItemGroup>
 
-
   <ItemGroup>
 	<EmbeddedResource Include="..\..\Credits.md" Link="Credits.md">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

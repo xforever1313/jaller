@@ -1,5 +1,4 @@
-﻿@*
-//
+﻿//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
 // 
@@ -16,25 +15,23 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
-*@
-@inherits LayoutComponentBase
 
-<div class="row">
-    <div class="col-md-12">
-        <h1 class="page-head-line">Jaller</h1>
-        <div id="blazor-error-ui">
-            An unhandled error has occurred.
-            <a href="" class="reload">Reload</a>
-            <a class="dismiss">🗙</a>
-        </div>
-    </div>
-</div>
-<!-- Main Content -->
-<div class="row">
-    <div class="col-md-12">
-        @Body
-    </div>
-</div>
-<div>
-    <p><strong>Client Version: </strong> @VersionInfo.Version</p>
-</div>
+using Jaller.Contracts.About;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace Jaller.Server.Models
+{
+    public class BasePageModel : PageModel
+    {
+        // ---------------- Constructor ----------------
+
+        public BasePageModel()
+        {
+            this.JallerVersionInfo = Resources.GetVersionInfo();
+        }
+
+        // ---------------- Properties ----------------
+
+        public JallerVersionInfo JallerVersionInfo { get; }
+    }
+}
