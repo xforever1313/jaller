@@ -4,6 +4,7 @@
     <ProjectReference Include="..\Jaller.Client\Jaller.Client.csproj" />
     <ProjectReference Include="..\Jaller.Contracts\Jaller.Contracts.csproj" />
     <ProjectReference Include="..\Jaller.Core\Jaller.Core.csproj" />
+    <ProjectReference Include="..\Jaller.Markdown\Jaller.Markdown.csproj" />
     <ProjectReference Include="..\Jaller.Standard\Jaller.Standard.csproj" />
   </ItemGroup>
 
@@ -14,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Markdig" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Mono.Options" />

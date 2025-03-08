@@ -19,6 +19,7 @@
 using Jaller.Contracts;
 using Jaller.Contracts.About;
 using Jaller.Core;
+using Jaller.Markdown;
 using Jaller.Standard.Configuration;
 using SethCS.IO;
 
@@ -34,6 +35,9 @@ public class Resources
         CoreVersion = typeof( JallerCore ).Assembly.GetName()?.Version?.ToString( 3 ) ?? "Unknown";
         ServerVersion = typeof( Resources ).Assembly.GetName()?.Version?.ToString( 3 ) ?? "Unknown";
         StandardVersion = typeof( IJallerConfig ).Assembly.GetName()?.Version?.ToString( 3 ) ?? "Unknown";
+
+        LicenseAsHtml = MarkdownToHtmlConverter.Convert( GetLicense() );
+        CreditsAsHtml = MarkdownToHtmlConverter.Convert( GetCredits() );
     }
 
     // ---------------- Properties ----------------
@@ -45,6 +49,10 @@ public class Resources
     public static string ServerVersion { get; }
 
     public static string StandardVersion { get; }
+
+    public static string LicenseAsHtml { get; }
+
+    public static string CreditsAsHtml { get; }
 
     // ---------------- Methods ----------------
 

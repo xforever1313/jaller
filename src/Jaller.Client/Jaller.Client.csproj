@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\sethcs\LibSethCS\LibSethCS.csproj" />
     <ProjectReference Include="..\Jaller.Contracts\Jaller.Contracts.csproj" />
+    <ProjectReference Include="..\Jaller.Markdown\Jaller.Markdown.csproj" />
   </ItemGroup>
 
 </Project>

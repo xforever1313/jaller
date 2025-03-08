@@ -1,4 +1,3 @@
-﻿@*
 //
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
@@ -16,27 +15,27 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
-*@
-@page
-@model Jaller.Server.Pages.HomeModel
 
-@section extrahead {
-    <!-- Blazor Stuff -->
-    <base href="/" />
-    <link href="/css/blazor.css" rel="stylesheet" />
+using Jaller.Server.Models;
+
+namespace Jaller.Server.Pages.About;
+
+public sealed class CreditsModel : BasePageModel
+{
+    // ---------------- Constructor ----------------
+
+    public CreditsModel()
+    {
+        this.CreditsHtml = Resources.CreditsAsHtml;
+    }
+
+    // ---------------- Properties ----------------
+
+    public string CreditsHtml { get; }
+
+    // ---------------- Methods ----------------
+
+    public void OnGet()
+    {
+    }
 }
-
-@section scripts {
-    <script src="_framework/blazor.webassembly.js"></script>
-}
-
-<noscript>
-    JavaScript is required run this application.
-</noscript>
-<div id="app">
-    <svg class="loading-progress">
-        <circle r="40%" cx="50%" cy="50%" />
-        <circle r="40%" cx="50%" cy="50%" />
-    </svg>
-    <div class="loading-progress-text"></div>
-</div>

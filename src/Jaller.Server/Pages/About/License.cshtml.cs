@@ -1,4 +1,4 @@
-﻿//
+//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
 // 
@@ -16,12 +16,26 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Client;
+using Jaller.Server.Models;
 
-internal static class HtmlFormatter
+namespace Jaller.Server.Pages.About;
+
+public sealed class LicenseModel : BasePageModel
 {
-    public static readonly string ATagRelProperties = @"noopener noreferrer nofollow";
+    // ---------------- Constructor ----------------
 
-    public static readonly string ATagProperties =
-        $@"target=""_blank"" rel=""{ATagRelProperties}""";
+    public LicenseModel()
+    {
+        this.LicenseHtml = Resources.LicenseAsHtml;
+    }
+
+    // ---------------- Properties ----------------
+
+    public string LicenseHtml { get; }
+
+    // ---------------- Methods ----------------
+
+    public void OnGet()
+    {
+    }
 }

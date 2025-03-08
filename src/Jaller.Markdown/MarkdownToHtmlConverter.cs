@@ -22,7 +22,7 @@ using Markdig.Renderers;
 using Markdig.Syntax.Inlines;
 using Markdig.Renderers.Html.Inlines;
 
-namespace Jaller.Client;
+namespace Jaller.Markdown;
 
 public static class MarkdownToHtmlConverter
 {
@@ -33,7 +33,7 @@ public static class MarkdownToHtmlConverter
             .Use<MarkdownExtension>()
             .Build();
 
-        return Markdown.ToHtml( markdown, pipeline );
+        return Markdig.Markdown.ToHtml( markdown, pipeline );
     }
 }
 
@@ -75,8 +75,8 @@ internal class MarkdownExtension : IMarkdownExtension
 
         // Only process absolute Uri
         if(
-            ( Uri.TryCreate( linkInline.Url, UriKind.RelativeOrAbsolute, out Uri? uri ) == false ) ||
-            ( uri.IsAbsoluteUri == false )
+             Uri.TryCreate( linkInline.Url, UriKind.RelativeOrAbsolute, out Uri? uri ) == false ||
+             uri.IsAbsoluteUri == false
         )
         {
             return false;
@@ -105,8 +105,8 @@ internal class MarkdownExtension : IMarkdownExtension
 
         // Only process absolute Uri
         if(
-            ( Uri.TryCreate( linkInline.Url, UriKind.RelativeOrAbsolute, out Uri? uri ) == false ) ||
-            ( uri.IsAbsoluteUri == false )
+             Uri.TryCreate( linkInline.Url, UriKind.RelativeOrAbsolute, out Uri? uri ) == false ||
+             uri.IsAbsoluteUri == false
         )
         {
             return false;
