@@ -18,6 +18,12 @@
 //
 *@
 @{
+    string title = "";
+    if (this.ViewData.TryGetValue("Title", out object? titleModel))
+    {
+        title = titleModel?.ToString() ?? "";
+    }
+
     Layout = "_Layout";
 }
 
@@ -67,6 +73,14 @@
     <!-- Main Page -->
     <div id="page-wrapper">
         <article id="page-inner">
+            @if( string.IsNullOrWhiteSpace( title ) == false )
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-head-line">@title</h1>
+                    </div>
+                </div>
+            }
             @RenderSection("beforemain", required: false)
             <!-- Main Content -->
             <div class="row">

@@ -3,7 +3,7 @@
 
 @if( this.Model.JallerFile is null )
 {
-    ViewData["Title"] = "Can not find file.";
+    ViewData["Title"] = "Can not find file";
 
     <div class="alert alert-danger">
         @if( this.Model.ErrorMessage is not null )
@@ -20,11 +20,8 @@ else
 {
     ViewData["Title"] = this.Model.JallerFile.Name;
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            @this.Model.JallerFile.Name
-        </div>
-        <div class="panel-body">
+    <div class="row">
+        <div class="col-md-12">
             <p><strong>CID V0:</strong> @( this.Model.CIDV0 ?? "Unknown" )</p>
             <p><strong>CID V1:</strong> @this.Model.JallerFile.CidV1</p>
             @if( string.IsNullOrEmpty( this.Model.JallerFile.Description ) == false )
@@ -34,12 +31,28 @@ else
                     @this.Html.Raw( MarkdownToHtmlConverter.Convert( this.Model.JallerFile.Description ) )
                 </div>
             }
-        </div>
-        @if( this.Model.JallerFile.DownloadablePolicy == DownloadPolicy.Public )
-        {
-            <div class="panel-footer">
+
+            @if( this.Model.JallerFile.DownloadablePolicy == DownloadPolicy.Public )
+            {
                 <a class="btn btn-success" href="/ipfs/@this.Model.JallerFile.CidV1" target="_blank">Download</a>
-            </div>
-        }
+            }
+        </div>
     </div>
+
+    <hr class="post-bottom-hr" />
+
+    @if( ( this.Model.JallerFile.Tags is not null ) && this.Model.JallerFile.Tags.Any() )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Tagged as:</h2>
+                <ul class="tags">
+                    @foreach( string tag in this.Model.JallerFile.Tags )
+                    {
+                        <li>@tag</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
 }
