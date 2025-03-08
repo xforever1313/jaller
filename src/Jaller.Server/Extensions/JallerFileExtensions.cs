@@ -37,4 +37,14 @@ public static class JallerFileExtensions
             Tags = file.Tags?.ToArray() ?? null
         };
     }
+
+    public static JallerFileTreeLeafInfo ToTreeLeafFileInfo( this JallerFile file )
+    {
+        return new JallerFileTreeLeafInfo
+        {
+            CidV1 = file.CidV1,
+            Name = file.Name,
+            ParentFolderId = file.ParentFolder,
+        };
+    }
 }

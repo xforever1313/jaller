@@ -16,22 +16,29 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Contracts.FolderManagement;
-using Jaller.Standard.FolderManagement;
+using System.Text.Json.Serialization;
+using Jaller.Contracts.FileManagement;
 
-namespace Jaller.Server.Extensions;
+namespace Jaller.Contracts.FolderManagement;
 
-public static class FolderContentsExtensions
+/// <summary>
+/// Information about a folder's contents so it can be rendered on
+/// a client's tree view.
+/// </summary>
+public record class JallerFolderTreeContentsInfo
 {
-    // ---------------- Methods ----------------
+    // ---------------- Properties ----------------
 
-    public static JallerFolderTreeContentsInfo ToFolderContentsInfo( this FolderContents contents, int? folderId )
-    {
-        return new JallerFolderTreeContentsInfo
-        {
-            FolderId = folderId,
-            Files = contents.Files?.Select( f => f.ToTreeLeafFileInfo() ).ToArray() ?? null,
-            Folders = contents.ChildFolders?.Select( f => f.ToFolderInfo() ).ToArray() ?? null
-        };
-    }
+    /// <summary>
+    /// The folder that contains this contents.
+    /// Null for root directory.
+    /// </summary>
+    [JsonPropertyName( "folder_id" )]
+    public int? FolderId { get; init; }
+
+    [JsonPropertyName( "files" )]
+    public JallerFileTreeLeafInfo[]? Files { get; init; }
+
+    [JsonPropertyName( "folders" )]
+    public JallerFolderInfo[]? Folders { get; init; }
 }

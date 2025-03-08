@@ -17,24 +17,25 @@
 //
 
 using System.Text.Json.Serialization;
-using Jaller.Contracts.FileManagement;
 
-namespace Jaller.Contracts.FolderManagement;
+namespace Jaller.Contracts.FileManagement;
 
-public record class JallerFolderContentsInfo
+/// <summary>
+/// Properties needed to work for the tree view in the web client.
+/// </summary>
+public record class JallerFileTreeLeafInfo
 {
     // ---------------- Properties ----------------
 
-    /// <summary>
-    /// The folder that contains this contents.
-    /// Null for root directory.
-    /// </summary>
-    [JsonPropertyName( "folder_id" )]
-    public int? FolderId { get; init; }
+    [JsonRequired]
+    [JsonPropertyName( "cidv1" )]
+    public required string CidV1 { get; init; }
 
-    [JsonPropertyName( "files" )]
-    public JallerFileInfo[]? Files { get; init; }
+    [JsonRequired]
+    [JsonPropertyName( "parent_folder" )]
+    public int? ParentFolderId { get; init; }
 
-    [JsonPropertyName( "folders" )]
-    public JallerFolderInfo[]? Folders { get; init; }
+    [JsonRequired]
+    [JsonPropertyName( "name" )]
+    public string Name { get; init; } = "Untitled";
 }
