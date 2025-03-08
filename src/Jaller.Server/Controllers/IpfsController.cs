@@ -16,19 +16,57 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Core;
+using Jaller.Standard;
+using Jaller.Standard.FileManagement;
 using Microsoft.AspNetCore.Mvc;
+using SethCS.Extensions;
 
 namespace Jaller.Server.Controllers;
 
-[Route( "api/[controller]" )]
+[Route( "ipfs" )]
 [ApiController]
 public sealed class IpfsController : ControllerBase
 {
+    // ---------------- Fields ----------------
+
+    private readonly IJallerCore core;
+
+    // ---------------- Constructor ----------------
+
+    public IpfsController( IJallerCore core )
+    {
+        this.core = core;
+    }
+
     // ---------------- Methods ----------------
 
     [HttpGet( "{cid}" )]
-    public IActionResult Download( string cid )
+    public async Task<IActionResult> Download( string cid )
     {
+        Cid? realCid = Cid.TryParse( cid );
+        if( realCid is null )
+        {
+            this.Response.ContentType = "plain/text";
+            return BadRequest( "Invalid or unsupported CID" );
+        }
+
+        JallerFile? file = await Task.Run( () => this.core.Files.TryGetFile( realCid.Version1Cid ) );
+        if( ( file is null ) || ( file.DownloadablePolicy != DownloadPolicy.Public ) )
+        {
+            this.Response.ContentType = "plain/text";
+            return NotFound( "Can not find file with given CID.  Either it does not exist, or this server does not allow one to download it." );
+        }
+
+        if( file.MimeType is not null )
+        {
+            this.Response.ContentType = file.MimeType;
+        }
+        else
+        {
+            this.Response.ContentType = file.Name.GetMimeType();
+        }
+
         return Ok( cid );
     }
 }

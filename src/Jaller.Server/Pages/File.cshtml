@@ -1,0 +1,45 @@
+﻿@page
+@model Jaller.Server.Pages.FileModel
+
+@if( this.Model.JallerFile is null )
+{
+    ViewData["Title"] = "Can not find file.";
+
+    <div class="alert alert-danger">
+        @if( this.Model.ErrorMessage is not null )
+        {
+            <p>@this.Model.ErrorMessage</p>
+        }
+        else
+        {
+            <p>Unknown Error :(</p>
+        }
+    </div>
+}
+else
+{
+    ViewData["Title"] = this.Model.JallerFile.Name;
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @this.Model.JallerFile.Name
+        </div>
+        <div class="panel-body">
+            <p><strong>CID V0:</strong> @( this.Model.CIDV0 ?? "Unknown" )</p>
+            <p><strong>CID V1:</strong> @this.Model.JallerFile.CidV1</p>
+            @if( string.IsNullOrEmpty( this.Model.JallerFile.Description ) == false )
+            {
+                <h3>Description</h3>
+                <div>
+                    @this.Html.Raw( MarkdownToHtmlConverter.Convert( this.Model.JallerFile.Description ) )
+                </div>
+            }
+        </div>
+        @if( this.Model.JallerFile.DownloadablePolicy == DownloadPolicy.Public )
+        {
+            <div class="panel-footer">
+                <a class="btn btn-success" href="/ipfs/@this.Model.JallerFile.CidV1" target="_blank">Download</a>
+            </div>
+        }
+    </div>
+}

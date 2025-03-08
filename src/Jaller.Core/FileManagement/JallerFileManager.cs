@@ -48,7 +48,11 @@ internal sealed class JallerFileManager : IJallerFileManager
 
     public JallerFile? TryGetFile( string cid )
     {
-        Cid realCid = Cid.Parse( cid );
+        Cid? realCid = Cid.TryParse( cid );
+        if( realCid is null )
+        {
+            return null;
+        }
 
         IpfsFile? file = this.db.Files.FindById( realCid.Version1Cid );
         if( file is null )

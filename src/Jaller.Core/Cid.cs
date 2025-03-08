@@ -56,32 +56,50 @@ namespace Jaller.Core
 
         // ---------------- Methods ----------------
 
+        public static Cid? TryParse( string hash )
+        {
+            try
+            {
+                PackgeIpfs.Cid innerCid = PackgeIpfs.Cid.Decode( hash );
+
+                string version0;
+                string version1;
+                if( innerCid.Version == 0 )
+                {
+                    version0 = hash;
+                    innerCid.Version = 1;
+                    version1 = innerCid.Encode();
+                }
+                else if( innerCid.Version == 1 )
+                {
+                    version1 = hash;
+                    innerCid.Version = 0;
+                    version0 = innerCid.Encode();
+                }
+                else
+                {
+                    return null;
+                }
+
+                return new Cid( version0, version1 );
+            }
+            catch( Exception )
+            {
+                return null;
+            }
+        }
+
         public static Cid Parse( string hash )
         {
-            PackgeIpfs.Cid innerCid = PackgeIpfs.Cid.Decode( hash );
-
-            string version0;
-            string version1;
-            if( innerCid.Version == 0 )
-            {
-                version0 = hash;
-                innerCid.Version = 1;
-                version1 = innerCid.Encode();
-            }
-            else if( innerCid.Version == 1 )
-            {
-                version1 = hash;
-                innerCid.Version = 0;
-                version0 = innerCid.Encode();
-            }
-            else
+            Cid? cid = TryParse( hash );
+            if( cid is null )
             {
                 throw new FormatException(
-                    "Unknown version for CID: " + innerCid.Version
+                    "Invalid CID: " + hash
                 );
             }
 
-            return new Cid( version0, version1 );
+            return cid;
         }
     }
 }
