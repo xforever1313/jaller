@@ -55,5 +55,21 @@ namespace Jaller.Core.Ipfs
 
             return response.Content.ReadAsStream();
         }
+
+        public Stream GetFile( string cid )
+        {
+            string versionPath = apiPath + $"/cat?progress=false&arg={cid}";
+            
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri( versionPath, UriKind.Relative ),
+                Method = HttpMethod.Post
+            };
+
+            HttpResponseMessage response = this.httpClient.Send( request );
+            response.EnsureSuccessStatusCode();
+
+            return response.Content.ReadAsStream();
+        }
     }
 }

@@ -24,4 +24,9 @@ public interface IJallerIpfsManager
     /// Retrieves the version information from the gateway.
     /// </summary>
     Stream GetVersionInfo();
+
+    /// <summary>
+    /// Reads the file from the IPFS Gateway.
+    /// </summary>
+    Stream GetFile( string cid );
 }

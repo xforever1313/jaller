@@ -58,15 +58,8 @@ public sealed class IpfsController : ControllerBase
             return NotFound( "Can not find file with given CID.  Either it does not exist, or this server does not allow one to download it." );
         }
 
-        if( file.MimeType is not null )
-        {
-            this.Response.ContentType = file.MimeType;
-        }
-        else
-        {
-            this.Response.ContentType = file.Name.GetMimeType();
-        }
+        this.Response.ContentType = file.MimeType ?? file.Name.GetMimeType();
 
-        return Ok( cid );
+        return Ok( this.core.Ipfs.GetFile( realCid.Version1Cid ) );
     }
 }
