@@ -20,90 +20,108 @@
 @inject HttpClient httpClient;
 @inject ILogger<FileTree> log;
 
-@if (this.folderInfo is null)
+@if (this.fileTree is null)
 {
-    <span>Loading Folder...</span>
+    <span>Loading Tree...</span>
 }
 else
 {
-    <ul class="no-bullets">
-        @foreach( JallerFolderInfo childFolderInfo in this.folderInfo?.Folders ?? Array.Empty<JallerFolderInfo>() )
+    var queue = new Queue<TreeNode>();
+    queue.Enqueue(this.fileTree.Root);
+    @while( queue.Any() )
+    {
+        TreeNode node = queue.Dequeue();
+        foreach( TreeNode childNode in node.ChildFolders.Values )
         {
-            <li id="folder_@childFolderInfo.Id">
-                <a href="#folder_@childFolderInfo.Id" @onclick="() => this.AddChild( childFolderInfo.Id )">
-                    @if( this.childFolders.Contains( childFolderInfo.Id ) )
-                    {
-                        <i class="fa-solid fa-folder-open"></i> @childFolderInfo.Name
-                    }
-                    else
-                    {
-                        <i class="fa-solid fa-folder"></i> @childFolderInfo.Name
-                    }
-                </a>
-                @foreach( int childFolder in this.childFolders )
-                {
-                    <FileTree FolderId="childFolder" ParentFolderId="this.FolderId" />
-                }
-            </li>
+            queue.Enqueue( childNode );
         }
 
-        @foreach( JallerFileTreeLeafInfo fileInfo in this.folderInfo?.Files ?? Array.Empty<JallerFileTreeLeafInfo>() )
-        {
-            <li><i class="fa-solid fa-file"></i> <a href="/File?cid=@fileInfo.CidV1" target="_blank">@fileInfo.Name</a></li>
-        }
-    </ul>
+        JallerFolderTreeContentsInfo folderInfo = node.FolderContents;
+
+        <ul class="no-bullets">
+            @foreach( JallerFolderInfo childFolderInfo in folderInfo.Folders ?? Array.Empty<JallerFolderInfo>() )
+            {
+                int? parentFolderId = folderInfo.FolderId;
+
+                <li id="folder_@childFolderInfo.Id">
+                    <a href="#folder_@childFolderInfo.Id" @onclick="async () => await this.AddChild( parentFolderId, childFolderInfo.Id )">
+                        @if (node.ChildFolders.ContainsKey(childFolderInfo.Id))
+                        {
+                            <i class="fa-solid fa-folder-open"></i> @childFolderInfo.Name
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-folder"></i> @childFolderInfo.Name
+                        }
+                    </a>
+                </li>
+            }
+
+            @foreach (JallerFileTreeLeafInfo fileInfo in folderInfo?.Files ?? Array.Empty<JallerFileTreeLeafInfo>())
+            {
+                <li><i class="fa-solid fa-file"></i> <a href="/File?cid=@fileInfo.CidV1" target="_blank">@fileInfo.Name</a></li>
+            }
+        </ul>
+    }
 }
 
 @code {
     // ---------------- Fields ----------------
 
-    private HashSet<int> childFolders = new();
-
-    private JallerFolderTreeContentsInfo? folderInfo;
-
-    // ---------------- Properties ----------------
-
-    [Parameter]
-    public int? ParentFolderId{ get; set; }
-
-    [Parameter]
-    public int? FolderId { get; set; }
+    private FileTreeModel? fileTree;
 
     // ---------------- Methods ----------------
 
     protected override async Task OnInitializedAsync()
     {
-        string folderId = this.FolderId?.ToString() ?? "";
-
-        HttpResponseMessage httpResponse = await this.httpClient.GetAsync($"/api/tree/contents/{folderId}");
-        if (httpResponse.IsSuccessStatusCode)
+        JallerFolderTreeContentsInfo? rootFolder = await GetFolderContents(null);
+        if (rootFolder is null )
         {
-            this.folderInfo = await httpResponse.Content.ReadFromJsonAsync<JallerFolderTreeContentsInfo>();
-            if( this.folderInfo is null )
+            this.log.LogCritical( "Can not get root directory, can not proceed." );
+            return;
+        }
+
+        this.fileTree = new FileTreeModel( rootFolder );
+    }
+
+    private async Task<JallerFolderTreeContentsInfo?> GetFolderContents( int? folderId )
+    {
+        string folderUrl = folderId?.ToString() ?? "";
+
+        HttpResponseMessage httpResponse = await this.httpClient.GetAsync($"/api/tree/contents/{folderUrl}");
+        if( httpResponse.IsSuccessStatusCode )
+        {
+            JallerFolderTreeContentsInfo? folderContents = await httpResponse.Content.ReadFromJsonAsync<JallerFolderTreeContentsInfo>();
+            if( folderContents is null )
             {
-                this.log.LogError($"Could not convert folder ID '{this.FolderId}' from JSON.");
-                return;
+                this.log.LogError($"Could not convert folder ID '{folderId}' from JSON.");
             }
 
-            int childFolderCount = this.folderInfo.Folders?.Length ?? 0;
-            int childFileCount = this.folderInfo.Files?.Length ?? 0;
-            this.log.LogInformation($"Initialized folder {folderId}. Child Folders Count: {childFolderCount}, Child File Count: {childFileCount}");
+            return folderContents;
         }
         else
         {
             string errorString = await httpResponse.Content.ReadAsStringAsync();
             this.log.LogError(errorString);
+
+            return null;
         }
     }
 
-    private void AddChild( int folderId )
+    private async Task AddChild( int? parentId, int childId )
     {
-        if (this.childFolders.Contains( folderId ) == false )
+        if( this.fileTree is null )
         {
-            this.childFolders.Add( folderId );
+            throw new InvalidOperationException("File Tree was somehow null.");
+        }
 
-            int childFileCount = this.folderInfo?.Files?.Length ?? 0;
-            this.log.LogInformation($"Added Child Folder {folderId}, file contents count: {childFileCount}");
+        JallerFolderTreeContentsInfo? folderContents = await GetFolderContents(childId);
+        if( folderContents is not null )
+        {
+            if( this.fileTree.AddDirectoryInfo(parentId, folderContents) == false )
+            {
+                this.log.LogError($"Could not find parent directory {parentId} for folder {childId}");
+            }
         }
     }
 }
