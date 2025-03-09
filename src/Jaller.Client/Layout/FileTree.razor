@@ -1,0 +1,109 @@
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+@inject HttpClient httpClient;
+@inject ILogger<FileTree> log;
+
+@if (this.folderInfo is null)
+{
+    <span>Loading Folder...</span>
+}
+else
+{
+    <ul class="no-bullets">
+        @foreach( JallerFolderInfo childFolderInfo in this.folderInfo?.Folders ?? Array.Empty<JallerFolderInfo>() )
+        {
+            <li id="folder_@childFolderInfo.Id">
+                <a href="#folder_@childFolderInfo.Id" @onclick="() => this.AddChild( childFolderInfo.Id )">
+                    @if( this.childFolders.Contains( childFolderInfo.Id ) )
+                    {
+                        <i class="fa-solid fa-folder-open"></i> @childFolderInfo.Name
+                    }
+                    else
+                    {
+                        <i class="fa-solid fa-folder"></i> @childFolderInfo.Name
+                    }
+                </a>
+                @foreach( int childFolder in this.childFolders )
+                {
+                    <FileTree FolderId="childFolder" ParentFolderId="this.FolderId" />
+                }
+            </li>
+        }
+
+        @foreach( JallerFileTreeLeafInfo fileInfo in this.folderInfo?.Files ?? Array.Empty<JallerFileTreeLeafInfo>() )
+        {
+            <li><i class="fa-solid fa-file"></i> <a href="/File?cid=@fileInfo.CidV1" target="_blank">@fileInfo.Name</a></li>
+        }
+    </ul>
+}
+
+@code {
+    // ---------------- Fields ----------------
+
+    private HashSet<int> childFolders = new();
+
+    private JallerFolderTreeContentsInfo? folderInfo;
+
+    // ---------------- Properties ----------------
+
+    [Parameter]
+    public int? ParentFolderId{ get; set; }
+
+    [Parameter]
+    public int? FolderId { get; set; }
+
+    // ---------------- Methods ----------------
+
+    protected override async Task OnInitializedAsync()
+    {
+        string folderId = this.FolderId?.ToString() ?? "";
+
+        HttpResponseMessage httpResponse = await this.httpClient.GetAsync($"/api/tree/contents/{folderId}");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            this.folderInfo = await httpResponse.Content.ReadFromJsonAsync<JallerFolderTreeContentsInfo>();
+            if( this.folderInfo is null )
+            {
+                this.log.LogError($"Could not convert folder ID '{this.FolderId}' from JSON.");
+                return;
+            }
+
+            int childFolderCount = this.folderInfo.Folders?.Length ?? 0;
+            int childFileCount = this.folderInfo.Files?.Length ?? 0;
+            this.log.LogInformation($"Initialized folder {folderId}. Child Folders Count: {childFolderCount}, Child File Count: {childFileCount}");
+        }
+        else
+        {
+            string errorString = await httpResponse.Content.ReadAsStringAsync();
+            this.log.LogError(errorString);
+        }
+    }
+
+    private void AddChild( int folderId )
+    {
+        if (this.childFolders.Contains( folderId ) == false )
+        {
+            this.childFolders.Add( folderId );
+
+            int childFileCount = this.folderInfo?.Files?.Length ?? 0;
+            this.log.LogInformation($"Added Child Folder {folderId}, file contents count: {childFileCount}");
+        }
+    }
+}
