@@ -1,5 +1,4 @@
-﻿@*
-//
+﻿//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
 // 
@@ -16,14 +15,18 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
-*@
 
-@using Jaller.Core.FileManagement;
-@using Jaller.Markdown;
-@using Jaller.Standard;
-@using Jaller.Standard.FileManagement;
-@using Jaller.Server;
-@using Jaller.Server.Models;
-@using Jaller.Server.Pages;
+using Jaller.Standard.FileManagement;
+using SethCS.Extensions;
 
-@using SethCS.Extensions;
+namespace Jaller.Core.FileManagement;
+
+public static class JallerFileExtensions
+{
+    // ---------------- Methods ----------------
+
+    public static string GetMimeType( this JallerFile file )
+    {
+        return file.MimeType ?? file.Name.GetMimeType();
+    }
+}

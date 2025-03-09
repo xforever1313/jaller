@@ -18,6 +18,7 @@
 
 using System.Net;
 using Jaller.Core;
+using Jaller.Core.FileManagement;
 using Jaller.Server.Models;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
@@ -30,6 +31,18 @@ public sealed class FileModel : BasePageModel
     // ---------------- Fields ----------------
 
     private readonly IJallerCore core;
+
+    private static HashSet<string> renderableDocumentType = new HashSet<string>
+    {
+        "audio",
+        "image",
+        "video"
+    };
+
+    private static HashSet<string> renderableMimeType = new HashSet<string>
+    {
+        "application/pdf"
+    };
 
     // ---------------- Constructor ----------------
 
@@ -45,6 +58,12 @@ public sealed class FileModel : BasePageModel
     public string? CIDV0 { get; private set; }
 
     public string? ErrorMessage { get; private set; }
+
+    /// <summary>
+    /// If the document type is renderable in html, this is set to not null
+    /// so we can have a preview in the webpage.
+    /// </summary>
+    public string? PreviewDocumentType { get; private set; }
 
     // ---------------- Methods ----------------
 
@@ -75,6 +94,20 @@ public sealed class FileModel : BasePageModel
         }
 
         this.CIDV0 = realCid.Version0Cid;
+
+        string mimeType = this.JallerFile.GetMimeType();
+
+        if( this.JallerFile.DownloadablePolicy == DownloadPolicy.Public )
+        {
+            if( renderableDocumentType.Contains( mimeType ) )
+            {
+                this.PreviewDocumentType = Path.GetDirectoryName( mimeType );
+            }
+            else if( renderableMimeType.Contains( mimeType ) )
+            {
+                this.PreviewDocumentType = mimeType;
+            }
+        }
 
         return Page();
     }

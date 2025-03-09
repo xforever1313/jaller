@@ -20,137 +20,136 @@ using System.Xml.Linq;
 using Jaller.Standard.FileManagement;
 using SethCS.Extensions;
 
-namespace Jaller.Core.Bulk
+namespace Jaller.Core.Bulk;
+
+internal static class JallerFileExtensions
 {
-    internal static class JallerFileExtensions
+    // ---------------- Fields ----------------
+
+    internal const string XmlElementName = "file";
+
+    // ---------------- Methods ----------------
+
+    public static JallerFile ToJallerFile( this XElement element, int? parentFolder )
     {
-        // ---------------- Fields ----------------
-
-        internal const string XmlElementName = "file";
-
-        // ---------------- Methods ----------------
-
-        public static JallerFile ToJallerFile( this XElement element, int? parentFolder )
+        string name = element.Name.LocalName;
+        if( name != XmlElementName )
         {
-            string name = element.Name.LocalName;
-            if( name != XmlElementName )
+            throw new ArgumentException( $"Unknown element name, expected {XmlElementName}.", nameof( element ) );
+        }
+
+        XElement? cidElement = element.Elements().FirstOrDefault(
+            e => e.Name.LocalName.EqualsIgnoreCase( "cid" )
+        );
+
+        if( cidElement is null )
+        {
+            throw new ArgumentException( "Can not find CID for passed in Jaller File in XML element.", nameof( element ) );
+        }
+
+        Cid cid = Cid.Parse( cidElement.Value );
+
+        var file = new JallerFile
+        {
+            CidV1 = cid.Version1Cid,
+            ParentFolder = parentFolder,
+            Name = "Untitled"
+        };
+
+        foreach( XAttribute attribute in element.Attributes() )
+        {
+            string attrName = attribute.Name.LocalName;
+            if( string.IsNullOrEmpty( attrName ) )
             {
-                throw new ArgumentException( $"Unknown element name, expected {XmlElementName}.", nameof( element ) );
+                continue;
             }
-
-            XElement? cidElement = element.Elements().FirstOrDefault(
-                e => e.Name.LocalName.EqualsIgnoreCase( "cid" )
-            );
-
-            if( cidElement is null )
+            else if( "name".EqualsIgnoreCase( attrName ) )
             {
-                throw new ArgumentException( "Can not find CID for passed in Jaller File in XML element.", nameof( element ) );
+                file = file with
+                {
+                    Name = attribute.Value
+                };
             }
+        }
 
-            Cid cid = Cid.Parse( cidElement.Value );
-
-            var file = new JallerFile
+        foreach( XElement childElement in element.Elements() )
+        {
+            string childName = childElement.Name.LocalName;
+            if( string.IsNullOrWhiteSpace( childName ) )
             {
-                CidV1 = cid.Version1Cid,
-                ParentFolder = parentFolder,
-                Name = "Untitled"
-            };
-
-            foreach( XAttribute attribute in element.Attributes() )
-            {
-                string attrName = attribute.Name.LocalName;
-                if( string.IsNullOrEmpty( attrName ) )
-                {
-                    continue;
-                }
-                else if( "name".EqualsIgnoreCase( attrName ) )
-                {
-                    file = file with
-                    {
-                        Name = attribute.Value
-                    };
-                }
+                continue;
             }
-
-            foreach( XElement childElement in element.Elements() )
+            else if( "description".EqualsIgnoreCase( childName ) )
             {
-                string childName = childElement.Name.LocalName;
-                if( string.IsNullOrWhiteSpace( childName ) )
+                file = file with
                 {
-                    continue;
-                }
-                else if( "description".EqualsIgnoreCase( childName ) )
+                    Description = childElement.Value,
+                };
+            }
+            else if( "downloadable".EqualsIgnoreCase( childName ) )
+            {
+                file = file with
                 {
-                    file = file with
+                    DownloadablePolicy = Enum.Parse<DownloadPolicy>( childElement.Value )
+                };
+            }
+            else if( "metadata".EqualsIgnoreCase( childName ) )
+            {
+                file = file with
+                {
+                    MetadataPrivacy = Enum.Parse<MetadataPolicy>( childElement.Value )
+                };
+            }
+            else if( "tags".EqualsIgnoreCase( childName ) )
+            {
+                var tags = new TagSet();
+                foreach( XElement tagElement in childElement.Elements() )
+                {
+                    string tagElementName = tagElement.Name.LocalName;
+                    if( string.IsNullOrWhiteSpace( tagElementName ) )
                     {
-                        Description = childElement.Value,
-                    };
-                }
-                else if( "downloadable".EqualsIgnoreCase( childName ) )
-                {
-                    file = file with
-                    {
-                        DownloadablePolicy = Enum.Parse<DownloadPolicy>( childElement.Value )
-                    };
-                }
-                else if( "metadata".EqualsIgnoreCase( childName ) )
-                {
-                    file = file with
-                    {
-                        MetadataPrivacy = Enum.Parse<MetadataPolicy>( childElement.Value )
-                    };
-                }
-                else if( "tags".EqualsIgnoreCase( childName ) )
-                {
-                    var tags = new TagSet();
-                    foreach( XElement tagElement in childElement.Elements() )
-                    {
-                        string tagElementName = tagElement.Name.LocalName;
-                        if( string.IsNullOrWhiteSpace( tagElementName ) )
-                        {
-                            continue;
-                        }
-                        else if( "tag".EqualsIgnoreCase( tagElementName ) )
-                        {
-                            tags.Add( tagElement.Value );
-                        }
+                        continue;
                     }
-                    file = file with
-                    { 
-                        Tags = tags
-                    };
+                    else if( "tag".EqualsIgnoreCase( tagElementName ) )
+                    {
+                        tags.Add( tagElement.Value );
+                    }
                 }
+                file = file with
+                { 
+                    Tags = tags
+                };
             }
-
-            return file;
         }
 
-        public static XElement ToXml( this JallerFile file )
+        return file;
+    }
+
+    public static XElement ToXml( this JallerFile file )
+    {
+        var element = new XElement( XmlElementName );
+        element.Add(
+            new XElement( "cid", file.CidV1 ),
+            new XElement( "description", file.Description ),
+            new XElement( "downloadable", file.DownloadablePolicy ),
+            new XElement( "metadata", file.MetadataPrivacy ),
+            new XElement( "mimetype", file.MimeType ),
+            new XAttribute( "name", file.Name )
+            // Ignore directory ID; that's determined by the parent XML node.
+        );
+
+        HashSet<string>? tags = file.Tags;
+        if( tags is not null )
         {
-            var element = new XElement( XmlElementName );
-            element.Add(
-                new XElement( "cid", file.CidV1 ),
-                new XElement( "description", file.Description ),
-                new XElement( "downloadable", file.DownloadablePolicy ),
-                new XElement( "metadata", file.MetadataPrivacy ),
-                new XElement( "mimetype", file.MimeType ),
-                new XAttribute( "name", file.Name )
-                // Ignore directory ID; that's determined by the parent XML node.
-            );
-
-            HashSet<string>? tags = file.Tags;
-            if( tags is not null )
+            var tagListElement = new XElement( "tags" );
+            foreach( string tag in tags )
             {
-                var tagListElement = new XElement( "tags" );
-                foreach( string tag in tags )
-                {
-                    var tagElement = new XElement( "tag", tag );
-                    tagListElement.Add( tagElement );
-                }
-                element.Add( tagListElement );
+                var tagElement = new XElement( "tag", tag );
+                tagListElement.Add( tagElement );
             }
-
-            return element;
+            element.Add( tagListElement );
         }
+
+        return element;
     }
 }

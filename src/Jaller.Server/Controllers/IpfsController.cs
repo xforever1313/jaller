@@ -17,6 +17,7 @@
 //
 
 using Jaller.Core;
+using Jaller.Core.FileManagement;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
 using Microsoft.AspNetCore.Mvc;
@@ -58,7 +59,7 @@ public sealed class IpfsController : ControllerBase
             return NotFound( "Can not find file with given CID.  Either it does not exist, or this server does not allow one to download it." );
         }
 
-        this.Response.ContentType = file.MimeType ?? file.Name.GetMimeType();
+        this.Response.ContentType = file.GetMimeType();
 
         return Ok( this.core.Ipfs.GetFile( realCid.Version1Cid ) );
     }

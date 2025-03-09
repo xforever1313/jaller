@@ -172,3 +172,11 @@ details[open] .editor-notes-content {
     transform: translateY(0);
   }
 }
+
+/* Media */
+
+.mediapreview {
+    width: 100%;
+    max-width: 100%;
+    display: block; /* removes any unwanted space below the video */
+}

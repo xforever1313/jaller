@@ -19,6 +19,7 @@
 else
 {
     ViewData["Title"] = this.Model.JallerFile.Name;
+    string mimeType = this.Model.JallerFile.GetMimeType();
 
     <div class="row">
         <div class="col-md-12">
@@ -34,10 +35,53 @@ else
 
             @if( this.Model.JallerFile.DownloadablePolicy == DownloadPolicy.Public )
             {
-                <a class="btn btn-success" href="/ipfs/@this.Model.JallerFile.CidV1" target="_blank">Download</a>
+                <div>
+                    <a class="btn btn-success" href="/ipfs/@this.Model.JallerFile.CidV1" target="_blank">Download</a>
+                </div>
             }
         </div>
     </div>
+
+    <hr class="post-bottom-hr" />
+
+    @if( string.IsNullOrWhiteSpace( this.Model.PreviewDocumentType ) == false )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Preview
+                    </div>
+                    <div class="panel-body">
+                        @if( "image".EqualsIgnoreCase( this.Model.PreviewDocumentType ) )
+                        {
+                            <img class="mediapreview" src="/ipfs/@this.Model.JallerFile.CidV1" alt="@this.Model.JallerFile.Name" />
+                        }
+                        else if( "audio".EqualsIgnoreCase( this.Model.PreviewDocumentType ) )
+                        {
+                            <audio class="mediapreview" controls>
+                                <source src="/ipfs/@this.Model.JallerFile.CidV1" type="@mimeType" />
+                                Your browser does not support the audio element.
+                            </audio>
+                        }
+                        else if( "video".EqualsIgnoreCase( this.Model.PreviewDocumentType ) )
+                        {
+                            <video class="mediapreview" controls>
+                                <source src="/ipfs/@this.Model.JallerFile.CidV1" type="@mimeType" />
+                                Your browser does not support the video element.
+                            </video>
+                        }
+                        else if( "application/pdf".EqualsIgnoreCase( this.Model.PreviewDocumentType ) )
+                        {
+                            <object class="mediapreview" data="/ipfs/@this.Model.JallerFile.CidV1" type="@mimeType" height="500">
+                                <p>Unable to display PDF file, try downloading it directly instead.</p>
+                            </object>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
     <hr class="post-bottom-hr" />
 
