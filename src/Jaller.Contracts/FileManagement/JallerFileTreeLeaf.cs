@@ -23,7 +23,7 @@ namespace Jaller.Contracts.FileManagement;
 /// <summary>
 /// Properties needed to work for the tree view in the web client.
 /// </summary>
-public record class JallerFileTreeLeafInfo
+public sealed record class JallerFileTreeLeafInfo
 {
     // ---------------- Properties ----------------
 

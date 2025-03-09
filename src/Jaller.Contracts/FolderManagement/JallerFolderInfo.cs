@@ -20,7 +20,7 @@ using System.Text.Json.Serialization;
 
 namespace Jaller.Contracts.FolderManagement;
 
-public sealed class JallerFolderInfo
+public sealed record class JallerFolderInfo
 {
     // ---------------- Constructor ----------------
 

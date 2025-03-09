@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Jaller.Core\Jaller.Core.csproj" />
+    <ProjectReference Include="..\Jaller.Server\Jaller.Server.csproj" />
     <ProjectReference Include="..\Jaller.Standard\Jaller.Standard.csproj" />
   </ItemGroup>
 
