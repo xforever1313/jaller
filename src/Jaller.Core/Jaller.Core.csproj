@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CsvHelper" />
   	<PackageReference Include="Ipfs.Core" />
 	<PackageReference Include="LiteDB" />
   	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />

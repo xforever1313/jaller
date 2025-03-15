@@ -153,5 +153,40 @@ namespace Jaller.Core.Bulk
                 parentElement.Add( folderElement );
             }
         }
+
+        public static IEnumerable<JallerFile> GetAllFiles(
+            this FolderContents folderContents,
+            IJallerCore core,
+            MetadataPolicy policy
+        )
+        {
+            var list = new List<JallerFile>();
+
+            var queue = new Queue<FolderContents>();
+            queue.Enqueue( folderContents );
+
+            while( queue.Any() )
+            {
+                FolderContents currentContents = queue.Dequeue();
+                if( currentContents.Files is not null )
+                {
+                    list.AddRange( currentContents.Files );
+                }
+
+                if( currentContents.ChildFolders is not null )
+                {
+                    foreach( JallerFolder folder in currentContents.ChildFolders )
+                    {
+                        FolderContents? childContents = core.Folders.TryGetFolderContents( folder.Id, policy );
+                        if( childContents is not null )
+                        {
+                            queue.Enqueue( childContents );
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
     }
 }

@@ -46,7 +46,7 @@ public sealed class BulkController : ControllerBase
     // ---------------- Methods ----------------
 
     [HttpGet( "jaller.xml" )]
-    public async Task<IActionResult> Download()
+    public async Task<IActionResult> DownloadXml()
     {
         // TODO: Allow this to be private based on
         // if a user is logged in.
@@ -58,6 +58,21 @@ public sealed class BulkController : ControllerBase
         {
             Content = doc.ToString(),
             ContentType = "application/xml",
+            StatusCode = (int)HttpStatusCode.OK
+        };
+    }
+
+    [HttpGet( "jaller.csv" )]
+    public async Task<IActionResult> DownloadCsv()
+    {
+        string csv = await Task.Run(
+            () => this.core.BulkOperations.GetAllFileMetadataAsCsv( MetadataPolicy.MachinePublic )
+        );
+
+        return new ContentResult
+        {
+            Content = csv,
+            ContentType = "text/csv",
             StatusCode = (int)HttpStatusCode.OK
         };
     }

@@ -35,5 +35,10 @@ namespace Jaller.Standard.Bulk
         /// Creates an XML file that contains all files in an XML format.
         /// </summary>
         XDocument BulkGetAllMetaData( MetadataPolicy policy );
+
+        /// <summary>
+        /// Gets all files as CSV data.
+        /// </summary>
+        string GetAllFileMetadataAsCsv( MetadataPolicy policy );
     }
 }

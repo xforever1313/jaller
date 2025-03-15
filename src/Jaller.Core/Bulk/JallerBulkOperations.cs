@@ -16,7 +16,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.Globalization;
 using System.Xml.Linq;
+using CsvHelper;
+using Jaller.Core.FileManagement;
 using Jaller.Standard;
 using Jaller.Standard.Bulk;
 using Jaller.Standard.FileManagement;
@@ -80,6 +83,49 @@ namespace Jaller.Core.Bulk
             rootContents.ToXml( root, this.core, policy );
 
             return doc;
+        }
+
+        public string GetAllFileMetadataAsCsv( MetadataPolicy policy )
+        {
+            FolderContents rootContents = this.core.Folders.GetRootFolder( policy );
+
+            var csvModels = new List<CsvModel>();
+
+            foreach( JallerFile file in rootContents.GetAllFiles( this.core, policy ) )
+            {
+                csvModels.Add( new CsvModel( file ) );
+            }
+
+            using var writer = new StringWriter();
+            using var csv = new CsvWriter( writer, CultureInfo.InvariantCulture );
+            csv.WriteRecords( csvModels );
+
+            return writer.ToString();
+        }
+
+        private sealed class CsvModel
+        {
+            // ---------------- Constructor ----------------
+
+            public CsvModel( JallerFile file )
+            {
+                Cid cid = Cid.Parse( file.CidV1 );
+                this.CidV0 = cid.Version0Cid;
+                this.CidV1 = cid.Version1Cid;
+
+                this.FileName = file.Name;
+                this.MimeType = file.GetMimeType();
+            }
+
+            // ---------------- Properties ----------------
+
+            public string FileName { get; }
+
+            public string CidV0 { get; }
+
+            public string CidV1 { get; }
+
+            public string MimeType { get; }
         }
     }
 }
