@@ -76,6 +76,7 @@ namespace Jaller.Server
                 core.Init();
 
                 // Add services to the container.
+                builder.Services.AddControllers().AddXmlSerializerFormatters();
                 builder.Services.AddMvc();
                 builder.Services.AddRazorPages();
                 builder.Services.AddSingleton<IJallerCore>( core );

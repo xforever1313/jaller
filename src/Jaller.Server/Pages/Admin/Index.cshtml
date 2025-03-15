@@ -1,0 +1,88 @@
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+
+@page
+
+@model Jaller.Server.Pages.Admin.IndexModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Metrics</h3>
+            </div>
+            <div class="panel-body">
+                <p><strong>Number of Files: </strong> @(this.Model.NumberOfFiles?.ToString() ?? "Unknown")</p>
+                <p><strong>Number of Folders: </strong> @(this.Model.NumberOfDirectories?.ToString() ?? "Unknown")</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>IPFS Kubo Version</h3>
+            </div>
+            <div class="panel-body">
+                @if( this.Model.IpfsVersionInfo is null )
+                {
+                    if( string.IsNullOrWhiteSpace( this.Model.IpfsVersionErrorString ) )
+                    {
+                        <p>Unknown or not configured.</p>
+                    }
+                    else
+                    {
+                        <p><strong>Error getting IPFS Kubo Version:</strong> @this.Model.IpfsVersionErrorString</p>
+                    }
+                }
+                else
+                {
+                    <p><strong>Version:</strong> @this.Model.IpfsVersionInfo.Version</p>
+                    <p><strong>Commit:</strong> @this.Model.IpfsVersionInfo.Commit</p>
+                    <p><strong>Repo:</strong> @this.Model.IpfsVersionInfo.Repo</p>
+                    <p><strong>Golang:</strong> @this.Model.IpfsVersionInfo.Golang</p>
+                    <p><strong>System:</strong> @this.Model.IpfsVersionInfo.System</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Import / Export</h3>
+            </div>
+            <div class="panel-body">
+                <p>
+                    <a href="/Admin/Import/">
+                        <i class="fa-solid fa-file-import"></i> Import Jaller File Metadata
+                    </a>
+                </p>
+                <p>
+                    <a href="/api/bulk/jaller.xml" target="_blank">
+                        <i class="fa-solid fa-file-export"></i> Export Jaller File Metadata
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

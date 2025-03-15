@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.Net;
 using System.Xml.Linq;
 using Jaller.Contracts.Bulk;
 using Jaller.Server.Models;
@@ -47,15 +48,18 @@ public sealed class BulkController : ControllerBase
     [HttpGet( "jaller.xml" )]
     public async Task<IActionResult> Download()
     {
-        this.HttpContext.Response.ContentType = "application/xml";
-
         // TODO: Allow this to be private based on
         // if a user is logged in.
         XDocument doc = await Task.Run(
             () => this.core.BulkOperations.BulkGetAllMetaData( MetadataPolicy.MachinePublic )
         );
-        
-        return Ok( doc.ToString() );
+
+        return new ContentResult
+        {
+            Content = doc.ToString(),
+            ContentType = "application/xml",
+            StatusCode = (int)HttpStatusCode.OK
+        };
     }
 
     [HttpPost( "import.xml" )]

@@ -18,24 +18,24 @@
 
 using System.Text.Json.Serialization;
 
-namespace Jaller.Contracts.Ipfs;
+namespace Jaller.Server.Models;
 
 public sealed class IpfsVersionInfo
 {
     // ---------------- Properties ----------------
 
     [JsonPropertyName( "Commit" )]
-    public string? Commit { get; set; }
+    public string? Commit { get; init; }
 
     [JsonPropertyName( "Golang" )]
-    public string? Golang { get; set; }
+    public string? Golang { get; init; }
 
     [JsonPropertyName( "Repo" )]
-    public string? Repo { get; set; }
+    public string? Repo { get; init; }
 
     [JsonPropertyName( "System" )]
-    public string? System { get; set; }
+    public string? System { get; init; }
 
     [JsonPropertyName( "Version" )]
-    public string? Version { get; set; }
+    public string? Version { get; init; }
 }

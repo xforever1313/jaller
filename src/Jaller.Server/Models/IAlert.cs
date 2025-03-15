@@ -1,5 +1,4 @@
-﻿@*
-//
+﻿//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
 // 
@@ -16,27 +15,23 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
-*@
-@page "/Admin"
-@inject HttpClient httpCLient;
-@inject ILogger<Admin> log;
 
-<PageTitle>Admin Panel</PageTitle>
+namespace Jaller.Server.Models;
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2>IPFS Gateway Version Information</h2>
-            </div>
-            <div class="panel-body">
-                <IpfsGatewayVersionInfo/>
-            </div>
-        </div>
-    </div>
-    <BulkImporter/>
-</div>
+public interface IAlert
+{
+    /// <summary>
+    /// An information message after a POST request happens.
+    /// </summary>
+    string InfoMessage { get; }
 
-@code {
-
+    /// <summary>
+    /// A warning message after a POST request happens.
+    /// </summary>
+    string WarningMessage { get; }
+    
+    /// <summary>
+    /// An error message after a POST request happens.
+    /// </summary>
+    string ErrorMessage { get; }
 }
