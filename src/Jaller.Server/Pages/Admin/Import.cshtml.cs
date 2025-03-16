@@ -21,6 +21,7 @@ using Jaller.Server.Models;
 using Jaller.Standard;
 using Jaller.Standard.Bulk;
 using Microsoft.AspNetCore.Mvc;
+using SethCS.Extensions;
 
 namespace Jaller.Server.Pages.Admin
 {
@@ -48,25 +49,21 @@ namespace Jaller.Server.Pages.Admin
         public bool OverwriteExistingFiles { get; set; }
 
         /// <inheritdoc/>
-        public IEnumerable<string>? InfoMessages { get; private set; }
+        [TempData]
+        public string? InfoMessage { get; set; }
 
         /// <inheritdoc/>
-        public IEnumerable<string>? WarningMessages { get; private set; }
+        [TempData]
+        public string? WarningMessage { get; set; }
 
         /// <inheritdoc/>
-        public IEnumerable<string>? ErrorMessages { get; private set; }
+        [TempData]
+        public string? ErrorMessage { get; set; }
 
         // ---------------- Methods ----------------
 
-        public void OnGet(
-            IEnumerable<string>? infoMessages = null,
-            IEnumerable<string>? warningMessages = null,
-            IEnumerable<string>? errorMessages = null
-        )
+        public void OnGet()
         {
-            this.InfoMessages = infoMessages;
-            this.WarningMessages = warningMessages;
-            this.ErrorMessages = errorMessages;
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -76,31 +73,15 @@ namespace Jaller.Server.Pages.Admin
             string? validationMessage = model.TryValidate();
             if( string.IsNullOrEmpty( validationMessage ) == false )
             {
-                this.ErrorMessages = [validationMessage];
-                return RedirectToPage(
-                    "/Admin/Import",
-                    new
-                    {
-                        this.InfoMessages,
-                        this.WarningMessages,
-                        this.ErrorMessages
-                    }
-                );
+                this.ErrorMessage = validationMessage;
+                return RedirectToPage();
                     
             }
             else if( model.File is null )
             {
-                this.ErrorMessages = ["File was somehow null."];
+                this.ErrorMessage = "File was somehow null.";
 
-                return RedirectToPage(
-                    "/Admin/Import",
-                    new
-                    {
-                        this.InfoMessages,
-                        this.WarningMessages,
-                        this.ErrorMessages
-                    }
-                );
+                return RedirectToPage();
             }
 
             await using var stream = model.File.OpenReadStream();
@@ -111,39 +92,23 @@ namespace Jaller.Server.Pages.Admin
             }
             catch( Exception e )
             {
-                this.ErrorMessages = [e.Message];
-                return RedirectToPage(
-                    "/Admin/Import",
-                    new
-                    {
-                        this.InfoMessages,
-                        this.WarningMessages,
-                        this.ErrorMessages
-                    }
-                );
+                this.ErrorMessage = e.Message;
+                return RedirectToPage();
             }
 
             BulkAddResult result = await Task.Run(
                 () => this.core.BulkOperations.BulkAddMetaData( doc, model.OverwriteExistingFiles )
             );
 
-            this.WarningMessages = result.Warnings.Any() ? result.Warnings : null;
-            this.ErrorMessages = result.Errors.Any() ? result.Errors : null;
+            this.WarningMessage = result.Warnings.Any() ? result.Warnings.ToListString() : null;
+            this.ErrorMessage = result.Errors.Any() ? result.Errors.ToListString() : null;
 
-            if( ( this.WarningMessages is null ) && ( this.ErrorMessages is null ) )
+            if( ( this.WarningMessage is null ) && ( this.ErrorMessage is null ) )
             {
-                this.InfoMessages = ["Import Successful!"];
+                this.InfoMessage = "Import Successful!";
             }
 
-            return RedirectToPage(
-                "/Admin/Import",
-                new
-                {
-                    this.InfoMessages,
-                    this.WarningMessages,
-                    this.ErrorMessages
-                }
-            );
+            return RedirectToPage();
         }
     }
 }

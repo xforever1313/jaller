@@ -25,11 +25,11 @@
     ViewData["Title"] = "Import";
 }
 
-@if( this.Model.InfoMessages?.Any() == true )
+@if( this.Model.InfoMessage is not null)
 {
     <div class="alert alert-info">
         <ul>
-            @foreach( string message in this.Model.InfoMessages )
+            @foreach( string message in this.Model.InfoMessage.ReadLines() )
             {
                 <li>@message</li>
             }
@@ -37,12 +37,12 @@
     </div>
 }
 
-@if( this.Model.WarningMessages?.Any() == true )
+@if( this.Model.WarningMessage is not null )
 {
     <div class="alert alert-warning">
         <p>Warnings when importing metadata:</p>
         <ul>
-            @foreach( string message in this.Model.WarningMessages )
+            @foreach( string message in this.Model.WarningMessage.ReadLines() )
             {
                 <li>@message</li>
             }
@@ -50,12 +50,12 @@
     </div>
 }
 
-@if( this.Model.ErrorMessages?.Any() == true )
+@if( this.Model.ErrorMessage is not null )
 {
     <div class="alert alert-danger">
         <p>Errors when importing metadata:</p>
         <ul>
-            @foreach( string message in this.Model.ErrorMessages )
+            @foreach( string message in this.Model.ErrorMessage.ReadLines() )
             {
                 <li>@message</li>
             }

@@ -90,6 +90,10 @@ public sealed class BulkController : ControllerBase
         {
             return BadRequest( validationMessgae );
         }
+        else if( model.File is null )
+        {
+            return BadRequest( "File was somehow null." );
+        }
 
         await using var stream = model.File.OpenReadStream();
         XDocument doc;
