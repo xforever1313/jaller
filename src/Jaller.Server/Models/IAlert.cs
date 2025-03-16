@@ -21,17 +21,19 @@ namespace Jaller.Server.Models;
 public interface IAlert
 {
     /// <summary>
-    /// An information message after a POST request happens.
+    /// Information messages after a POST request happens.
+    /// 
+    /// Null for no messages.
     /// </summary>
-    string InfoMessage { get; }
+    IEnumerable<string>? InfoMessages { get; }
 
     /// <summary>
-    /// A warning message after a POST request happens.
+    /// Warning messages after a POST request happens.
     /// </summary>
-    string WarningMessage { get; }
+    IEnumerable<string>? WarningMessages { get; }
     
     /// <summary>
-    /// An error message after a POST request happens.
+    /// Error messages after a POST request happens.
     /// </summary>
-    string ErrorMessage { get; }
+    IEnumerable<string>? ErrorMessages { get; }
 }

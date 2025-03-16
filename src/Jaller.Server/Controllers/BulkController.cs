@@ -85,6 +85,12 @@ public sealed class BulkController : ControllerBase
             return BadRequest( "This must be a POST request." );
         }
 
+        string? validationMessgae = model.TryValidate();
+        if( string.IsNullOrEmpty( validationMessgae ) == false )
+        {
+            return BadRequest( validationMessgae );
+        }
+
         await using var stream = model.File.OpenReadStream();
         XDocument doc;
         try

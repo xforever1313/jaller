@@ -32,14 +32,14 @@ public sealed class FileModel : BasePageModel
 
     private readonly IJallerCore core;
 
-    private static HashSet<string> renderableDocumentType = new HashSet<string>
+    private static readonly HashSet<string> renderableDocumentType = new HashSet<string>
     {
         "audio",
         "image",
         "video"
     };
 
-    private static HashSet<string> renderableMimeType = new HashSet<string>
+    private static readonly HashSet<string> renderableMimeType = new HashSet<string>
     {
         "application/pdf"
     };

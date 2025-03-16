@@ -1,0 +1,138 @@
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+
+@page
+@model Jaller.Server.Pages.Admin.ImportModel
+
+@{
+    ViewData["Title"] = "Import";
+}
+
+@if( this.Model.InfoMessages?.Any() == true )
+{
+    <div class="alert alert-info">
+        <ul>
+            @foreach( string message in this.Model.InfoMessages )
+            {
+                <li>@message</li>
+            }
+        </ul>
+    </div>
+}
+
+@if( this.Model.WarningMessages?.Any() == true )
+{
+    <div class="alert alert-warning">
+        <p>Warnings when importing metadata:</p>
+        <ul>
+            @foreach( string message in this.Model.WarningMessages )
+            {
+                <li>@message</li>
+            }
+        </ul>
+    </div>
+}
+
+@if( this.Model.ErrorMessages?.Any() == true )
+{
+    <div class="alert alert-danger">
+        <p>Errors when importing metadata:</p>
+        <ul>
+            @foreach( string message in this.Model.ErrorMessages )
+            {
+                <li>@message</li>
+            }
+        </ul>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            Use this form to import a Jaller XML file that contains file metadata.
+        </p>
+        <p>
+            Please only import files from a source you trust, there is no checking to make sure the contents
+            of the XML file are accurate.
+        </p>
+        <p>
+            If the imported file contains a CID that is already in the Jaller database, it will not be overwritten
+            unless Overwrite Existing Files is checked.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-group" method="post" enctype="multipart/form-data">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Import</h3>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <label for="fileInput">File</label>
+                    </p>
+                    <p>
+                        <input id="fileInput" class="form-control" type="file" name="UploadedFile" accept="application/xml" oninput="fileInput_oninput(this);" />
+                    </p>
+                    <p class="checkbox">
+                        <label for="overwriteFilesCheckBox">
+                            <input id="overwriteFilesCheckBox" type="checkbox" value="True" name="OverwriteExistingFiles" />
+                            Overwrite Existing Files
+                        </label>
+                    </p>
+                </div>
+                <div class="panel-footer">
+                    <button class="btn btn-primary" type="submit" id="uploadButton">Import</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts 
+{
+    <script>
+        var fileInput;
+        var uploadButton;
+
+        window.onload = function()
+        {
+            uploadButton = document.getElementById( "uploadButton" );
+            uploadButton.disabled = true; // Disabled by default since we won't have files right away.
+
+            fileInput = document.getElementById( "fileInput" );
+        }
+
+        function fileInput_oninput( input )
+        {
+            // Only allow the upload button to be clickable if a file is selected.
+            if( fileInput.files.length > 0 )
+            {
+                uploadButton.disabled = false;
+            }
+            else
+            {
+                uploadButton.disabled = true;
+            }
+        }
+    </script>
+}

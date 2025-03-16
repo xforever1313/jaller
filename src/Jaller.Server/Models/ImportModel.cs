@@ -16,9 +16,39 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using SethCS.Extensions;
+
 namespace Jaller.Server.Models;
 
 public record class ImportModel(
-    IFormFile File,
+    IFormFile? File,
     bool OverwriteExistingFiles = false
-);
+)
+{
+    /// <summary>
+    /// Validates the model.  If there are any error messages, this returns
+    /// the error message.
+    /// 
+    /// Returns null on no error.
+    /// </summary>
+    public string? TryValidate()
+    {
+        if( this.File is null )
+        {
+            return $"{nameof( this.File )} was null!";
+        }
+        else if( ".xml".EqualsIgnoreCase( Path.GetExtension( this.File.FileName ) ) == false )
+        {
+            return "File name's extension does not end in .xml";
+        }
+        else if( 
+            ( "application/xml".EqualsIgnoreCase( this.File.ContentType ) == false ) &&
+            ( "text/xml".EqualsIgnoreCase( this.File.ContentType ) == false )
+        )
+        {
+            return "Invalid Content Type";
+        }
+
+        return null;
+    }
+}
