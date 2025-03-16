@@ -33,6 +33,8 @@ internal static class JallerDirectoryExtensions
             Id = dir.Id,
             Name = dir.Name,
             ParentFolder = dir.ParentFolder,
+            DownloadablePolicy = dir.DownloadablePolicy,
+            MetadataPrivacy = dir.MetadataPrivacy
         };
     }
 }

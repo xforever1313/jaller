@@ -148,6 +148,40 @@ public sealed class JallerFileManagerTests
     }
 
     [TestMethod]
+    public void CreateFileAtRootDirectoryWithPublicSettingsTest()
+    {
+        // Setup
+        var file = new JallerFile
+        {
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
+            Name = "file.txt",
+            ParentFolder = null,
+            DownloadablePolicy = DownloadPolicy.Public,
+            MetadataPrivacy = MetadataPolicy.Public,
+            Description = "Some Description",
+            MimeType = "application/text"
+        };
+
+        // Act
+        this.Core.Files.ConfigureFile( file );
+
+        int totalFiles = this.Core.Files.GetFileCount();
+        JallerFile? actualFile = this.Core.Files.TryGetFile( file.CidV1 );
+        FolderContents rootContents = this.Core.Folders.GetRootFolder( MetadataPolicy.Private );
+
+        // Check
+        Assert.AreEqual( 1, totalFiles );
+        Assert.IsNotNull( actualFile );
+        Assert.AreEqual( file, actualFile );
+        Assert.IsTrue( this.Core.Files.FileExists( file.CidV1 ) );
+
+        Assert.IsNull( rootContents.ChildFolders );
+        Assert.IsNotNull( rootContents.Files );
+        Assert.AreEqual( 1, rootContents.Files.Count() );
+        Assert.AreEqual( file, rootContents.Files.First() );
+    }
+
+    [TestMethod]
     public void CreateFileInDirectoryTest()
     {
         // Setup

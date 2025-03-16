@@ -180,6 +180,38 @@ namespace Jaller.Tests.Core.Bulk
         }
 
         [TestMethod]
+        public void OneFolderAtRootWithPublicSettingsTest()
+        {
+            // Setup
+            var folder = new JallerFolder
+            {
+                Name = "Some Folder",
+                ParentFolder = null,
+                DownloadablePolicy = DownloadPolicy.Public,
+                MetadataPrivacy = MetadataPolicy.Public
+            };
+            folder = folder with
+            {
+                Id = this.ExportCore.Folders.ConfigureFolder( folder )
+            };
+
+            // Act
+            XDocument doc = this.ExportCore.BulkOperations.BulkGetAllMetaData( MetadataPolicy.Private );
+
+            BulkAddResult result = this.ImportCore.BulkOperations.BulkAddMetaData( doc, false );
+            JallerFolder? actualFolder = this.ImportCore.Folders.TryGetFolderByName( folder.ParentFolder, folder.Name );
+
+            // Check
+            Assert.IsNotNull( actualFolder );
+
+            Assert.AreEqual( 0, result.Warnings.Count );
+            Assert.AreEqual( 0, result.Errors.Count );
+            Assert.AreEqual( 1, this.ImportCore.Folders.GetFolderCount() );
+            Assert.AreEqual( 0, this.ImportCore.Files.GetFileCount() );
+            Assert.AreEqual( folder, actualFolder );
+        }
+
+        [TestMethod]
         public void NestedFoldersTest()
         {
             // Setup

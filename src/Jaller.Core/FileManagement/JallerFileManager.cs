@@ -60,19 +60,8 @@ internal sealed class JallerFileManager : IJallerFileManager
             return null;
         }
 
-        return new JallerFile
-        {
-            CidV1 = file.Cid,
-            Description = file.Description,
-            DownloadablePolicy = file.DownloadablePolicy,
-            MetadataPrivacy = file.MetadataPrivacy,
-            MimeType = file.MimeType,
-            Name = file.FileName,
-            ParentFolder = file.ParentFolder,
-            Tags = file.Tags
-        };
+        return file.ToPublicModel();
     }
-
 
     public void ConfigureFile( JallerFile file )
     {

@@ -139,6 +139,38 @@ namespace Jaller.Tests.Core.FolderManagement
         }
 
         [TestMethod]
+        public void SingleFolderWithPublicSettingsTest()
+        {
+            // Setup
+            var newFolder = new JallerFolder
+            {
+                Name = "Test Folder",
+                ParentFolder = null,
+                DownloadablePolicy = DownloadPolicy.Public,
+                MetadataPrivacy = MetadataPolicy.Public
+            };
+
+            // Act
+            int newFolderId = this.Core.Folders.ConfigureFolder( newFolder );
+            Assert.AreNotEqual( 0, newFolderId );
+            newFolder = newFolder with
+            {
+                // Need to set the ID since it got updated, and
+                // equals below will fail otherwise.
+                Id = newFolderId
+            };
+
+            JallerFolder? createdFolder = this.Core.Folders.TryGetFolder( newFolderId );
+            JallerFolder? folderByName = this.Core.Folders.TryGetFolderByName( null, newFolder.Name );
+
+            // Check
+            Assert.AreEqual( 1, this.Core.Folders.GetFolderCount() );
+            Assert.IsNotNull( createdFolder );
+            Assert.AreEqual( newFolder, createdFolder );
+            Assert.AreEqual( newFolder, folderByName );
+        }
+
+        [TestMethod]
         public void ModifyExistingFolderTest()
         {
             // Setup

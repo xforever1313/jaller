@@ -67,12 +67,14 @@ internal sealed class JallerFolderManager : IJallerFolderManager
                 {
                     // No children folders yet, this is a new directory.
                     ChildrenFolders = null,
+                    DownloadablePolicy = newFolderConfig.DownloadablePolicy,
 
                     // No files yet, this is a new directory.
                     Files = null,
 
+                    MetadataPrivacy = newFolderConfig.MetadataPrivacy,
                     Name = newFolderConfig.Name,
-                    ParentFolder = newFolderConfig.ParentFolder
+                    ParentFolder = newFolderConfig.ParentFolder,
                 };
             }
             else // Directory exists, and we want to modify it.
@@ -82,6 +84,8 @@ internal sealed class JallerFolderManager : IJallerFolderManager
 
                 dbDirectory = dbDirectory with
                 {
+                    DownloadablePolicy = newFolderConfig.DownloadablePolicy,
+                    MetadataPrivacy = newFolderConfig.MetadataPrivacy,
                     Name = newFolderConfig.Name,
                     ParentFolder = newFolderConfig.ParentFolder
                 };
@@ -305,12 +309,7 @@ internal sealed class JallerFolderManager : IJallerFolderManager
             return null;
         }
 
-        return new JallerFolder
-        {
-            Id = dir.Id,
-            Name = dir.Name,
-            ParentFolder = dir.ParentFolder
-        };
+        return dir.ToPublicModel();
     }
 
     public JallerFolder? TryGetFolderByName( int? parentId, string name )
@@ -321,12 +320,7 @@ internal sealed class JallerFolderManager : IJallerFolderManager
             return null;
         }
 
-        return new JallerFolder
-        {
-            Id = dir.Id,
-            Name = dir.Name,
-            ParentFolder = dir.ParentFolder
-        };
+        return dir.ToPublicModel();
     }
 
     public FolderContents? TryGetFolderContents( int folderId, MetadataPolicy visibility )
