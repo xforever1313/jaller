@@ -38,6 +38,7 @@ public class Resources
 
         LicenseAsHtml = MarkdownToHtmlConverter.Convert( GetLicense() );
         CreditsAsHtml = MarkdownToHtmlConverter.Convert( GetCredits() );
+        ReadmeAsHtml = MarkdownToHtmlConverter.Convert( GetReadme() );
     }
 
     // ---------------- Properties ----------------
@@ -53,6 +54,8 @@ public class Resources
     public static string LicenseAsHtml { get; }
 
     public static string CreditsAsHtml { get; }
+
+    public static string ReadmeAsHtml { get; }
 
     // ---------------- Methods ----------------
 
