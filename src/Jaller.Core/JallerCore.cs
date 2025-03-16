@@ -47,7 +47,7 @@ namespace Jaller.Core
 
             this.ipfsGatewayClient = new HttpClient
             {
-                BaseAddress = config.Ipfs.GatewayUrl
+                BaseAddress = config.Ipfs.KuboUrl
             };
 
             this.Database = new JallerDatabase( this.Config );

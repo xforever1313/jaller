@@ -25,7 +25,7 @@ public interface IJallerIpfsGatewayConfig
     /// This is NOT the URL to the HTTP Gateway, (usually port 8080), but the RPC API
     /// (usually port 5001).
     /// </summary>
-    Uri GatewayUrl { get; }
+    Uri? KuboUrl { get; }
 
     /// <summary>
     /// How much to multiply the default timeout by

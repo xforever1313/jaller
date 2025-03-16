@@ -43,6 +43,9 @@
 	<EmbeddedResource Include="..\..\Readme.md" Link="Readme.md">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
+	<EmbeddedResource Include="..\..\Docker\jaller\JallerConfig.cs" Link="DefaultJallerConfig.cs">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	</EmbeddedResource>
   </ItemGroup>
 	
 </Project>

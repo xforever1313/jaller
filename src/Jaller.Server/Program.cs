@@ -255,10 +255,7 @@ namespace Jaller.Server
 
         private static void WriteDefaultConfig( FileInfo fileLocation )
         {
-            string fileContents =
-$@"
-// TODO
-";
+            string fileContents = Resources.GetDefaultConfiguration();
 
             File.WriteAllText( fileLocation.FullName, fileContents );
         }

@@ -1,116 +1,154 @@
-// Sample Rau Config file.
-// This uses C# syntax, and is compiled once at the startup of Rau.
+// Sample Jaller Config file.
+// This uses C# syntax, and is compiled once at the startup of Jaller.
 // This means you have all the power of C# to make your configuration file.
 
 // If you like environment variables, you should be able to get values out of them
 // via C#'s Environment.GetEnvironmentVariable( string ) method.
 
 // There is no need to add a "using" statement at the top.  That should
-// be taken care of by plugins or Rau itself.
+// be taken care of by Jaller
 
-// Remember to delete the "Delete This" section below.
+// ---------------- Database Settings ----------------
 
-// Delete any plugins you do not want to use.
+// These settings configure the database where all data for Jaller is stored.
 
-#plugin /app/plugins/Canary/Rau.Plugins.Canary.dll
-#plugin /app/plugins/Rss2Pds/Rau.Plugins.Rss2Pds.dll
+// Location of were the Jaller database should created.
+// Comment this out to use the default location of your user's
+// application data directory, which is
+// c:\Users\<you>\AppData\Jaller\jaller.ldb on Windows
+// or /home/<you>/.config/Jaller/jaller.ldb on Unix systems.
+this.Database.DatabaseLocation = new FileInfo( @"/var/jaller/jaller.ldb" );
 
-/// <summary>
-/// Configures the global settings for Rau.
-/// This includes settings that are required to launch the service.
-/// </summary>
-/// <remarks>
-/// See https://github.com/xforever1313/Rau/blob/main/src/Rau/Configuration/IRauConfiguratorExtensions.cs
-/// for all methods that can be called here.
-/// </remarks>
-public override void ConfigureRauSettings( IRauConfigurator rau )
-{
-    // 300 is Blue Sky's character limit.
-    rau.SetCharacterLimit( 300 );
+// Set this to true unless you need the database to be shared
+// by multiple applications (most folks should leave this set to true).
+this.Database.SharedConnection = true;
 
-    // When running in Docker, you'll probably need to set this to whatever language you want
-    // your posts to be in.
-    // Without it, Rau will default to the system default, which may not be defined
-    // in the Docker container.
-    rau.SetDefaultPostLanguages( new string[] { "en", "en-US" } );
+// If the last close database exception results in an invalid data state,
+// the data file will be rebuild on the next open.
+//
+// Should probably leave this to false unless your database gets corrupted for some
+// reason and you need to try to recover it.
+this.Database.AutoRebuild = false;
 
-    rau.UsePersistenceDirectory( "/data/" );
-    rau.UseMetricsAtPort( 9100 );
+// Check if datafile is of an older version and upgrade it before opening.
+// This should really only be set to true if instructed to in the release notes
+// when upgrading releases.
+this.Database.AutoUpgradeDb = false;
 
-    // What messages get printed to the Console log (viewable via the "docker log" command).
-    // Possible options:
-    // RauLogLevel.Verbose
-    // RauLogLevel.Debug
-    // RauLogLevel.Information
-    // RauLogLevel.Warning
-    // RauLogLevel.Error
-    // RauLogLevel.Fatal
-    rau.SetConsoleLogLevel( RauLogLevel.Information );
+// Set to a non-null string value ("Some Value in Quotes") to encrypt the datafile
+// with this password.  This uses AES encryption.
+this.Database.EncryptionPassword = null;
 
-    // Uncomment to send warnings and above messages to a Telegram chat.
-    // rau.LogToTelegram( "<Telegram Bot Token>", "<Telegram Chat ID>" );
-}
+// ---------------- IPFS Network Configuration ----------------
 
-/// <summary>
-/// Configures the bot itself.  This method is run
-/// after all plugins are loaded and initialized.
-/// </summary>
-/// <remarks>
-/// See https://github.com/xforever1313/Rau/blob/main/src/Rau.Standard/IRauApi.cs
-/// to see all the methods and properties that can be invoked on the past in
-/// API object.
-/// 
-/// View each plugin's documentation to see extensions that can be called as well.
-/// </remarks>
-public override void ConfigureBot( IRauApi rau )
-{
-    var pdsInstance = new Uri( "<Your PDS Instance>" );
+// The URL to Kubo (or something that implements the IPFS protocol).
+// This URL should be set to the RPC API (usually port 5001).
+//
+// NOTE: If you do not want users to be able to download files, set this value to null.
+// This will make Jaller an "IPFS Hash" database only, where users can search for
+// hashes but can not download anything.
+this.Ipfs.KuboUrl = new Uri( "http://localhost:5001" );
 
-    // -------- Canary Plugin --------
+// How much to multiply the default timeout when downloading something from the IPFS gateway
+// in the event the network between Jaller and Kubo is too slow.
+// If this is set to 0, this makes an infinite timeout (not recommended).
+this.Ipfs.TimeoutMultiplier = 2;
 
-    // Example on how to use the Canary plugin.
-    // Delete this entire section if not using the Canary plugin.
+// ---------------- Logging ----------------
 
-    rau.AddCanaryAccountWithDefaultMessage(
-        new PdsAccount
-        {
-            UserName = "<Canary User Name>",
-            Password = "<App Password>",
-            Instance = pdsInstance
-        },
-        // Chirp on the top-of every hour.
-        "0 0 * * * ?"
-    );
+// For any setting that sets a Log Level, possible values are:
+// - JallerLogLevel.Verbose
+// - JallerLogLevel.Debug
+// - JallerLogLevel.Information
+// - JallerLogLevel.Warning
+// - JallerLogLevel.Error
+// - JallerLogLevel.Fatal
+//
+// Verbose having the most logging (and more space taken up),
+// while Fatal has the least amount of logging.
 
-    // -------- RSS Plugin --------
+// The minimum log level that gets logged to the console.
+this.Logging.ConsoleLogLevel = JallerLogLevel.Information;
 
-    // Example on how to use the RSS plugin.
-    // Delete this entire section if not using the RSS plugin.
+// If it is desired to log to a file, set this variable to a file path.
+// Comment out or set to null to not log to a file.
+this.Logging.LogFile = new FileInfo( "/var/jaller/jaller.log" );
 
-    var languages = new string[] { "en", "en-US" };
+// The minimum log level that gets logged to the file.  Ignored
+// if LogFile is null or not set.
+this.Logging.LogFileLevel = JallerLogLevel.Information;
 
-    rau.MirrorRssFeed(
-        new FeedConfig
-        {
-            FeedUrl = new Uri( "<Rss Feed Url>" ),
-            UserName = "<Your User Name>",
-            Password = "<App Password>",
-            PdsInstanceUrl = pdsInstance,
-            // Every 20 minutes after the hour.
-            CronString = "0 20 * * * ?",
-            HashTags = new string[] { "<Insert, or set to null>" },
-            AlertThreshold = 5,
-            IncludeFeedTitleInPost = false,
-            InitializeOnStartUp = true,
-            Languages = languages
-        }
-    );
+// The Telegram bot token to use for logging messages.  See more information
+// on how to do that:
+// https://docs.teleirc.com/en/latest/user/quick-start/#create-a-telegram-bot
+//
+// If set to null or commented out, log messages are not sent to Telegram.
+this.Logging.TelegramBotToken = null;
 
-    // -------- Delete This --------
+// The Telegram chat ID to use for logging messages.
+// If set to null or commented out, log messages are not sent to Telegram.
+this.Logging.TelegramChatId = null;
 
-    // Delete these next three lines.  This is here to make sure
-    // a default configuration isn't being used, and someone actually edited the file.
-    throw new NotImplementedException(
-        "Default configuration detected, please edit the 'RauConfig.cs' file in the 'rau' folder.  Remember to delete this exception from that file (should be at the bottom of the file)."
-    );
-}
+// The minimum log level that gets logged to Telegram.  Ignored
+// if either of the Telegram settings are null, not specified, or commented out.
+this.Logging.TelegramLogLevel = JallerLogLevel.Warning;
+
+// ---------------- Users ----------------
+
+// Set to true to allow a default "admin" user.
+// Set to false to disable the default "admin" user.
+// This should only really be set to true upon first boot
+// when there are no users; or you need an admin user if all other
+// admin accounts got deleted somehow.
+//
+// If this is enabled, you can login with the "admin" user, using
+// the password specified below.
+this.Users.AllowAdminUser = false;
+
+// Please change this to something else if the admin user is enabled.
+// Ignored if the admin user is disabled.
+this.Users.AdminPassword = "JallerAdminPassword";
+
+// ---------------- Web Configuration ----------------
+
+// If set to true, this will have metrics that can be scraped by Prometheus
+// on /Metrics.
+// Note, that metrics will include counts of files and directories marked private.
+// Use the "MetricsUrlPrefixes" settings to restrict which URLs can scrape
+// for metrics.
+this.Web.EnableMetrics = false;
+
+// If this is set to false, a URL that contains a port number will
+// be rejected.  This should generally speaking be set to true if running in a
+// development environment or if behind a reverse proxy.
+//
+// The only reason why this setting exists is because if this is run on DreamHost
+// using a Proxy, one can get access to the application either by
+// going to the Proxy URL (the correct way), or just going to the PORT
+// Jaller is running on (the wrong way).  Setting this to false
+// only allows the Proxy URL to work.
+this.Web.AllowPortsInUrl = true;
+
+// If set to true, if the requested URL that contains "//" this will
+// rewrite the URL so each "//" becomes "/" instead.
+//
+// Should probably be left alone and stay set to false.
+// The only reason this exists is because if running this on DreamHost,
+// DreamHost adds an extra '/' after the tld for some reason
+// (So if the desired URL is https://somewhere.com/Admin/, DreamHost would have
+// written the URL has https://somewhere.com//Admin/ when forwarding the request
+// to Jaller for whatever reason).
+this.Web.RewriteDoubleSlashes = false;
+
+// A list of allowed admin URLs.  If someone tries to login
+// to the admin interface and it is not prefixed with one of these URLs,
+// they will not be allowed in.
+//
+// The use case is if Jaller is exposed to the public internet, but it is desired
+// to make the admin interface only appear on a local network, this can be used
+// so only the local network URL or IP Addresses will be allowed into the admin
+// interface.
+//
+// Set to null to have no restrictions.  An empty array means the Admin
+// interface will simply not work.
+this.Web.AllowedAdminUrlPrefixes = ["localhost"];

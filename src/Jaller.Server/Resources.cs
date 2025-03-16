@@ -90,4 +90,13 @@ public class Resources
 
         return str;
     }
+
+    public static string GetDefaultConfiguration()
+    {
+        string str = AssemblyResourceReader.ReadStringResource(
+              typeof( Program ).Assembly, $"{nameof( Jaller )}.{nameof( Server )}.DefaultJallerConfig.cs"
+        );
+
+        return str;
+    }
 }
