@@ -30,15 +30,15 @@ public static class IJallerWebConfigExtensions
     /// </summary>
     public static bool IsAdminRequstAllowed( this IJallerWebConfig config, HttpRequest request )
     {
-        if( config.AllowedAdminUrlPrefixes is null )
+        if( config.AllowedAdminHosts is null )
         {
             return true;
         }
-        else if( config.AllowedAdminUrlPrefixes.Any() == false )
+        else if( config.AllowedAdminHosts.Any() == false )
         {
             return false;
         }
 
-        return config.AllowedAdminUrlPrefixes.Any( s => s.EqualsIgnoreCase( request.Host.Host ) );
+        return config.AllowedAdminHosts.Any( s => s.EqualsIgnoreCase( request.Host.Host ) );
     }
 }

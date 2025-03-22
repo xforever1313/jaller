@@ -31,7 +31,7 @@ public interface IJallerWebConfig
     /// Set to null to have no restrictions.  An empty array means the Admin
     /// interface will full-stop not work.
     /// </summary>
-    IReadOnlyCollection<string>? AllowedAdminUrlPrefixes { get; }
+    IReadOnlyCollection<string>? AllowedAdminHosts { get; }
 
     /// <summary>
     /// If set to false, a URL that contains a port number

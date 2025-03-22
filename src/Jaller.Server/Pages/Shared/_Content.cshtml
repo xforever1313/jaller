@@ -62,9 +62,12 @@
                 <li>
                     <a href="/Search"><i class="fa fa-search"></i> Search</a>
                 </li>
-                <li>
-                    <a href="/Admin"><i class="fa-solid fa-user-tie"></i> Admin Panel</a>
-                </li>
+                @if( Model.AllowAdminAccess )
+                {
+                    <li>
+                        <a href="/Admin"><i class="fa-solid fa-user-tie"></i> Admin Panel</a>
+                    </li>
+                }
             </ul>
         </div>
     </nav>

@@ -35,7 +35,8 @@ namespace Jaller.Server.Pages.Admin
 
         // ---------------- Constructor ----------------
 
-        public ImportModel( IJallerCore core )
+        public ImportModel( IJallerCore core ) :
+            base( core )
         {
             this.core = core;
 

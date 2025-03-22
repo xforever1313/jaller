@@ -17,21 +17,31 @@
 //
 
 using Jaller.Contracts.About;
+using Jaller.Server.Extensions;
+using Jaller.Standard;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Models
 {
     public class BasePageModel : PageModel
     {
+        // ---------------- Fields ----------------
+
+        private readonly IJallerCore core;
+
         // ---------------- Constructor ----------------
 
-        public BasePageModel()
+        public BasePageModel( IJallerCore core )
         {
+            this.core = core;
+
             this.JallerVersionInfo = Resources.GetVersionInfo();
         }
 
         // ---------------- Properties ----------------
 
         public JallerVersionInfo JallerVersionInfo { get; }
+
+        public bool AllowAdminAccess => this.core.Config.Web.IsAdminRequstAllowed( this.Request );
     }
 }

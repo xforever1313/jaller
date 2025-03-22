@@ -46,7 +46,8 @@ public sealed class FileModel : BasePageModel
 
     // ---------------- Constructor ----------------
 
-    public FileModel( IJallerCore core )
+    public FileModel( IJallerCore core ) :
+        base( core )
     {
         this.core = core;
     }

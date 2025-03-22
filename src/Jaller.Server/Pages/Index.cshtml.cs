@@ -17,11 +17,21 @@
 //
 
 using Jaller.Server.Models;
+using Jaller.Standard;
 
 namespace Jaller.Server.Pages
 {
     public class HomeModel : BasePageModel
     {
+        // ---------------- Constructor ----------------
+
+        public HomeModel( IJallerCore core ) :
+            base( core )
+        {
+        }
+
+        // ---------------- Methods ----------------
+
         public void OnGet()
         {
         }

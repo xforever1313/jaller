@@ -17,11 +17,19 @@
 //
 
 using Jaller.Server.Models;
+using Jaller.Standard;
 
 namespace Jaller.Server.Pages.Errors
 {
     public class _404Model : BasePageModel
     {
+        // ---------------- Constructor ----------------
+
+        public _404Model( IJallerCore core ) :
+            base( core )
+        {
+        }
+
         // ---------------- Methods ----------------
 
         public void OnGet()

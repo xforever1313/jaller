@@ -17,6 +17,7 @@
 //
 
 using Jaller.Server.Models;
+using Jaller.Standard;
 
 namespace Jaller.Server.Pages.About;
 
@@ -24,7 +25,8 @@ public sealed class LicenseModel : BasePageModel
 {
     // ---------------- Constructor ----------------
 
-    public LicenseModel()
+    public LicenseModel( IJallerCore core ) :
+        base( core )
     {
         this.LicenseHtml = Resources.LicenseAsHtml;
     }

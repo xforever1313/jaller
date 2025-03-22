@@ -33,7 +33,8 @@ namespace Jaller.Server.Pages.Admin
 
         // ---------------- Constructor ----------------
 
-        public IndexModel( IJallerCore core )
+        public IndexModel( IJallerCore core ) :
+            base( core )
         {
             this.core = core;
         }

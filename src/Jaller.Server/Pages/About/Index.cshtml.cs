@@ -17,6 +17,7 @@
 //
 
 using Jaller.Server.Models;
+using Jaller.Standard;
 
 namespace Jaller.Server.Pages.About;
 
@@ -24,7 +25,8 @@ public sealed class IndexModel : BasePageModel
 {
     // ---------------- Constructor ----------------
 
-    public IndexModel()
+    public IndexModel( IJallerCore core ) :
+        base( core )
     {
         this.ReadmeHtml = Resources.ReadmeAsHtml;
     }

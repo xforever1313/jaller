@@ -17,6 +17,7 @@
 //
 
 using Jaller.Server.Models;
+using Jaller.Standard;
 
 namespace Jaller.Server.Pages.About;
 
@@ -24,7 +25,8 @@ public sealed class CreditsModel : BasePageModel
 {
     // ---------------- Constructor ----------------
 
-    public CreditsModel()
+    public CreditsModel( IJallerCore core ) :
+        base( core )
     {
         this.CreditsHtml = Resources.CreditsAsHtml;
     }

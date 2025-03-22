@@ -140,8 +140,8 @@ this.Web.AllowPortsInUrl = true;
 // to Jaller for whatever reason).
 this.Web.RewriteDoubleSlashes = false;
 
-// A list of allowed admin URLs.  If someone tries to login
-// to the admin interface and it is not prefixed with one of these URLs,
+// A list of allowed hosts that can access the admin pages.  If someone tries to login
+// to the admin interface and the request is not to one of these URLs,
 // they will not be allowed in.
 //
 // The use case is if Jaller is exposed to the public internet, but it is desired
@@ -151,4 +151,4 @@ this.Web.RewriteDoubleSlashes = false;
 //
 // Set to null to have no restrictions.  An empty array means the Admin
 // interface will simply not work.
-this.Web.AllowedAdminUrlPrefixes = ["localhost"];
+this.Web.AllowedAdminHosts = ["localhost"];
