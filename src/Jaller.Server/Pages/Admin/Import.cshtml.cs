@@ -16,7 +16,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.Net;
 using System.Xml.Linq;
+using Jaller.Server.Extensions;
 using Jaller.Server.Models;
 using Jaller.Standard;
 using Jaller.Standard.Bulk;
@@ -62,12 +64,23 @@ namespace Jaller.Server.Pages.Admin
 
         // ---------------- Methods ----------------
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+            {
+                return StatusCode( (int)HttpStatusCode.Forbidden );
+            }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if( core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+            {
+                return StatusCode( (int)HttpStatusCode.Forbidden );
+            }
+
             var model = new Models.ImportModel( this.UploadedFile, this.OverwriteExistingFiles );
 
             string? validationMessage = model.TryValidate();

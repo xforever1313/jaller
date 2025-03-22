@@ -16,9 +16,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.Net;
 using System.Text.Json;
+using Jaller.Server.Extensions;
 using Jaller.Server.Models;
 using Jaller.Standard;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Jaller.Server.Pages.Admin
 {
@@ -47,8 +50,13 @@ namespace Jaller.Server.Pages.Admin
 
         // ---------------- Methods ----------------
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            if( core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+            {
+                return StatusCode( (int)HttpStatusCode.Forbidden );
+            }
+
             this.NumberOfFiles = this.core.Files.GetFileCount();
             this.NumberOfDirectories = this.core.Folders.GetFolderCount();
 
@@ -61,6 +69,8 @@ namespace Jaller.Server.Pages.Admin
             {
                 this.IpfsVersionErrorString = e.Message;
             }
+
+            return Page();
         }
     }
 }

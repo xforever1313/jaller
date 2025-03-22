@@ -130,6 +130,7 @@ namespace Jaller.Server
 
                 app.UseDefaultFiles();
                 app.UseStaticFiles();
+                app.UseStatusCodePagesWithReExecute( "/Errors/{0}" );
 
                 app.UseRouting();
 
