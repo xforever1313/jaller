@@ -53,6 +53,9 @@ else
                     <span>
                         <a href="/Folder?id=@folderInfo.FolderId" target="_blank" class="btn btn-xs btn-link" title="View folder information"><i class="fa-solid fa-circle-info"></i></a>
                     </span>
+                    <span>
+                        <a href="/Folder/Add?parentId=@folderInfo.FolderId" target="_blank" class="btn btn-xs btn-link" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i></a>
+                    </span>
 
                     @if( foundChildNode && ( childNode is not null ) && childNode.IsOpen )
                     {
@@ -67,6 +70,16 @@ else
                     <a href="/File?cid=@fileInfo.CidV1" target="_blank" class="btn btn-link">
                         <i class="fa-solid fa-file"></i> @fileInfo.Name
                     </a>
+                </li>
+            }
+
+            @if( nodeToProcess.FolderContents.FolderId is null )
+            {
+                <li>
+                    <a href="/Folder?id=0" target="_blank" class="btn btn-link" title="View folder information"><i class="fa-solid fa-circle-info"></i>Root folder info...</a>
+                </li>
+                <li>
+                    <a href="/Folder/Add?parentId=0" target="_blank" class="btn btn-link" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i>Add to root folder...</a>
                 </li>
             }
         </ul>

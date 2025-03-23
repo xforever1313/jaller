@@ -49,7 +49,7 @@ public sealed class IndexModel : BasePageModel
 
     // ---------------- Methods ----------------
 
-    public async Task<IActionResult> OnGet( int? id )
+    public async Task<IActionResult> OnGetAsync( int? id )
     {
         // If no ID is specified, assume root directory.
         id = id ?? 0;
