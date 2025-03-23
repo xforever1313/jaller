@@ -20,7 +20,7 @@
 @inject HttpClient httpClient;
 @inject ILogger<FileTree> log;
 
-@if (this.fileTree is null)
+@if( this.fileTree is null )
 {
     <span>Loading Tree...</span>
 }
@@ -39,7 +39,7 @@ else
 
                 <li id="folder_@childFolderInfo.Id">
                     <a @onclick="async () => await this.ChildFolderLinkClicked( nodeFolderId, childFolderInfo.Id, childNode )">
-                        @if( nodeToProcess.ChildFolders.ContainsKey( childFolderInfo.Id ) && nodeToProcess.IsOpen )
+                        @if( nodeToProcess.ChildFolders.ContainsKey( childFolderInfo.Id ) && nodeToProcess.ChildFolders[childFolderInfo.Id].IsOpen )
                         {
                             <i class="fa-solid fa-folder-open"></i> @childFolderInfo.Name
                         }
@@ -49,7 +49,7 @@ else
                         }
                     </a>
 
-                    @if( nodeToProcess.IsOpen && foundChildNode && ( childNode is not null ) )
+                    @if( foundChildNode && ( childNode is not null ) && childNode.IsOpen )
                     {
                         ProcessNode( childNode );
                     }

@@ -56,6 +56,7 @@ public class FileTreeModel
             TreeNode node = queue.Dequeue();
             if( node.FolderContents.FolderId == parentFolderId )
             {
+                // We found the parent folder, add the folder as a child folder of it.
                 node.SetChild( folderContents, shouldFolderOpen );
                 return true;
             }
@@ -96,7 +97,7 @@ public class TreeNode
     /// <summary>
     /// If the folder is opened on the UI or closed.
     /// </summary>
-    public bool IsOpen { get; private set; }
+    public bool IsOpen { get; }
 
     // ---------------- Methods ----------------
 
