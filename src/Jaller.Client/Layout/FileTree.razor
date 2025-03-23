@@ -38,16 +38,21 @@ else
                 int? nodeFolderId = folderInfo.FolderId;
 
                 <li id="folder_@childFolderInfo.Id">
-                    <button class="btn btn-link" type="button" @onclick="async () => await this.ChildFolderLinkClicked( nodeFolderId, childFolderInfo.Id, childNode )">
-                        @if( nodeToProcess.ChildFolders.ContainsKey( childFolderInfo.Id ) && nodeToProcess.ChildFolders[childFolderInfo.Id].IsOpen )
-                        {
-                            <i class="fa-solid fa-folder-open"></i> @childFolderInfo.Name
-                        }
-                        else
-                        {
-                            <i class="fa-solid fa-folder"></i> @childFolderInfo.Name
-                        }
-                    </button>
+                    <span>
+                        <button style="padding-right:0em;" class="btn btn-link" type="button" @onclick="async () => await this.ChildFolderLinkClicked( nodeFolderId, childFolderInfo.Id, childNode )">
+                            @if( nodeToProcess.ChildFolders.ContainsKey( childFolderInfo.Id ) && nodeToProcess.ChildFolders[childFolderInfo.Id].IsOpen )
+                            {
+                                <i class="fa-solid fa-folder-open"></i> @childFolderInfo.Name
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-folder"></i> @childFolderInfo.Name
+                            }
+                        </button>
+                    </span>
+                    <span>
+                        <a href="/Folder?id=@folderInfo.FolderId" target="_blank" class="btn btn-xs btn-link" title="View folder information"><i class="fa-solid fa-circle-info"></i></a>
+                    </span>
 
                     @if( foundChildNode && ( childNode is not null ) && childNode.IsOpen )
                     {
@@ -58,7 +63,11 @@ else
 
             @foreach( JallerFileTreeLeafInfo fileInfo in folderInfo.Files ?? Array.Empty<JallerFileTreeLeafInfo>() )
             {
-                <li><a href="/File?cid=@fileInfo.CidV1" target="_blank" class="btn btn-link"><i class="fa-solid fa-file"></i> @fileInfo.Name</a></li>
+                <li>
+                    <a href="/File?cid=@fileInfo.CidV1" target="_blank" class="btn btn-link">
+                        <i class="fa-solid fa-file"></i> @fileInfo.Name
+                    </a>
+                </li>
             }
         </ul>
     }
