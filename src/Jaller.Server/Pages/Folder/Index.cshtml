@@ -1,0 +1,109 @@
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+
+@page
+@model Jaller.Server.Pages.Folder.IndexModel
+
+@if( this.Model.JallerFolder is null )
+{
+    ViewData["Title"] = "Can not find folder";
+
+    <div class="alert alert-danger">
+        @if( this.Model.ErrorMessage is null )
+        {
+            <p>Unknown Error :(</p>
+        }
+        else
+        {
+            <p>@this.Model.ErrorMessage</p>
+        }
+    </div>
+}
+else
+{
+    ViewData["Title"] = $"Folder: {this.Model.JallerFolder.Name}";
+
+    if( this.Model.JallerFolder.Id != 0 )
+    {
+        // If we are not already the root folder, we can add a button to go up one directory.
+        // If the parent directory is the root folder, then we can point it to the root
+        // directory by setting the parent ID to 0.
+        int parentId = this.Model.JallerFolder.ParentFolder ?? 0;
+
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <a href="/Folder?id=@parentId">
+                        <i class="fa-regular fa-square-caret-up"></i> Go to parent folder...
+                    </a>
+                </p>
+            </div>
+        </div>
+    }
+
+    if( this.Model.FolderContents.IsNullOrEmpty() )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <p>Folder contains no contents.</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        @if( this.Model.FolderContents.ChildFolders?.Any() ?? false )
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Sub-Folders</h3>
+                    <ul class="no-bullets">
+                    @foreach( JallerFolder folder in this.Model.FolderContents.ChildFolders )
+                    {
+                        <li>
+                            <a href="/Folder?id=@folder.Id">
+                                <i class="fa-solid fa-folder"></i> @folder.Name
+                            </a>
+                        </li>
+                    }
+                    </ul>
+                </div>
+            </div>
+        }
+
+        @if( this.Model.FolderContents.Files?.Any() ?? false )
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Files</h3>
+                    <ul class="no-bullets">
+                        @foreach( JallerFile file in this.Model.FolderContents.Files )
+                        {
+                            <li>
+                                <a href="/File?cid=@file.CidV1">
+                                    <i class="fa-solid fa-file"></i> @file.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    }
+}

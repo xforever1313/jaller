@@ -1,5 +1,4 @@
-﻿@*
-//
+﻿//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
 // 
@@ -16,18 +15,27 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
-*@
 
-@using Jaller.Core.FileManagement;
-@using Jaller.Core.FolderManagement;
-@using Jaller.Markdown;
-@using Jaller.Standard;
-@using Jaller.Standard.FileManagement;
-@using Jaller.Standard.FolderManagement;
-@using Jaller.Server;
-@using Jaller.Server.Models;
-@using Jaller.Server.Pages;
+using System.Diagnostics.CodeAnalysis;
+using Jaller.Standard.FolderManagement;
 
-@using SethCS.Extensions;
+namespace Jaller.Core.FolderManagement
+{
+    public static class FolderContentsExtensions
+    {
+        // ---------------- Methods ----------------
 
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+        public static bool IsNullOrEmpty( [NotNullWhen( false )] this FolderContents? contents )
+        {
+            if( contents is null )
+            {
+                return true;
+            }
+
+            bool containsFiles = contents.Files?.Any() ?? false;
+            bool containsFolders = contents.ChildFolders?.Any() ?? false;
+
+            return ( containsFiles == false ) && ( containsFolders == false );
+        }
+    }
+}
