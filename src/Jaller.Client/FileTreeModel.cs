@@ -27,7 +27,7 @@ public class FileTreeModel
 
     public FileTreeModel( JallerFolderTreeContentsInfo root )
     {
-        this.Root = new TreeNode( root );
+        this.Root = new TreeNode( root, true );
     }
 
     // ---------------- Properties ----------------
@@ -36,7 +36,17 @@ public class FileTreeModel
 
     // ---------------- Methods ----------------
 
-    public bool AddDirectoryInfo( int? parentFolderId, JallerFolderTreeContentsInfo newFolder )
+    /// <summary>
+    /// Toggles the state of the directory to be open or closed.
+    /// If open, then all child contents are revealed.  If closed, no children content is shown.
+    /// </summary>
+    /// <param name="folderContents">
+    /// A folder contents of <paramref name="parentFolderId"/>.
+    /// </param>
+    /// <returns>
+    /// True if we found the parent folder ID within the child folder contents, otherwise false.
+    /// </returns>
+    public bool ToggleDirectory( int? parentFolderId, JallerFolderTreeContentsInfo folderContents, bool shouldFolderOpen )
     {
         var queue = new Queue<TreeNode>();
         queue.Enqueue( this.Root );
@@ -46,7 +56,7 @@ public class FileTreeModel
             TreeNode node = queue.Dequeue();
             if( node.FolderContents.FolderId == parentFolderId )
             {
-                node.AddChild( newFolder );
+                node.SetChild( folderContents, shouldFolderOpen );
                 return true;
             }
 
@@ -68,11 +78,13 @@ public class TreeNode
 
     // ---------------- Constructor ----------------
 
-    public TreeNode( JallerFolderTreeContentsInfo directory )
+    public TreeNode( JallerFolderTreeContentsInfo directory, bool isOpen )
     {
         this.FolderContents = directory;
         this.childFolders = new Dictionary<int, TreeNode>();
         this.ChildFolders = new ReadOnlyDictionary<int, TreeNode>( this.childFolders );
+
+        this.IsOpen = isOpen;
     }
 
     // ---------------- Properties ----------------
@@ -81,12 +93,17 @@ public class TreeNode
 
     public IReadOnlyDictionary<int, TreeNode> ChildFolders { get; }
 
+    /// <summary>
+    /// If the folder is opened on the UI or closed.
+    /// </summary>
+    public bool IsOpen { get; private set; }
+
     // ---------------- Methods ----------------
 
-    public void AddChild( JallerFolderTreeContentsInfo folder )
+    public void SetChild( JallerFolderTreeContentsInfo folder, bool shouldChildBeOpen )
     {
         ArgumentNullException.ThrowIfNull( folder.FolderId );
 
-        this.childFolders[folder.FolderId.Value] = new TreeNode( folder ); 
+        this.childFolders[folder.FolderId.Value] = new TreeNode( folder, shouldChildBeOpen );
     }
 }

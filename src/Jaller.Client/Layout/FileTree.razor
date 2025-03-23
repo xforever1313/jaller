@@ -31,15 +31,15 @@ else
         JallerFolderTreeContentsInfo folderInfo = nodeToProcess.FolderContents;
 
         <ul class="no-bullets">
-            @foreach (JallerFolderInfo childFolderInfo in folderInfo.Folders ?? Array.Empty<JallerFolderInfo>())
+            @foreach( JallerFolderInfo childFolderInfo in folderInfo.Folders ?? Array.Empty<JallerFolderInfo>() )
             {
-                bool foundChildNode = nodeToProcess.ChildFolders.TryGetValue(childFolderInfo.Id, out TreeNode? childNode);
+                bool foundChildNode = nodeToProcess.ChildFolders.TryGetValue( childFolderInfo.Id, out TreeNode? childNode );
 
-                int? parentFolderId = folderInfo.FolderId;
+                int? nodeFolderId = folderInfo.FolderId;
 
                 <li id="folder_@childFolderInfo.Id">
-                    <a href="#folder_@childFolderInfo.Id" @onclick="async () => await this.AddChild( parentFolderId, childFolderInfo.Id )">
-                        @if (nodeToProcess.ChildFolders.ContainsKey(childFolderInfo.Id))
+                    <a @onclick="async () => await this.ChildFolderLinkClicked( nodeFolderId, childFolderInfo.Id, childNode )">
+                        @if( nodeToProcess.ChildFolders.ContainsKey( childFolderInfo.Id ) && nodeToProcess.IsOpen )
                         {
                             <i class="fa-solid fa-folder-open"></i> @childFolderInfo.Name
                         }
@@ -49,22 +49,21 @@ else
                         }
                     </a>
 
-                    @if( foundChildNode && childNode is not null )
+                    @if( nodeToProcess.IsOpen && foundChildNode && ( childNode is not null ) )
                     {
                         ProcessNode( childNode );
                     }
                 </li>
             }
 
-            @foreach (JallerFileTreeLeafInfo fileInfo in folderInfo.Files ?? Array.Empty<JallerFileTreeLeafInfo>())
+            @foreach( JallerFileTreeLeafInfo fileInfo in folderInfo.Files ?? Array.Empty<JallerFileTreeLeafInfo>() )
             {
-                this.log.LogInformation("In File: " + fileInfo.CidV1);
                 <li><i class="fa-solid fa-file"></i> <a href="/File?cid=@fileInfo.CidV1" target="_blank">@fileInfo.Name</a></li>
             }
         </ul>
     }
 
-    ProcessNode(this.fileTree.Root);
+    ProcessNode( this.fileTree.Root );
 }
 
 @code {
@@ -110,19 +109,47 @@ else
         }
     }
 
-    private async Task AddChild( int? parentId, int childId )
+
+    /// <summary>
+    /// Event that is called if a folder is opened.
+    /// </summary>
+    /// <param name="parentId">The parent folder ID of the clicked folder. Null if the parent folder is root.</param>
+    /// <param name="folderId">The folder ID of the client folder.</param>
+    /// <param name="folderNode">The tree node associaed with the folder ID, assuming it currently exists.</param>
+    private async Task ChildFolderLinkClicked( int? parentId, int folderId, TreeNode? folderNode )
     {
         if( this.fileTree is null )
         {
-            throw new InvalidOperationException("File Tree was somehow null.");
+            throw new InvalidOperationException( "File Tree was somehow null." );
         }
 
-        JallerFolderTreeContentsInfo? folderContents = await GetFolderContents(childId);
+        JallerFolderTreeContentsInfo? folderContents;
+
+        // If no folder no exists, assume it is not opened.
+        bool isOpen = folderNode?.IsOpen ?? false;
+
+        if( isOpen )
+        {
+            // If we are currently open, toggling means we want to close up the folder.
+            // No sense in wasting network traffic asking for the current folder contents.
+            folderContents = new JallerFolderTreeContentsInfo
+            {
+                Files = null,
+                Folders = null,
+                FolderId = folderId
+            };
+        }
+        else
+        {
+            // If we are not currently open, we want to 
+            folderContents = await GetFolderContents( folderId );
+        }
+
         if( folderContents is not null )
         {
-            if( this.fileTree.AddDirectoryInfo(parentId, folderContents) == false )
+            if( this.fileTree.ToggleDirectory( parentId, folderContents, ( isOpen == false ) ) == false )
             {
-                this.log.LogError($"Could not find parent directory {parentId} for folder {childId}");
+                this.log.LogError( $"Could not find parent directory {parentId} for folder {folderId}" );
             }
         }
     }
