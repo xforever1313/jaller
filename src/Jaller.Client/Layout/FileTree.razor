@@ -38,7 +38,7 @@ else
                 int? nodeFolderId = folderInfo.FolderId;
 
                 <li id="folder_@childFolderInfo.Id">
-                    <a @onclick="async () => await this.ChildFolderLinkClicked( nodeFolderId, childFolderInfo.Id, childNode )">
+                    <button class="btn btn-link" type="button" @onclick="async () => await this.ChildFolderLinkClicked( nodeFolderId, childFolderInfo.Id, childNode )">
                         @if( nodeToProcess.ChildFolders.ContainsKey( childFolderInfo.Id ) && nodeToProcess.ChildFolders[childFolderInfo.Id].IsOpen )
                         {
                             <i class="fa-solid fa-folder-open"></i> @childFolderInfo.Name
@@ -47,7 +47,7 @@ else
                         {
                             <i class="fa-solid fa-folder"></i> @childFolderInfo.Name
                         }
-                    </a>
+                    </button>
 
                     @if( foundChildNode && ( childNode is not null ) && childNode.IsOpen )
                     {
@@ -58,7 +58,7 @@ else
 
             @foreach( JallerFileTreeLeafInfo fileInfo in folderInfo.Files ?? Array.Empty<JallerFileTreeLeafInfo>() )
             {
-                <li><i class="fa-solid fa-file"></i> <a href="/File?cid=@fileInfo.CidV1" target="_blank">@fileInfo.Name</a></li>
+                <li><a href="/File?cid=@fileInfo.CidV1" target="_blank" class="btn btn-link"><i class="fa-solid fa-file"></i> @fileInfo.Name</a></li>
             }
         </ul>
     }
