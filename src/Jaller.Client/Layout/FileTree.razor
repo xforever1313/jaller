@@ -51,10 +51,16 @@ else
                         </button>
                     </span>
                     <span>
-                        <a href="/Folder?id=@folderInfo.FolderId" target="_blank" class="btn btn-xs btn-link" title="View folder information"><i class="fa-solid fa-circle-info"></i></a>
+                        <a href="/Folder?id=@childFolderInfo.Id" target="_blank" class="btn btn-xs btn-link" title="View folder information"><i class="fa-solid fa-circle-info"></i></a>
                     </span>
                     <span>
-                        <a href="/Folder/Add?parentId=@folderInfo.FolderId" target="_blank" class="btn btn-xs btn-link" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i></a>
+                        <a href="/Folder/Add?parentId=@childFolderInfo.Id" target="_blank" class="btn btn-xs btn-link" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i></a>
+                    </span>
+                    <span>
+                        <a href="/Folder/Edit?id=@childFolderInfo.Id" target="_blank" class="btn btn-xs btn-link" title="Edit folder"><i class="fa-solid fa-gear"></i></a>
+                    </span>
+                    <span>
+                        <a href="/Folder/Delete?id=@childFolderInfo.Id" target="_blank" class="btn btn-xs btn-link" title="Delete folder"><i class="fa-solid fa-folder-minus"></i></a>
                     </span>
 
                     @if( foundChildNode && ( childNode is not null ) && childNode.IsOpen )

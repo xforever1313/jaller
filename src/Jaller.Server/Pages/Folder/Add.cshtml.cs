@@ -47,15 +47,15 @@ namespace Jaller.Server.Pages.Folder
         public JallerFolder? UploadedFolder { get; set; }
 
         /// <inheritdoc/>
-        [TempData]
+        [TempData( Key = "AddFolderInfoMessage" )]
         public string? InfoMessage { get; set; }
 
         /// <inheritdoc/>
-        [TempData]
+        [TempData( Key = "AddFolderWarningMessage" )]
         public string? WarningMessage { get; set; }
 
         /// <inheritdoc/>
-        [TempData]
+        [TempData( Key = "AddFolderErrorMessage" )]
         public string? ErrorMessage { get; set; }
 
         // ---------------- Methods ----------------

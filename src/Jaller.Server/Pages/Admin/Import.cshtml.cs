@@ -52,15 +52,15 @@ namespace Jaller.Server.Pages.Admin
         public bool OverwriteExistingFiles { get; set; }
 
         /// <inheritdoc/>
-        [TempData]
+        [TempData( Key = "ImportInfoMessage" )]
         public string? InfoMessage { get; set; }
 
         /// <inheritdoc/>
-        [TempData]
+        [TempData( Key = "ImportWarningMessage" )]
         public string? WarningMessage { get; set; }
 
         /// <inheritdoc/>
-        [TempData]
+        [TempData( Key = "ImportErrorMessage" )]
         public string? ErrorMessage { get; set; }
 
         // ---------------- Methods ----------------
