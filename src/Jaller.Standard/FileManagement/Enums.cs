@@ -34,13 +34,6 @@ public enum MetadataPolicy : int
     Private = 0,
 
     /// <summary>
-    /// The metadata is only viewable in machine-readable
-    /// format (e.g. XML or RSS), but will not appear
-    /// on the human-facing front-end.
-    /// </summary>
-    MachinePublic = 200,
-
-    /// <summary>
     /// Metadata can be viewed by anyone, even if they
     /// are not logged in.  This does not mean
     /// that the file can be downloaded from the gateway,
