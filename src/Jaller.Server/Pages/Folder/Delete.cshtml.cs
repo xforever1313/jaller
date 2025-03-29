@@ -46,6 +46,12 @@ public sealed class DeleteModel : BasePageModel, IAlert
     [BindProperty]
     public int? FolderToDelete { get; set; }
 
+    /// <summary>
+    /// Error message that appears during a get request.
+    /// Null for no error.
+    /// </summary>
+    public string? GetRequestErrorMessage { get; private set; }
+
     /// <inheritdoc/>
     [TempData( Key = "DeleteFolderInfoMessage" )]
     public string? InfoMessage { get; set; }
@@ -72,7 +78,7 @@ public sealed class DeleteModel : BasePageModel, IAlert
 
         if( id == 0 )
         {
-            this.ErrorMessage = "Can not delete root folder.";
+            this.GetRequestErrorMessage = "Can not delete root folder.";
             this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return Page();
         }
@@ -81,7 +87,7 @@ public sealed class DeleteModel : BasePageModel, IAlert
 
         if( this.JallerFolder is null )
         {
-            this.ErrorMessage = "Can not find folder at the specified ID.";
+            this.GetRequestErrorMessage = "Can not find folder at the specified ID.";
             this.Response.StatusCode = (int)HttpStatusCode.NotFound;
             return Page();
         }

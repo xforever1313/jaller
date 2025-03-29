@@ -45,7 +45,7 @@ public sealed class IndexModel : BasePageModel
 
     public FolderContents? FolderContents { get; private set; }
 
-    public string? ErrorMessage { get; private set; }
+    public string? GetRequestErrorMessage { get; private set; }
 
     // ---------------- Methods ----------------
 
@@ -73,7 +73,7 @@ public sealed class IndexModel : BasePageModel
         
         if( this.JallerFolder is null )
         {
-            this.ErrorMessage = "Can not find folder at the specified ID.";
+            this.GetRequestErrorMessage = "Can not find folder at the specified ID.";
             this.Response.StatusCode = (int)HttpStatusCode.NotFound;
             return Page();
         }

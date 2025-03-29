@@ -28,13 +28,13 @@
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-danger">
-                @if( this.Model.ErrorMessage is null )
+                @if( this.Model.GetRequestErrorMessage is null )
                 {
                     <p>Unknown Error :(</p>
                 }
                 else
                 {
-                    <p>@this.Model.ErrorMessage</p>
+                    <p>@this.Model.GetRequestErrorMessage</p>
                 }
             </div>
         </div>

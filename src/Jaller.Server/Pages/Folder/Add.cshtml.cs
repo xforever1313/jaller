@@ -46,6 +46,12 @@ namespace Jaller.Server.Pages.Folder
         [BindProperty]
         public JallerFolder? UploadedFolder { get; set; }
 
+        /// <summary>
+        /// Error message that appears during a get request.
+        /// Null for no error.
+        /// </summary>
+        public string? GetRequestErrorMessage { get; private set; }
+
         /// <inheritdoc/>
         [TempData( Key = "AddFolderInfoMessage" )]
         public string? InfoMessage { get; set; }
@@ -69,7 +75,7 @@ namespace Jaller.Server.Pages.Folder
                 this.ParentFolder = await Task.Run( () => this.core.Folders.TryGetFolder( parentFolderId.Value ) );
                 if( this.ParentFolder is null )
                 {
-                    this.ErrorMessage = $"Can not find parent folder with ID {parentFolderId}.";
+                    this.GetRequestErrorMessage = $"Can not find parent folder with ID {parentFolderId}.";
                     this.Response.StatusCode = (int)HttpStatusCode.NotFound;
                     return Page();
                 }

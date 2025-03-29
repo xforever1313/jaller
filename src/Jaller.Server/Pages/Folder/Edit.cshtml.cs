@@ -46,6 +46,12 @@ public sealed class EditModel : BasePageModel, IAlert
     [BindProperty]
     public JallerFolder? UploadedFolder { get; set; }
 
+    /// <summary>
+    /// Error message that appears during a get request.
+    /// Null for no error.
+    /// </summary>
+    public string? GetRequestErrorMessage { get; private set; }
+
     /// <inheritdoc/>
     [TempData( Key = "EditInfoMessage" )]
     public string? InfoMessage { get; set; }
@@ -67,7 +73,7 @@ public sealed class EditModel : BasePageModel, IAlert
 
         if( id == 0 )
         {
-            this.ErrorMessage = "Can not edit root folder.";
+            this.GetRequestErrorMessage = "Can not edit root folder.";
             this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return Page();
         }
@@ -76,7 +82,7 @@ public sealed class EditModel : BasePageModel, IAlert
 
         if( this.JallerFolder is null )
         {
-            this.ErrorMessage = "Can not find folder at the specified ID.";
+            this.GetRequestErrorMessage = "Can not find folder at the specified ID.";
             this.Response.StatusCode = (int)HttpStatusCode.NotFound;
             return Page();
         }
