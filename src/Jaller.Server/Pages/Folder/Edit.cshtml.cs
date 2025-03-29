@@ -86,6 +86,10 @@ public sealed class EditModel : BasePageModel, IAlert
 
     public async Task<IActionResult> OnPostAsync()
     {
+        this.InfoMessage = null;
+        this.WarningMessage = null;
+        this.ErrorMessage = null;
+
         if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
@@ -114,8 +118,7 @@ public sealed class EditModel : BasePageModel, IAlert
         }
 
         this.InfoMessage = $"Folder Updated!  Its ID is {folderId}.";
-        this.WarningMessage = null;
-        this.ErrorMessage = null;
+
         return RedirectToPage( new { id = folderId } );
     }
 }

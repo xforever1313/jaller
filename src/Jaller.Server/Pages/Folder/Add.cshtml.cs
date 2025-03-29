@@ -80,6 +80,10 @@ namespace Jaller.Server.Pages.Folder
 
         public async Task<IActionResult> OnPostAsync()
         {
+            this.InfoMessage = null;
+            this.WarningMessage = null;
+            this.ErrorMessage = null;
+
             if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
             {
                 return StatusCode( (int)HttpStatusCode.Forbidden );
@@ -103,8 +107,6 @@ namespace Jaller.Server.Pages.Folder
             }
 
             this.InfoMessage = $"Folder Added!  Its ID is {newId}.";
-            this.WarningMessage = null;
-            this.ErrorMessage = null;
             return RedirectToPage();
         }
     }

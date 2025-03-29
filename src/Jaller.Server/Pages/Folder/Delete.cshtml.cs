@@ -91,6 +91,10 @@ public sealed class DeleteModel : BasePageModel, IAlert
 
     public async Task<IActionResult> OnPostAsync()
     {
+        this.InfoMessage = null;
+        this.WarningMessage = null;
+        this.ErrorMessage = null;
+
         if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
@@ -112,10 +116,6 @@ public sealed class DeleteModel : BasePageModel, IAlert
             this.ErrorMessage = e.Message;
             return RedirectToPage();
         }
-
-        this.InfoMessage = null;
-        this.WarningMessage = null;
-        this.ErrorMessage = null;
 
         return RedirectToPage( "FolderDeleteConfirmation", new { id = folderToDelete } );
     }
