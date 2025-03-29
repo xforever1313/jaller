@@ -120,6 +120,8 @@ namespace Jaller.Server.Pages.Admin
             if( ( this.WarningMessage is null ) && ( this.ErrorMessage is null ) )
             {
                 this.InfoMessage = "Import Successful!";
+                this.WarningMessage = null;
+                this.ErrorMessage = null;
             }
 
             return RedirectToPage();

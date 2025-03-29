@@ -21,6 +21,8 @@
 @using Jaller.Standard.FileManagement;
 @using Jaller.Server.Extensions;
 
+@model IJallerPermissions
+
 <p>
     <label for="downloadPolicySelection">
         Who can download files?
@@ -30,7 +32,18 @@
     <select class="form-control" id="downloadPolicySelection" name="DownloadablePolicy">
     @foreach( DownloadPolicy policy in Enum.GetValues<DownloadPolicy>().OrderByDescending( e => (int)e ) )
     {
-        <option value="@((int)policy)">@policy.GetFriendlyName()</option>
+        if( this.Model is null )
+        {
+            <option value="@((int)policy)">@policy.GetFriendlyName()</option>
+        }
+        else if( this.Model.DownloadablePolicy == policy )
+        {
+            <option value="@((int)policy)" selected>@policy.GetFriendlyName()</option>
+        }
+        else
+        {
+            <option value="@((int)policy)">@policy.GetFriendlyName()</option>
+        }
     }
     </select>
 </p>

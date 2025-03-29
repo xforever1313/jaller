@@ -21,6 +21,8 @@
 @using Jaller.Standard.FileManagement;
 @using Jaller.Server.Extensions;
 
+@model IJallerPermissions
+
 <p>
     <label for="metadataPolicySelection">
         Who can view metadata?
@@ -30,7 +32,18 @@
     <select class="form-control" id="metadataPolicySelection" name="MetadataPolicy">
     @foreach( MetadataPolicy policy in Enum.GetValues<MetadataPolicy>().OrderByDescending( e => (int)e ) )
     {
-        <option value="@((int)policy)">@policy.GetFriendlyName()</option>
+        if( this.Model is null )
+        {
+            <option value="@((int)policy)">@policy.GetFriendlyName()</option>
+        }
+        else if( this.Model.MetadataPrivacy == policy )
+        {
+            <option value="@((int)policy)" selected>@policy.GetFriendlyName()</option>
+        }
+        else
+        {
+            <option value="@((int)policy)">@policy.GetFriendlyName()</option>
+        }
     }
     </select>
 </p>

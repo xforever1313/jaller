@@ -17,15 +17,15 @@
 //
 
 using System.Net;
+using Jaller.Server.Extensions;
 using Jaller.Server.Models;
 using Jaller.Standard;
-using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jaller.Server.Pages.Folder;
 
-public sealed class EditModel : BasePageModel
+public sealed class EditModel : BasePageModel, IAlert
 {
     // ---------------- Fields ----------------
 
@@ -43,7 +43,20 @@ public sealed class EditModel : BasePageModel
 
     public JallerFolder? JallerFolder { get; private set; }
 
-    public string? ErrorMessage { get; private set; }
+    [BindProperty]
+    public JallerFolder? UploadedFolder { get; set; }
+
+    /// <inheritdoc/>
+    [TempData( Key = "EditInfoMessage" )]
+    public string? InfoMessage { get; set; }
+
+    /// <inheritdoc/>
+    [TempData( Key = "EditWarningMessage" )]
+    public string? WarningMessage { get; set; }
+
+    /// <inheritdoc/>
+    [TempData( Key = "EditErrorMessage" )]
+    public string? ErrorMessage { get; set; }
 
     // ---------------- Methods ----------------
 
@@ -58,9 +71,9 @@ public sealed class EditModel : BasePageModel
             this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return Page();
         }
-        
+
         this.JallerFolder = await Task.Run( () => this.core.Folders.TryGetFolder( id.Value ) );
-        
+
         if( this.JallerFolder is null )
         {
             this.ErrorMessage = "Can not find folder at the specified ID.";
@@ -69,5 +82,40 @@ public sealed class EditModel : BasePageModel
         }
 
         return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+        {
+            return StatusCode( (int)HttpStatusCode.Forbidden );
+        }
+
+        if( this.UploadedFolder is null )
+        {
+            this.ErrorMessage = "File was somehow null.";
+            return RedirectToPage();
+        }
+        else if( this.UploadedFolder.Id == 0 )
+        {
+            this.ErrorMessage = "Can not edit the root folder.";
+            return RedirectToPage();
+        }
+
+        int folderId;
+        try
+        {
+            folderId = await Task.Run( () => this.core.Folders.ConfigureFolder( this.UploadedFolder ) );
+        }
+        catch( Exception e )
+        {
+            this.ErrorMessage = e.Message;
+            return RedirectToPage();
+        }
+
+        this.InfoMessage = $"Folder Updated!  Its ID is {folderId}.";
+        this.WarningMessage = null;
+        this.ErrorMessage = null;
+        return RedirectToPage( new { id = folderId } );
     }
 }

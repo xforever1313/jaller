@@ -43,9 +43,82 @@
 }
 else
 {
+    @if( this.Model.InfoMessage is not null )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <ul>
+                        @foreach( string message in this.Model.InfoMessage.ReadLines() )
+                        {
+                            <li>@message</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if( this.Model.WarningMessage is not null )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning">
+                    <p>Warnings when trying to add folder:</p>
+                    <ul>
+                        @foreach( string message in this.Model.WarningMessage.ReadLines() )
+                        {
+                            <li>@message</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if( this.Model.ErrorMessage is not null )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    <p>Errors when adding folder:</p>
+                    <ul>
+                        @foreach( string message in this.Model.ErrorMessage.ReadLines() )
+                        {
+                            <li>@message</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
     string folderName = this.Model.JallerFolder.Name;
     ViewData["Title"] = $"Edit {folderName}";
 
-    <p>Edit @folderName?</p>
-    <p>TODO Make form.</p>
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-group" method="post" enctype="multipart/form-data">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Editing @folderName</h3>
+                    </div>
+                    <div class="panel-body">
+                        <input type="hidden" name="Id" value="@this.Model.JallerFolder.Id" readonly />
+                        <p>
+                            <label for="nameInput">Folder Name</label>
+                        </p>
+                        <p>
+                            <input id="nameInput" class="form-control" type="text" name="Name" value="@folderName" />
+                        </p>
+                        <partial name="_MetadataPolicyDropDown" model="this.Model.JallerFolder" />
+                        <partial name="_DownloadPolicyDropDown" model="this.Model.JallerFolder" />
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-success" type="submit" id="uploadButton">Edit Folder</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 }

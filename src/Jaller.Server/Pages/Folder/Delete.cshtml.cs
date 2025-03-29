@@ -113,6 +113,10 @@ public sealed class DeleteModel : BasePageModel, IAlert
             return RedirectToPage();
         }
 
+        this.InfoMessage = null;
+        this.WarningMessage = null;
+        this.ErrorMessage = null;
+
         return RedirectToPage( "FolderDeleteConfirmation", new { id = folderToDelete } );
     }
 }

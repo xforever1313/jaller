@@ -103,6 +103,8 @@ namespace Jaller.Server.Pages.Folder
             }
 
             this.InfoMessage = $"Folder Added!  Its ID is {newId}.";
+            this.WarningMessage = null;
+            this.ErrorMessage = null;
             return RedirectToPage();
         }
     }
