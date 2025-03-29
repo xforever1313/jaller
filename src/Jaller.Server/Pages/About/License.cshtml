@@ -3,4 +3,9 @@
 @{
     ViewData["Title"] = "Software License";
 }
-@this.Html.Raw( this.Model.LicenseHtml )
+
+<div class="row">
+    <div class="col-md-12">
+        @this.Html.Raw( this.Model.LicenseHtml )
+    </div>
+</div>

@@ -25,15 +25,19 @@
 {
     ViewData["Title"] = "Can not find file";
 
-    <div class="alert alert-danger">
-        @if( this.Model.ErrorMessage is not null )
-        {
-            <p>@this.Model.ErrorMessage</p>
-        }
-        else
-        {
-            <p>Unknown Error :(</p>
-        }
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger">
+                @if( this.Model.ErrorMessage is not null )
+                {
+                    <p>@this.Model.ErrorMessage</p>
+                }
+                else
+                {
+                    <p>Unknown Error :(</p>
+                }
+            </div>
+        </div>
     </div>
 }
 else

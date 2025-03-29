@@ -17,6 +17,7 @@
 //
 
 using System.Net;
+using Jaller.Server.Extensions;
 using Jaller.Server.Models;
 using Jaller.Standard;
 using Jaller.Standard.FolderManagement;
@@ -24,7 +25,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Jaller.Server.Pages.Folder
 {
-    public sealed class AddModel : BasePageModel
+    public sealed class AddModel : BasePageModel, IAlert
     {
         // ---------------- Fields ----------------
 
@@ -42,7 +43,20 @@ namespace Jaller.Server.Pages.Folder
 
         public JallerFolder? ParentFolder { get; private set; }
 
-        public string? ErrorMessage { get; private set; }
+        [BindProperty]
+        public JallerFolder? UploadedFolder { get; set; }
+
+        /// <inheritdoc/>
+        [TempData]
+        public string? InfoMessage { get; set; }
+
+        /// <inheritdoc/>
+        [TempData]
+        public string? WarningMessage { get; set; }
+
+        /// <inheritdoc/>
+        [TempData]
+        public string? ErrorMessage { get; set; }
 
         // ---------------- Methods ----------------
 
@@ -62,6 +76,34 @@ namespace Jaller.Server.Pages.Folder
             }
 
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+            {
+                return StatusCode( (int)HttpStatusCode.Forbidden );
+            }
+
+            if( this.UploadedFolder is null )
+            {
+                this.ErrorMessage = "File was somehow null";
+                return RedirectToPage();
+            }
+
+            int newId;
+            try
+            {
+                newId = await Task.Run( () => this.core.Folders.ConfigureFolder( this.UploadedFolder ) );
+            }
+            catch( Exception e )
+            {
+                this.ErrorMessage = e.Message;
+                return RedirectToPage();
+            }
+
+            this.InfoMessage = $"Folder Added!  Its ID is {newId}.";
+            return RedirectToPage();
         }
     }
 }

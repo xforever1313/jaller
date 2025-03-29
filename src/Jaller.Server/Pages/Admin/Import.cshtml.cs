@@ -77,7 +77,7 @@ namespace Jaller.Server.Pages.Admin
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if( core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+            if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
             {
                 return StatusCode( (int)HttpStatusCode.Forbidden );
             }

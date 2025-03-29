@@ -25,4 +25,9 @@
 @{
     ViewData["Title"] = "About Jaller";
 }
-@this.Html.Raw( this.Model.ReadmeHtml )
+
+<div class="row">
+    <div class="col-md-12">
+        @this.Html.Raw( this.Model.ReadmeHtml )
+    </div>
+</div>
