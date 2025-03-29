@@ -51,16 +51,16 @@ else
                         </button>
                     </span>
                     <span>
-                        <a href="/Folder?id=@childFolderInfo.Id" target="_blank" class="btn btn-xs btn-link" title="View folder information"><i class="fa-solid fa-circle-info"></i></a>
+                        <a href="/Folder?id=@childFolderInfo.Id" class="btn btn-xs btn-link" title="View folder information"><i class="fa-solid fa-circle-info"></i></a>
                     </span>
                     <span>
-                        <a href="/Folder/Add?parentId=@childFolderInfo.Id" target="_blank" class="btn btn-xs btn-link" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i></a>
+                        <a href="/Folder/Add?parentId=@childFolderInfo.Id" class="btn btn-xs btn-link" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i></a>
                     </span>
                     <span>
-                        <a href="/Folder/Edit?id=@childFolderInfo.Id" target="_blank" class="btn btn-xs btn-link" title="Edit folder"><i class="fa-solid fa-gear"></i></a>
+                        <a href="/Folder/Edit?id=@childFolderInfo.Id" class="btn btn-xs btn-link" title="Edit folder"><i class="fa-solid fa-gear"></i></a>
                     </span>
                     <span>
-                        <a href="/Folder/Delete?id=@childFolderInfo.Id" target="_blank" class="btn btn-xs btn-link" title="Delete folder"><i class="fa-solid fa-folder-minus"></i></a>
+                        <a href="/Folder/Delete?id=@childFolderInfo.Id" class="btn btn-xs btn-link" title="Delete folder"><i class="fa-solid fa-folder-minus"></i></a>
                     </span>
 
                     @if( foundChildNode && ( childNode is not null ) && childNode.IsOpen )
@@ -73,7 +73,7 @@ else
             @foreach( JallerFileTreeLeafInfo fileInfo in folderInfo.Files ?? Array.Empty<JallerFileTreeLeafInfo>() )
             {
                 <li>
-                    <a href="/File?cid=@fileInfo.CidV1" target="_blank" class="btn btn-link">
+                    <a href="/File?cid=@fileInfo.CidV1" class="btn btn-link">
                         <i class="fa-solid fa-file"></i> @fileInfo.Name
                     </a>
                 </li>
@@ -82,10 +82,10 @@ else
             @if( nodeToProcess.FolderContents.FolderId is null )
             {
                 <li>
-                    <a href="/Folder?id=0" target="_blank" class="btn btn-link" title="View folder information"><i class="fa-solid fa-circle-info"></i>Root folder info...</a>
+                    <a href="/Folder?id=0" class="btn btn-link" title="View folder information"><i class="fa-solid fa-circle-info"></i>Root folder info...</a>
                 </li>
                 <li>
-                    <a href="/Folder/Add?parentId=0" target="_blank" class="btn btn-link" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i>Add to root folder...</a>
+                    <a href="/Folder/Add?parentId=0" class="btn btn-link" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i>Add to root folder...</a>
                 </li>
             }
         </ul>

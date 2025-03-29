@@ -44,7 +44,19 @@ else
 {
     ViewData["Title"] = $"Folder: {this.Model.JallerFolder.Name}";
 
-    if( this.Model.JallerFolder.Id != 0 )
+    if( this.Model.JallerFolder.Id == 0 )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <a href="/">
+                        <i class="fa-regular fa-home"></i> Go Home
+                    </a>
+                </p>
+            </div>
+        </div>
+    }
+    else if( this.Model.JallerFolder.Id != 0 )
     {
         // If we are not already the root folder, we can add a button to go up one directory.
         // If the parent directory is the root folder, then we can point it to the root
@@ -76,17 +88,23 @@ else
         {
             <div class="row">
                 <div class="col-md-12">
-                    <h3>Sub-Folders</h3>
-                    <ul class="no-bullets">
-                    @foreach( JallerFolder folder in this.Model.FolderContents.ChildFolders )
-                    {
-                        <li>
-                            <a href="/Folder?id=@folder.Id">
-                                <i class="fa-solid fa-folder"></i> @folder.Name
-                            </a>
-                        </li>
-                    }
-                    </ul>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Sub-Folders</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="no-bullets">
+                                @foreach( JallerFolder folder in this.Model.FolderContents.ChildFolders )
+                                {
+                                    <li>
+                                        <a href="/Folder?id=@folder.Id">
+                                            <i class="fa-solid fa-folder"></i> @folder.Name
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         }
@@ -95,17 +113,47 @@ else
         {
             <div class="row">
                 <div class="col-md-12">
-                    <h3>Files</h3>
-                    <ul class="no-bullets">
-                        @foreach( JallerFile file in this.Model.FolderContents.Files )
-                        {
-                            <li>
-                                <a href="/File?cid=@file.CidV1">
-                                    <i class="fa-solid fa-file"></i> @file.Name
-                                </a>
-                            </li>
-                        }
-                    </ul>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Files</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="no-bullets">
+                                @foreach (JallerFile file in this.Model.FolderContents.Files)
+                                {
+                                    <li>
+                                        <a href="/File?cid=@file.CidV1">
+                                            <i class="fa-solid fa-file"></i> @file.Name
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if( this.Model.AllowAdminAccess )
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Manage Folder</h3>
+                        </div>
+                        <div class="panel-body">
+                            <span>
+                                <a href="/Folder/Add?parentId=@this.Model.JallerFolder.Id" class="btn btn-primary" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i> Create Sub-Folder</a>
+                            </span>
+                            <span>
+                                <a href="/Folder/Edit?id=@this.Model.JallerFolder.Id" class="btn btn-warning" title="Edit folder"><i class="fa-solid fa-gear"></i> Edit Folder</a>
+                            </span>
+                            <span>
+                                <a href="/Folder/Delete?id=@this.Model.JallerFolder.Id" class="btn btn-danger" title="Delete folder"><i class="fa-solid fa-folder-minus"></i> Delete Folder</a>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         }
