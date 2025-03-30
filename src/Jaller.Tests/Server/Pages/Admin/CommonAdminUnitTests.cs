@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Jaller.Tests.Pages.Admin
+namespace Jaller.Tests.Server.Pages.Admin
 {
     public static class CommonAdminUnitTests
     {
@@ -53,7 +53,7 @@ namespace Jaller.Tests.Pages.Admin
                 model.Request.Host = new HostString( url );
 
                 IActionResult result = action();
-                StatusCodeResult? statusCodeResult = result as StatusCodeResult;
+                var statusCodeResult = result as StatusCodeResult;
                 Assert.IsNotNull( statusCodeResult );
 
                 Assert.AreEqual( (int)HttpStatusCode.Forbidden, statusCodeResult.StatusCode );
@@ -66,7 +66,7 @@ namespace Jaller.Tests.Pages.Admin
                 model.Request.Host = new HostString( url );
 
                 IActionResult result = action();
-                StatusCodeResult? statusCodeResult = result as StatusCodeResult;
+                var statusCodeResult = result as StatusCodeResult;
                 Assert.IsNotNull( statusCodeResult );
 
                 Assert.AreEqual( (int)HttpStatusCode.Forbidden, statusCodeResult.StatusCode );

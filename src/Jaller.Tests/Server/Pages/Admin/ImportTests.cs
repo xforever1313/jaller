@@ -16,36 +16,52 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Core;
 using Jaller.Core.Configuration;
 using Jaller.Server.Pages.Admin;
-using Jaller.Standard;
-using Moq;
+using Jaller.Tests.Mocks;
 
-namespace Jaller.Tests.Pages.Admin;
+namespace Jaller.Tests.Server.Pages.Admin;
 
 [TestClass]
-public sealed class IndexTests
+public sealed class ImportTests
 {
     // ---------------- Fields ----------------
 
-    private Mock<IJallerCore>? core;
+    private JallerConfig? config;
+
+    private JallerCore? core;
 
     // ---------------- Setup / Teardown ----------------
 
     [TestInitialize]
     public void TestSetup()
     {
-        this.core = new Mock<IJallerCore>( MockBehavior.Strict );
+        this.config = new JallerConfig();
+        this.config.Database.DatabaseLocation = null;
+
+        this.core = new JallerCore( this.config, new StubLogger() );
+        this.core.Init();
     }
 
     [TestCleanup]
     public void TestTeardown()
     {
+        this.core?.Dispose();
     }
 
     // ---------------- Properties ----------------
 
-    private Mock<IJallerCore> Core
+    public JallerConfig Config
+    {
+        get
+        {
+            Assert.IsNotNull( this.config );
+            return this.config;
+        }
+    }
+
+    private JallerCore Core
     {
         get
         {
@@ -57,19 +73,30 @@ public sealed class IndexTests
     // ---------------- Tests ----------------
 
     [TestMethod]
-    public void HostRestrictionTest()
+    public void GetHostRestrictionTest()
     {
         // Setup
-        var config = new JallerConfig();
-        this.Core.Setup( m => m.Config ).Returns( config );
-
-        var uut = new IndexModel( this.Core.Object );
+        var uut = new ImportModel( this.Core );
 
         // Act / Check
         CommonAdminUnitTests.DoHostRestrictionTest(
-            () => uut.OnGetAsync().Result,
+            () => uut.OnGet(),
             uut,
-            config.Web
+            this.Config.Web
+        );
+    }
+
+    [TestMethod]
+    public void PostHostRestrictionTest()
+    {
+        // Setup
+        var uut = new ImportModel( this.Core );
+
+        // Act / Check
+        CommonAdminUnitTests.DoHostRestrictionTest(
+            () => uut.OnPostAsync().Result,
+            uut,
+            this.Config.Web
         );
     }
 }
