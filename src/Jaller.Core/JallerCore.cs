@@ -21,6 +21,7 @@ using Jaller.Core.Database;
 using Jaller.Core.FileManagement;
 using Jaller.Core.FolderManagement;
 using Jaller.Core.Ipfs;
+using Jaller.Core.Search;
 using Jaller.Standard;
 using Jaller.Standard.Bulk;
 using Jaller.Standard.Configuration;
@@ -28,6 +29,7 @@ using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Jaller.Standard.Ipfs;
 using Jaller.Standard.Logging;
+using Jaller.Standard.Search;
 using Jaller.Standard.UserManagement;
 
 namespace Jaller.Core
@@ -56,6 +58,7 @@ namespace Jaller.Core
             this.Files = new JallerFileManager( this, this.Database );
             this.Folders = new JallerFolderManager( this, this.Database );
             this.Ipfs = new JallerIpfsManager( this, this.ipfsGatewayClient );
+            this.Search = new JallerSearcher( this, this.Database );
         }
 
         // ---------------- Properties ----------------
@@ -72,6 +75,8 @@ namespace Jaller.Core
 
         public IJallerFileManager Files { get; }
 
+        public IJallerSearch Search { get; }
+
         public IUserManager UserManager => throw new NotImplementedException();
 
         internal JallerDatabase Database { get; }
@@ -80,6 +85,7 @@ namespace Jaller.Core
 
         public void Init()
         {
+            this.Search.Index( CancellationToken.None );
         }
 
         public void Dispose()

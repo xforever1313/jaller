@@ -16,7 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Core.Configuration;
 using Jaller.Core.Exceptions;
 using Jaller.Standard.Configuration;
 using LiteDB;
@@ -48,6 +47,7 @@ namespace Jaller.Core.Database
 
             this.Files = this.dbConnection.GetCollection<IpfsFile>();
             this.Directories = this.dbConnection.GetCollection<JallerDirectory>();
+            this.SearchKeywords = this.dbConnection.GetCollection<SearchKeyword>();
         }
 
         // ---------------- Properties ----------------
@@ -55,6 +55,8 @@ namespace Jaller.Core.Database
         public ILiteCollection<IpfsFile> Files { get; }
 
         public ILiteCollection<JallerDirectory> Directories { get; }
+
+        public ILiteCollection<SearchKeyword> SearchKeywords { get; }
 
         // ---------------- Methods ----------------
 

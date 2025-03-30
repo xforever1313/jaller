@@ -1,0 +1,81 @@
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+
+@page
+
+@model Jaller.Server.Pages.Search.IndexModel
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+@if( this.Model.ErrorMessage is not null )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger">
+                <p>Errors when searching:</p>
+                <ul>
+                    @foreach( string message in this.Model.ErrorMessage.ReadLines() )
+                    {
+                        <li>@message</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="search-container">
+            <form method="get">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Search For Files</h3>
+                    </div>
+                    <div class="panel-body">
+                        <input type="text" name="query" class="form-control"
+                                placeholder="Search..." value="@( this.Model.Query ?? "" )">
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if( this.Model.FoundFiles is not null && this.Model.FoundFiles.Any() )
+{
+    <h3>Search Results</h3>
+    <ul>
+        @foreach( JallerSearchResult result in this.Model.FoundFiles )
+        {
+            <li><a href="/File?cid=@result.CidV1">@result.FileName</a></li>
+        }
+    </ul>
+}
+else if( this.Model.Query is not null )
+{
+    // We tried to query something, but nothing showed up, that's a not found result.
+    <h3>No Results Found :(</h3>
+}

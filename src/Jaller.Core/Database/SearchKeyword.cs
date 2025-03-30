@@ -1,5 +1,4 @@
-﻿@*
-//
+﻿//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
 // 
@@ -16,19 +15,25 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
-*@
 
-@using Jaller.Core.FileManagement;
-@using Jaller.Core.FolderManagement;
-@using Jaller.Markdown;
-@using Jaller.Standard;
-@using Jaller.Standard.FileManagement;
-@using Jaller.Standard.FolderManagement;
-@using Jaller.Standard.Search;
-@using Jaller.Server;
-@using Jaller.Server.Models;
-@using Jaller.Server.Pages;
+using System.ComponentModel.DataAnnotations;
+using LiteDB;
+using SethCS.Collections;
 
-@using SethCS.Extensions;
+namespace Jaller.Core.Database
+{
+    internal sealed record class SearchKeyword
+    {
+        // ---------------- Properties ----------------
 
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+        [BsonId( false )]
+        [Required]
+        public required string Keyword { get; init; }
+
+        /// <summary>
+        /// The CIDs that match the search term.
+        /// Set to null for no results.
+        /// </summary>
+        public SequentialOrderIgnoredHashSet<string>? Cids { get; init; }
+    }
+}

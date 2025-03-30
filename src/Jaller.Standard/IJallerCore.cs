@@ -22,6 +22,7 @@ using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Jaller.Standard.Ipfs;
 using Jaller.Standard.Logging;
+using Jaller.Standard.Search;
 using Jaller.Standard.UserManagement;
 
 namespace Jaller.Standard;
@@ -41,6 +42,8 @@ public interface IJallerCore
     IJallerIpfsManager Ipfs { get; }
 
     IJallerLogger Log { get; }
+
+    IJallerSearch Search { get; }
 
     IUserManager UserManager { get; }
 }
