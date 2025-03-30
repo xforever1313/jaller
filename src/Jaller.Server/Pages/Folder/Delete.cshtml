@@ -104,7 +104,7 @@ else
                         <h3>Delete @folderName?</h3>
                     </div>
                     <div class="panel-body">
-                        <input type="hidden" name="FolderToDelete" value="@this.Model.JallerFolder.Id" readonly />
+                        <input type="hidden" name="@nameof( this.Model.FolderToDelete )" value="@this.Model.JallerFolder.Id" readonly />
                         <p>This will delete <strong>all</strong> sub-folders and files that are contained within this folder.</p>
                         <p>If you are sure, hit the "Delete" button below.</p>
                         <p>Otherwise, <a href="/Folder?id=@(this.Model.JallerFolder.Id)">click here</a> to go back to the folder's information page.</p>

@@ -18,7 +18,7 @@
 
 namespace Jaller.Standard.FileManagement;
 
-public sealed record class JallerFile : IJallerPermissions
+public sealed record class JallerFile
 {
     /// <summary>
     /// The content ID (CID) of the file.

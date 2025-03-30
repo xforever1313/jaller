@@ -20,8 +20,18 @@ using Jaller.Standard.FileManagement;
 
 namespace Jaller.Standard.FolderManagement;
 
-public sealed record class JallerFolder : IJallerPermissions
+public sealed record class JallerFolder
 {
+    // ---------------- Fields ----------------
+
+    public static readonly string DefaultFolderName = "Untitled Folder";
+
+    public static readonly MetadataPolicy DefaultMetadataPrivacy = MetadataPolicy.Private;
+
+    public static readonly DownloadPolicy DefaultDownloadablePolicy = DownloadPolicy.Private;
+
+    // ---------------- Properties ----------------
+
     public int Id { get; internal init; }
 
     public required string Name { get; init; }
@@ -34,10 +44,10 @@ public sealed record class JallerFolder : IJallerPermissions
     /// <summary>
     /// The publicity of the contents of this folder.
     /// </summary>
-    public MetadataPolicy MetadataPrivacy { get; init; } = MetadataPolicy.Private;
+    public MetadataPolicy MetadataPrivacy { get; init; } = DefaultMetadataPrivacy;
 
     /// <summary>
     /// If the contents of this folder are downloadable.
     /// </summary>
-    public DownloadPolicy DownloadablePolicy { get; init; } = DownloadPolicy.Private;
+    public DownloadPolicy DownloadablePolicy { get; init; } = DefaultDownloadablePolicy;
 }

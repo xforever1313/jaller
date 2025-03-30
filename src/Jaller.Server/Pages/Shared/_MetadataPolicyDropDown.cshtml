@@ -21,7 +21,7 @@
 @using Jaller.Standard.FileManagement;
 @using Jaller.Server.Extensions;
 
-@model IJallerPermissions
+@model MetadataPolicy?
 
 <p>
     <label for="metadataPolicySelection">
@@ -29,14 +29,14 @@
     </label>
 </p>
 <p>
-    <select class="form-control" id="metadataPolicySelection" name="MetadataPolicy">
+    <select class="form-control" id="metadataPolicySelection" name="@nameof( IJallerPermissions.MetadataPrivacy )">
     @foreach( MetadataPolicy policy in Enum.GetValues<MetadataPolicy>().OrderByDescending( e => (int)e ) )
     {
         if( this.Model is null )
         {
             <option value="@((int)policy)">@policy.GetFriendlyName()</option>
         }
-        else if( this.Model.MetadataPrivacy == policy )
+        else if( this.Model == policy )
         {
             <option value="@((int)policy)" selected>@policy.GetFriendlyName()</option>
         }

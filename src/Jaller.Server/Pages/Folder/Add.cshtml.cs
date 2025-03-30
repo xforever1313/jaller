@@ -20,12 +20,13 @@ using System.Net;
 using Jaller.Server.Extensions;
 using Jaller.Server.Models;
 using Jaller.Standard;
+using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jaller.Server.Pages.Folder
 {
-    public sealed class AddModel : BasePageModel, IAlert
+    public sealed class AddModel : BasePageModel, IAlert, IJallerPermissions
     {
         // ---------------- Fields ----------------
 
@@ -43,8 +44,21 @@ namespace Jaller.Server.Pages.Folder
 
         public JallerFolder? ParentFolder { get; private set; }
 
+        // -------- POST Properties --------
+
         [BindProperty]
-        public JallerFolder? UploadedFolder { get; set; }
+        public string? NewFolderName { get; set; }
+
+        [BindProperty]
+        public int? ParentFolderId { get; set; }
+
+        [BindProperty]
+        public MetadataPolicy? MetadataPrivacy { get; set; }
+
+        [BindProperty]
+        public DownloadPolicy? DownloadablePolicy { get; set; }
+
+        // -------- Messages --------
 
         /// <summary>
         /// Error message that appears during a get request.
@@ -95,16 +109,23 @@ namespace Jaller.Server.Pages.Folder
                 return StatusCode( (int)HttpStatusCode.Forbidden );
             }
 
-            if( this.UploadedFolder is null )
+            if( this.ParentFolderId == 0 )
             {
-                this.ErrorMessage = "File was somehow null";
-                return RedirectToPage();
+                this.ParentFolderId = null;
             }
+
+            var newFolder = new JallerFolder
+            {
+                Name = this.NewFolderName ?? "Untitled Folder",
+                DownloadablePolicy = this.DownloadablePolicy ?? JallerFolder.DefaultDownloadablePolicy,
+                MetadataPrivacy = this.MetadataPrivacy ?? JallerFolder.DefaultMetadataPrivacy,
+                ParentFolder = this.ParentFolderId
+            };
 
             int newId;
             try
             {
-                newId = await Task.Run( () => this.core.Folders.ConfigureFolder( this.UploadedFolder ) );
+                newId = await Task.Run( () => this.core.Folders.ConfigureFolder( newFolder ) );
             }
             catch( Exception e )
             {

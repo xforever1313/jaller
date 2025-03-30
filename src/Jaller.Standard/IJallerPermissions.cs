@@ -25,10 +25,10 @@ public interface IJallerPermissions
     /// <summary>
     /// If the metadata of the object is viewable.
     /// </summary>
-    MetadataPolicy MetadataPrivacy { get; }
+    MetadataPolicy? MetadataPrivacy { get; }
 
     /// <summary>
     /// If the object can be downloadable.
     /// </summary>
-    DownloadPolicy DownloadablePolicy { get; }
+    DownloadPolicy? DownloadablePolicy { get; }
 }

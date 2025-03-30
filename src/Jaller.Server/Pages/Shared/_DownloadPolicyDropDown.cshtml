@@ -21,7 +21,7 @@
 @using Jaller.Standard.FileManagement;
 @using Jaller.Server.Extensions;
 
-@model IJallerPermissions
+@model DownloadPolicy?
 
 <p>
     <label for="downloadPolicySelection">
@@ -29,14 +29,14 @@
     </label>
 </p>
 <p>
-    <select class="form-control" id="downloadPolicySelection" name="DownloadablePolicy">
+    <select class="form-control" id="downloadPolicySelection" name="@nameof( IJallerPermissions.DownloadablePolicy )">
     @foreach( DownloadPolicy policy in Enum.GetValues<DownloadPolicy>().OrderByDescending( e => (int)e ) )
     {
         if( this.Model is null )
         {
             <option value="@((int)policy)">@policy.GetFriendlyName()</option>
         }
-        else if( this.Model.DownloadablePolicy == policy )
+        else if( this.Model == policy )
         {
             <option value="@((int)policy)" selected>@policy.GetFriendlyName()</option>
         }

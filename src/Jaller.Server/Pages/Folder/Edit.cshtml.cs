@@ -20,12 +20,13 @@ using System.Net;
 using Jaller.Server.Extensions;
 using Jaller.Server.Models;
 using Jaller.Standard;
+using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jaller.Server.Pages.Folder;
 
-public sealed class EditModel : BasePageModel, IAlert
+public sealed class EditModel : BasePageModel, IAlert, IJallerPermissions
 {
     // ---------------- Fields ----------------
 
@@ -43,8 +44,24 @@ public sealed class EditModel : BasePageModel, IAlert
 
     public JallerFolder? JallerFolder { get; private set; }
 
+    // -------- POST Properties --------
+
     [BindProperty]
-    public JallerFolder? UploadedFolder { get; set; }
+    public int? FolderId { get; set; }
+
+    [BindProperty]
+    public int? ParentFolderId { get; set; }
+
+    [BindProperty]
+    public string? NewFolderName { get; set; }
+
+    [BindProperty]
+    public MetadataPolicy? MetadataPrivacy { get; set; }
+
+    [BindProperty]
+    public DownloadPolicy? DownloadablePolicy { get; set; }
+
+    // -------- Messages --------
 
     /// <summary>
     /// Error message that appears during a get request.
@@ -101,12 +118,12 @@ public sealed class EditModel : BasePageModel, IAlert
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }
 
-        if( this.UploadedFolder is null )
+        if( this.FolderId is null )
         {
-            this.ErrorMessage = "File was somehow null.";
+            this.ErrorMessage = "Folder ID is null, it must be specified (we can not edit the root folder).";
             return RedirectToPage();
         }
-        else if( this.UploadedFolder.Id == 0 )
+        else if( this.FolderId == 0 )
         {
             this.ErrorMessage = "Can not edit the root folder.";
             return RedirectToPage();
@@ -115,7 +132,28 @@ public sealed class EditModel : BasePageModel, IAlert
         int folderId;
         try
         {
-            folderId = await Task.Run( () => this.core.Folders.ConfigureFolder( this.UploadedFolder ) );
+            this.JallerFolder = await Task.Run( () => this.core.Folders.TryGetFolder( this.FolderId.Value ) );
+            if( this.JallerFolder is null )
+            {
+                this.ErrorMessage = "Folder no longer exists in the database.  It may have been deleted before an edit took place.";
+                return RedirectToPage();
+            }
+
+            int? parentFolder = this.ParentFolderId;
+            if( parentFolder == 0 )
+            {
+                parentFolder = null;
+            }
+
+            this.JallerFolder = this.JallerFolder with
+            {
+                DownloadablePolicy = this.DownloadablePolicy ?? JallerFolder.DefaultDownloadablePolicy,
+                MetadataPrivacy = this.MetadataPrivacy ?? JallerFolder.MetadataPrivacy,
+                Name = this.NewFolderName ?? JallerFolder.DefaultFolderName,
+                ParentFolder = parentFolder
+            };
+
+            folderId = await Task.Run( () => this.core.Folders.ConfigureFolder( this.JallerFolder ) );
         }
         catch( Exception e )
         {

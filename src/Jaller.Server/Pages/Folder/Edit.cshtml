@@ -104,15 +104,16 @@ else
                         <h3>Editing @folderName</h3>
                     </div>
                     <div class="panel-body">
-                        <input type="hidden" name="Id" value="@this.Model.JallerFolder.Id" readonly />
+                        <input type="hidden" name="@nameof( this.Model.FolderId )" value="@this.Model.JallerFolder.Id" readonly />
+                        <input type="hidden" name="@nameof( this.Model.ParentFolderId )" value="@( this.Model.ParentFolderId ?? 0 )" readonly />
                         <p>
                             <label for="nameInput">Folder Name</label>
                         </p>
                         <p>
-                            <input id="nameInput" class="form-control" type="text" name="Name" value="@folderName" />
+                            <input id="nameInput" class="form-control" type="text" name="@nameof( this.Model.NewFolderName )" value="@folderName" />
                         </p>
-                        <partial name="_MetadataPolicyDropDown" model="this.Model.JallerFolder" />
-                        <partial name="_DownloadPolicyDropDown" model="this.Model.JallerFolder" />
+                        <partial name="_MetadataPolicyDropDown" model="this.Model.JallerFolder.MetadataPrivacy" />
+                        <partial name="_DownloadPolicyDropDown" model="this.Model.JallerFolder.DownloadablePolicy" />
                     </div>
                     <div class="panel-footer">
                         <button class="btn btn-success" type="submit" id="uploadButton">Edit Folder</button>
