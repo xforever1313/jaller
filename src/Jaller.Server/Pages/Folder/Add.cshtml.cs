@@ -23,6 +23,7 @@ using Jaller.Standard;
 using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Jaller.Server.Pages.Folder
 {
@@ -42,6 +43,7 @@ namespace Jaller.Server.Pages.Folder
 
         // ---------------- Properties ----------------
 
+        [BindNever]
         public JallerFolder? ParentFolder { get; private set; }
 
         // -------- POST Properties --------
@@ -64,6 +66,7 @@ namespace Jaller.Server.Pages.Folder
         /// Error message that appears during a get request.
         /// Null for no error.
         /// </summary>
+        [BindNever]
         public string? GetRequestErrorMessage { get; private set; }
 
         /// <inheritdoc/>
