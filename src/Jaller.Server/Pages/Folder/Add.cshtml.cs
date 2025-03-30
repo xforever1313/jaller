@@ -134,7 +134,7 @@ namespace Jaller.Server.Pages.Folder
             }
 
             this.InfoMessage = $"Folder Added!  Its ID is {newId}.";
-            return RedirectToPage();
+            return RedirectToPage( new { parentFolderId = this.ParentFolderId } );
         }
     }
 }
