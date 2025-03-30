@@ -24,9 +24,9 @@ using Jaller.Standard;
 using Jaller.Standard.FileManagement;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Jaller.Server.Pages;
+namespace Jaller.Server.Pages.File;
 
-public sealed class FileModel : BasePageModel
+public sealed class IndexModel : BasePageModel
 {
     // ---------------- Fields ----------------
 
@@ -46,7 +46,7 @@ public sealed class FileModel : BasePageModel
 
     // ---------------- Constructor ----------------
 
-    public FileModel( IJallerCore core ) :
+    public IndexModel( IJallerCore core ) :
         base( core )
     {
         this.core = core;
