@@ -8,9 +8,9 @@
 // There is no need to add a "using" statement at the top.  That should
 // be taken care of by Jaller
 
-// ---------------- Database Settings ----------------
+// ---------------- File Data Database Settings ----------------
 
-// These settings configure the database where all data for Jaller is stored.
+// These settings configure the database where all file data for Jaller is stored.
 
 // Location of were the Jaller database should created.
 // Comment this out to use the default location of your user's
@@ -92,6 +92,53 @@ this.Logging.TelegramChatId = null;
 // The minimum log level that gets logged to Telegram.  Ignored
 // if either of the Telegram settings are null, not specified, or commented out.
 this.Logging.TelegramLogLevel = JallerLogLevel.Warning;
+
+// ---------------- Search Settings ----------------
+
+// These settings configure the search index of Jaller.
+// The search cache is stored in a separate database in case a user wants
+// to backup the user and file data, but don't care about the search data.
+
+// Location of were the Jaller search cache should created.
+// Comment this out to use the default location of your user's
+// application data directory, which is
+// c:\Users\<you>\AppData\Jaller\jaller_search_cache.ldb on Windows
+// or /home/<you>/.config/Jaller/jaller_search_cache.ldb on Unix systems.
+this.Search.DatabaseLocation = new FileInfo( @"/var/jaller/jaller_search_cache.ldb" );
+
+// If set to true, this will update the search index right when
+// Jaller starts up.  However, this may delay the app from fully starting up.
+// Set to false to not have have the search index at startup; but this may
+// mean that the search data may be out-of-date.
+this.Search.UpdateIndexOnStartup = true;
+
+// A cron-string on often to update the search index.
+// 
+// See https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#cron-expressions
+// for more information on how to make this string.
+//
+// Defaulted to every day at midnight.
+this.Search.IndexUpdateRate = "0 0 0 * * ?";
+
+// Set this to true unless you need the database to be shared
+// by multiple applications (most folks should leave this set to true).
+this.Search.SharedConnection = true;
+
+// If the last close database exception results in an invalid data state,
+// the data file will be rebuild on the next open.
+//
+// Should probably leave this to false unless your database gets corrupted for some
+// reason and you need to try to recover it.
+this.Search.AutoRebuild = false;
+
+// Check if datafile is of an older version and upgrade it before opening.
+// This should really only be set to true if instructed to in the release notes
+// when upgrading releases.
+this.Search.AutoUpgradeDb = false;
+
+// Set to a non-null string value ("Some Value in Quotes") to encrypt the datafile
+// with this password.  This uses AES encryption.
+this.Search.EncryptionPassword = null;
 
 // ---------------- Users ----------------
 

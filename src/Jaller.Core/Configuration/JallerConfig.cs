@@ -29,6 +29,7 @@ public record class JallerConfig : IJallerConfig
         this.Database = new JallerDatabaseConfig();
         this.Ipfs = new JallerIpfsGatewayConfig();
         this.Logging = new JallerLoggingConfig();
+        this.Search = new JallerSearchConfig();
         this.Users = new JallerUserConfig();
         this.Web = new JallerWebConfig();
     }
@@ -55,6 +56,9 @@ public record class JallerConfig : IJallerConfig
 
     public JallerIpfsGatewayConfig Ipfs { get; }
     IJallerIpfsGatewayConfig IJallerConfig.Ipfs => this.Ipfs;
+
+    public JallerSearchConfig Search { get; }
+    IJallerSearchConfig IJallerConfig.Search => this.Search;
 
     public JallerUserConfig Users { get; }
     IJallerUserConfig IJallerConfig.Users => this.Users;
