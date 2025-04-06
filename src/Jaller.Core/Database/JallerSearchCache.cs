@@ -1,4 +1,4 @@
-﻿//
+//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
 // 
@@ -21,20 +21,17 @@ using LiteDB;
 
 namespace Jaller.Core.Database;
 
-internal sealed class JallerDatabase : BaseJallerDatabase, IDisposable
+internal sealed class JallerSearchCache : BaseJallerDatabase, IDisposable
 {
     // ---------------- Constructor ----------------
 
-    public JallerDatabase( IJallerConfig config ) :
-        base( config.Database )
+    public JallerSearchCache( IJallerConfig config ) :
+        base( config.Search )
     {
-        this.Files = this.dbConnection.GetCollection<IpfsFile>();
-        this.Directories = this.dbConnection.GetCollection<JallerDirectory>();
+        this.SearchKeywords = this.dbConnection.GetCollection<SearchKeyword>();
     }
 
     // ---------------- Properties ----------------
 
-    public ILiteCollection<IpfsFile> Files { get; }
-
-    public ILiteCollection<JallerDirectory> Directories { get; }
+    public ILiteCollection<SearchKeyword> SearchKeywords { get;}
 }

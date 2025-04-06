@@ -30,14 +30,17 @@ internal sealed class JallerSearcher : IJallerSearch
 
     private readonly IJallerCore core;
 
-    private readonly JallerDatabase db;
+    private readonly JallerSearchCache searchCache;
+
+    private readonly JallerDatabase fileData;
 
     // ---------------- Constructor ----------------
 
-    public JallerSearcher( IJallerCore core, JallerDatabase db )
+    public JallerSearcher( IJallerCore core, JallerSearchCache searchCache, JallerDatabase fileData )
     {
         this.core = core;
-        this.db = db;
+        this.searchCache = searchCache;
+        this.fileData = fileData;
     }
 
     // ---------------- Properties ----------------
@@ -50,7 +53,7 @@ internal sealed class JallerSearcher : IJallerSearch
 
     public int GetKeywordCount()
     {
-        return this.db.SearchKeywords.Count();
+        return this.searchCache.SearchKeywords.Count();
     }
 
     public void Index( CancellationToken token )
@@ -61,32 +64,32 @@ internal sealed class JallerSearcher : IJallerSearch
             this.IsIndexing = true;
             
             // First, remove any files that may have been deleted.
-            foreach( SearchKeyword keyword in this.db.SearchKeywords.FindAll() )
+            foreach( SearchKeyword keyword in this.searchCache.SearchKeywords.FindAll() )
             {
                 // This keyword can be removed.
                 if( ( keyword.Cids is null ) || ( keyword.Cids.Any() == false ) )
                 {
-                    this.db.SearchKeywords.Delete( keyword.Keyword );
+                    this.searchCache.SearchKeywords.Delete( keyword.Keyword );
                 }
                 else
                 {
                     keyword.Cids.RemoveWhere(
-                        cid => this.db.Files.FindById( cid ) is null
+                        cid => this.fileData.Files.FindById( cid ) is null
                     );
 
                     if( keyword.Cids is null )
                     {
-                        this.db.SearchKeywords.Delete( keyword.Keyword );
+                        this.searchCache.SearchKeywords.Delete( keyword.Keyword );
                     }
                     else
                     {
-                        this.db.SearchKeywords.Update( keyword );
+                        this.searchCache.SearchKeywords.Update( keyword );
                     }
                 }
             }
 
             // Next, populate the search keyword.
-            foreach( IpfsFile file in this.db.Files.FindAll() )
+            foreach( IpfsFile file in this.fileData.Files.FindAll() )
             {
                 var keywords = new List<string>();
 
@@ -107,7 +110,7 @@ internal sealed class JallerSearcher : IJallerSearch
                 foreach( string keyword in keywords )
                 {
                     bool existing;
-                    SearchKeyword? dbKeyword = this.db.SearchKeywords.FindById( keyword );
+                    SearchKeyword? dbKeyword = this.searchCache.SearchKeywords.FindById( keyword );
                     if( dbKeyword is null )
                     {
                         dbKeyword = new SearchKeyword
@@ -134,11 +137,11 @@ internal sealed class JallerSearcher : IJallerSearch
 
                     if( existing )
                     {
-                        this.db.SearchKeywords.Update( dbKeyword );
+                        this.searchCache.SearchKeywords.Update( dbKeyword );
                     }
                     else
                     {
-                        this.db.SearchKeywords.Insert( dbKeyword );
+                        this.searchCache.SearchKeywords.Insert( dbKeyword );
                     }
                 }
             }
@@ -164,7 +167,7 @@ internal sealed class JallerSearcher : IJallerSearch
         var foundCids = new HashSet<string>();
         foreach( string keyword in keywords )
         {
-            SearchKeyword? searchResult = this.db.SearchKeywords.FindById( keyword );
+            SearchKeyword? searchResult = this.searchCache.SearchKeywords.FindById( keyword );
             if( ( searchResult is not null ) && ( searchResult.Cids is not null ) )
             {
                 foreach( string cid in searchResult.Cids )
@@ -174,7 +177,7 @@ internal sealed class JallerSearcher : IJallerSearch
             }
         }
 
-        return foundCids.Select( cid => this.db.Files.FindById( cid ) )
+        return foundCids.Select( cid => this.fileData.Files.FindById( cid ) )
                 .Where( file => file is not null )
                 .Select( file => new JallerSearchResult( file.Cid, file.FileName ) )
                 .ToArray();

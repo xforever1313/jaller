@@ -53,12 +53,13 @@ namespace Jaller.Core
             };
 
             this.Database = new JallerDatabase( this.Config );
+            this.SearchCache = new JallerSearchCache( this.Config );
 
             this.BulkOperations = new JallerBulkOperations( this );
             this.Files = new JallerFileManager( this, this.Database );
             this.Folders = new JallerFolderManager( this, this.Database );
             this.Ipfs = new JallerIpfsManager( this, this.ipfsGatewayClient );
-            this.Search = new JallerSearcher( this, this.Database );
+            this.Search = new JallerSearcher( this, this.SearchCache, this.Database );
         }
 
         // ---------------- Properties ----------------
@@ -81,6 +82,8 @@ namespace Jaller.Core
 
         internal JallerDatabase Database { get; }
 
+        internal JallerSearchCache SearchCache { get; }
+
         // ---------------- Methods ----------------
 
         public void Init()
@@ -91,6 +94,7 @@ namespace Jaller.Core
         public void Dispose()
         {
             this.Database.Dispose();
+            this.SearchCache.Dispose();
             this.ipfsGatewayClient.Dispose();
         }
     }
