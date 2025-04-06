@@ -97,7 +97,7 @@ this.Logging.TelegramLogLevel = JallerLogLevel.Warning;
 
 // These settings configure the search index of Jaller.
 // The search cache is stored in a separate database in case a user wants
-// to backup the user and file data, but don't care about the search data.
+// to backup the user and file data, but does not care about the search data.
 
 // Location of were the Jaller search cache should created.
 // Comment this out to use the default location of your user's
@@ -120,23 +120,23 @@ this.Search.UpdateIndexOnStartup = true;
 // Defaulted to every day at midnight.
 this.Search.IndexUpdateRate = "0 0 0 * * ?";
 
-// Set this to true unless you need the database to be shared
+// Set this to true unless you need the search cache to be shared
 // by multiple applications (most folks should leave this set to true).
 this.Search.SharedConnection = true;
 
 // If the last close database exception results in an invalid data state,
 // the data file will be rebuild on the next open.
 //
-// Should probably leave this to false unless your database gets corrupted for some
+// Should probably leave this to false unless your search cache gets corrupted for some
 // reason and you need to try to recover it.
 this.Search.AutoRebuild = false;
 
-// Check if datafile is of an older version and upgrade it before opening.
+// Check if search cache is of an older version and upgrade it before opening.
 // This should really only be set to true if instructed to in the release notes
 // when upgrading releases.
 this.Search.AutoUpgradeDb = false;
 
-// Set to a non-null string value ("Some Value in Quotes") to encrypt the datafile
+// Set to a non-null string value ("Some Value in Quotes") to encrypt the search cache
 // with this password.  This uses AES encryption.
 this.Search.EncryptionPassword = null;
 
