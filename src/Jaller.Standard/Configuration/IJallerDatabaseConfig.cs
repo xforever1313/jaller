@@ -53,7 +53,7 @@ public interface IJallerDatabaseConfig
     /// a thread can request a connection from the pool and 
     /// return it when it is finished.
     /// </remarks>
-    bool SharedConnection { get; }
+    bool DirectConnection { get; }
 
     /// <summary>
     /// If last close database exception result a invalid data state,

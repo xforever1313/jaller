@@ -31,7 +31,7 @@ public sealed record class JallerDatabaseConfig : IJallerDatabaseConfig
         )
     );
 
-    public bool SharedConnection { get; set; } = false;
+    public bool DirectConnection { get; set; } = true;
 
     public bool AutoRebuild { get; set; } = false;
 

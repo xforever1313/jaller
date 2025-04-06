@@ -21,7 +21,7 @@ this.Database.DatabaseLocation = new FileInfo( @"/var/jaller/jaller.ldb" );
 
 // Set this to true unless you need the database to be shared
 // by multiple applications (most folks should leave this set to true).
-this.Database.SharedConnection = true;
+this.Database.DirectConnection = true;
 
 // If the last close database exception results in an invalid data state,
 // the data file will be rebuild on the next open.
@@ -122,7 +122,7 @@ this.Search.IndexUpdateRate = "0 0 0 * * ?";
 
 // Set this to true unless you need the search cache to be shared
 // by multiple applications (most folks should leave this set to true).
-this.Search.SharedConnection = true;
+this.Search.DirectConnection = true;
 
 // If the last close database exception results in an invalid data state,
 // the data file will be rebuild on the next open.

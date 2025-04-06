@@ -37,7 +37,7 @@ internal abstract class BaseJallerDatabase : IDisposable
         var connectionString = new ConnectionString
         {
             AutoRebuild = config.AutoRebuild,
-            Connection = config.SharedConnection ? ConnectionType.Shared : ConnectionType.Direct,
+            Connection = config.DirectConnection ? ConnectionType.Direct : ConnectionType.Shared,
             Filename = config.DatabaseLocation?.FullName ?? ":memory:",
             Password = config.EncryptionPassword,
             Upgrade = config.AutoUpgradeDb
