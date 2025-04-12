@@ -26,6 +26,8 @@ public sealed record class JallerUserConfig : IJallerUserConfig
 
     public bool AllowAdminUser { get; set; } = false;
 
+    public string AdminEmail { get; set; } = "";
+
     /// <remarks>
     /// Empty string is not allowed, this will fail validation intentionally.
     /// We want the user to set *something*.

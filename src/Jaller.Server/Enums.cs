@@ -16,30 +16,42 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Standard.Configuration;
+namespace Jaller.Server;
 
-public interface IJallerUserConfig : IJallerDatabaseConfig
+public enum Roles
 {
     /// <summary>
-    /// Set to true to allow a default "admin" user in.
-    /// Set to false to disable the default "admin" user.
+    /// A normal user, can only login to view and download private files.
     /// </summary>
-    /// <remarks>
-    /// Once a user is created with the "admin" role, this should
-    /// probably be set to false.  This should only be set to true
-    /// if all admins lost their password or something to that effect.
-    /// </remarks>
-    bool AllowAdminUser { get; }
+    User,
 
     /// <summary>
-    /// The admin's email.  This must be specified if <see cref="AllowAdminUser"/> is set to true.
-    /// Ignore if <see cref="AllowAdminUser"/> is false.
+    /// A user that can modify file metadata, but can not upload.
     /// </summary>
-    string AdminEmail { get; }
+    Editor,
 
     /// <summary>
-    /// The password to login as for the admin user.
-    /// This is ignored if <see cref="AllowAdminUser"/> is false.
+    /// A user that can upload files to IPFS, and add metadata.
     /// </summary>
-    string AdminPassword { get; }
+    Uploader,
+
+    /// <summary>
+    /// A user that can control everything.
+    /// </summary>
+    Admin
+}
+
+public static class EnumExtensions
+{
+    public static string GetRoleName( this Roles role )
+    {
+        return role switch
+        {
+            Roles.User => "User",
+            Roles.Editor => "Editor",
+            Roles.Uploader => "Uploader",
+            Roles.Admin => "Administrator",
+            _ => throw new ArgumentException( $"Invalid role: {role}", nameof( role ) ),
+        };
+    }
 }

@@ -152,14 +152,21 @@ this.Search.EncryptionPassword = null;
 // This should only really be set to true upon first boot
 // when there are no users; or you need an admin user if all other
 // admin accounts got deleted somehow.
+// The admin user is re-created every time the app starts up.
 //
 // If this is enabled, you can login with the "admin" user, using
 // the password specified below.
 this.Users.AllowAdminUser = false;
 
+// The administrator user's email.  This is used to login into the admin account.
+// Ignored if admin user is disabled.
+// Careful, if this happens to match an existing user, that user will be wiped
+// and given admin access.
+this.Users.AdminEmail = "admin@example.com";
+
 // Please change this to something else if the admin user is enabled.
 // Ignored if the admin user is disabled.
-this.Users.AdminPassword = "JallerAdminPassword";
+this.Users.AdminPassword = "Jaller@dm1nPassword";
 
 // Location of were the Jaller user database should created.
 // Comment this out to use the default location of your user's
