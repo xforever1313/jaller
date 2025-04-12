@@ -17,6 +17,11 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 *@
+
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<LiteDB.Identity.Models.LiteDbUser> SignInManager
+@inject UserManager<LiteDB.Identity.Models.LiteDbUser> UserManager
+
 @{
     string title = "";
     if (this.ViewData.TryGetValue("Title", out object? titleModel))
@@ -50,6 +55,7 @@
             </button>
         </div>
         <h1 id="main-title" style="padding:0.5em;">Jaller - An advanced IPFS Gateway</h1>
+        <partial name="~/Pages/Shared/_LoginPartial.cshtml" />
     </nav>
 
     <!-- Side Bar -->

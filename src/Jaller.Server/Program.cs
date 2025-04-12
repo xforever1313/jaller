@@ -23,6 +23,7 @@ using Jaller.Standard;
 using Jaller.Standard.Configuration;
 using LiteDB.Identity;
 using LiteDB.Identity.Extensions;
+using LiteDB.Identity.Models;
 using Mono.Options;
 using Prometheus;
 using SethCS.Extensions;
@@ -84,6 +85,7 @@ namespace Jaller.Server
                         options.ConnectionString = core.Config.Users.ToConnectionString();
                     }
                 );
+                builder.Services.AddDefaultIdentity<LiteDbUser>();
 
                 builder.Services.AddControllers().AddXmlSerializerFormatters();
                 builder.Services.AddMvc();
@@ -143,6 +145,7 @@ namespace Jaller.Server
 
                 app.UseRouting();
 
+                app.UseAuthentication();
                 app.UseAuthorization();
 
                 if( config.Web.EnableMetrics )
