@@ -22,6 +22,8 @@ namespace Jaller.Core.Configuration;
 
 public sealed record class JallerUserConfig : IJallerUserConfig
 {
+    // ---------------- Properties ----------------
+
     public bool AllowAdminUser { get; set; } = false;
 
     /// <remarks>
@@ -29,4 +31,20 @@ public sealed record class JallerUserConfig : IJallerUserConfig
     /// We want the user to set *something*.
     /// </remarks>
     public string AdminPassword { get; set; } = "";
+
+
+    public FileInfo? DatabaseLocation { get; set; } = new FileInfo(
+        Path.Combine(
+            JallerConfig.DefaultPersistenceDirectory.FullName,
+            "jaller_users.ldb"
+        )
+    );
+
+    public bool DirectConnection { get; set; } = true;
+
+    public bool AutoRebuild { get; set; } = false;
+
+    public bool AutoUpgradeDb { get; set; } = false;
+
+    public string? EncryptionPassword { get; set; } = null;
 }

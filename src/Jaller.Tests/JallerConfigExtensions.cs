@@ -16,24 +16,16 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Standard.Configuration;
+using Jaller.Core.Configuration;
 
-public interface IJallerUserConfig : IJallerDatabaseConfig
+namespace Jaller.Tests;
+
+public static class JallerConfigExtensions
 {
-    /// <summary>
-    /// Set to true to allow a default "admin" user in.
-    /// Set to false to disable the default "admin" user.
-    /// </summary>
-    /// <remarks>
-    /// Once a user is created with the "admin" role, this should
-    /// probably be set to false.  This should only be set to true
-    /// if all admins lost their password or something to that effect.
-    /// </remarks>
-    bool AllowAdminUser { get; }
-
-    /// <summary>
-    /// The password to login as for the admin user.
-    /// This is ignored if <see cref="AllowAdminUser"/> is false.
-    /// </summary>
-    string AdminPassword { get; }
+    public static void UseInMemoryDatabase( this JallerConfig config )
+    {
+        config.Database.DatabaseLocation = null;
+        config.Users.DatabaseLocation = null;
+        config.Search.DatabaseLocation = null;
+    }
 }

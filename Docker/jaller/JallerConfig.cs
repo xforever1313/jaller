@@ -142,6 +142,11 @@ this.Search.EncryptionPassword = null;
 
 // ---------------- Users ----------------
 
+// These settings configure the user database of Jaller.
+// User settings are purposefully separated from data
+// in case an admin wants to encrypt a user database, but doesn't care to encrypt the
+// data database.
+
 // Set to true to allow a default "admin" user.
 // Set to false to disable the default "admin" user.
 // This should only really be set to true upon first boot
@@ -155,6 +160,33 @@ this.Users.AllowAdminUser = false;
 // Please change this to something else if the admin user is enabled.
 // Ignored if the admin user is disabled.
 this.Users.AdminPassword = "JallerAdminPassword";
+
+// Location of were the Jaller user database should created.
+// Comment this out to use the default location of your user's
+// application data directory, which is
+// c:\Users\<you>\AppData\Jaller\jaller_search_cache.ldb on Windows
+// or /home/<you>/.config/Jaller/jaller_search_cache.ldb on Unix systems.
+this.Users.DatabaseLocation = new FileInfo( @"/var/jaller/jaller_users.ldb" );
+
+// Set this to true unless you need the search cache to be shared
+// by multiple applications (most folks should leave this set to true).
+this.Users.DirectConnection = true;
+
+// If the last close database exception results in an invalid data state,
+// the data file will be rebuild on the next open.
+//
+// Should probably leave this to false unless your user database gets corrupted for some
+// reason and you need to try to recover it.
+this.Users.AutoRebuild = false;
+
+// Check if the user database is of an older version and upgrade it before opening.
+// This should really only be set to true if instructed to in the release notes
+// when upgrading releases.
+this.Users.AutoUpgradeDb = false;
+
+// Set to a non-null string value ("Some Value in Quotes") to encrypt the user database
+// with this password.  This uses AES encryption.
+this.Users.EncryptionPassword = null;
 
 // ---------------- Web Configuration ----------------
 

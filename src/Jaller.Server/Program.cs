@@ -21,6 +21,8 @@ using Jaller.Core.Configuration;
 using Jaller.Server.Logging;
 using Jaller.Standard;
 using Jaller.Standard.Configuration;
+using LiteDB.Identity;
+using LiteDB.Identity.Extensions;
 using Mono.Options;
 using Prometheus;
 using SethCS.Extensions;
@@ -76,6 +78,13 @@ namespace Jaller.Server
                 core.Init();
 
                 // Add services to the container.
+                builder.Services.AddLiteDBIdentity(
+                    ( LiteDbIdentityOptions options ) =>
+                    {
+                        options.ConnectionString = core.Config.Users.ToConnectionString();
+                    }
+                );
+
                 builder.Services.AddControllers().AddXmlSerializerFormatters();
                 builder.Services.AddMvc();
                 builder.Services.AddRazorPages();
@@ -133,6 +142,8 @@ namespace Jaller.Server
                 app.UseStatusCodePagesWithReExecute( "/Errors/{0}" );
 
                 app.UseRouting();
+
+                app.UseAuthorization();
 
                 if( config.Web.EnableMetrics )
                 {

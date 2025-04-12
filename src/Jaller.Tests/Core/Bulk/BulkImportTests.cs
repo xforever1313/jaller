@@ -47,7 +47,7 @@ namespace Jaller.Tests.Core.Bulk
         public void TestSetup()
         {
             this.config = new JallerConfig();
-            this.config.Database.DatabaseLocation = null;
+            this.config.UseInMemoryDatabase();
 
             this.exportCore = new JallerCore( this.config, new StubLogger() );
             this.exportCore.Init();

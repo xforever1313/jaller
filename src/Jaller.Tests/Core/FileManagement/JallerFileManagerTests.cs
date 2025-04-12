@@ -40,7 +40,7 @@ public sealed class JallerFileManagerTests
     public void TestSetup()
     {
         this.config = new JallerConfig();
-        this.config.Database.DatabaseLocation = null;
+        this.config.UseInMemoryDatabase();
 
         this.core = new JallerCore( this.config, new StubLogger() );
         this.core.Init();

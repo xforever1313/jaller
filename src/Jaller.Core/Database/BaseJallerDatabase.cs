@@ -26,6 +26,8 @@ internal abstract class BaseJallerDatabase : IDisposable
 {
     // ---------------- Fields ----------------
 
+    internal const string InMemoryDatabaseName = ":memory:";
+
     protected readonly LiteDatabase dbConnection;
 
     // ---------------- Constructor ----------------
@@ -38,7 +40,7 @@ internal abstract class BaseJallerDatabase : IDisposable
         {
             AutoRebuild = config.AutoRebuild,
             Connection = config.DirectConnection ? ConnectionType.Direct : ConnectionType.Shared,
-            Filename = config.DatabaseLocation?.FullName ?? ":memory:",
+            Filename = config.DatabaseLocation?.FullName ?? InMemoryDatabaseName,
             Password = config.EncryptionPassword,
             Upgrade = config.AutoUpgradeDb
         };
