@@ -55,7 +55,6 @@
             </button>
         </div>
         <h1 id="main-title" style="padding:0.5em;">Jaller - An advanced IPFS Gateway</h1>
-        <partial name="~/Pages/Shared/_LoginPartial.cshtml" />
     </nav>
 
     <!-- Side Bar -->
@@ -68,10 +67,23 @@
                 <li>
                     <a href="/Search"><i class="fa fa-search"></i> Search</a>
                 </li>
+                @if( SignInManager.IsSignedIn( User ) )
+                {
+                    <li>
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-user-gear"></i> Manage Account</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login"><i class="fa-solid fa-user"></i> Login</a>
+                    </li>
+                }
+
                 @if( Model.AllowAdminAccess )
                 {
                     <li>
-                        <a href="/Admin"><i class="fa-solid fa-user-tie"></i> Admin Panel</a>
+                        <a href="/Admin"><i class="fa-solid fa-gear"></i> Admin Panel</a>
                     </li>
                 }
             </ul>
