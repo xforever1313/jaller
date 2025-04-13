@@ -27,6 +27,9 @@ public static class ClaimsPrincipalExtensions
 {
     // ---------------- Methods ----------------
 
+    /// <remarks>
+    /// Should probably not use this and us SignInManager instead.
+    /// </remarks>
     public static bool IsLoggedIn( this ClaimsPrincipal? user )
     {
         if( user is null )
