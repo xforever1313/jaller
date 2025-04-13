@@ -117,7 +117,7 @@ else
                 <ul class="tags">
                     @foreach( string tag in this.Model.JallerFile.Tags )
                     {
-                        <li>@tag</li>
+                        <li><a href="/Search?query=@tag">@tag</a></li>
                     }
                 </ul>
             </div>

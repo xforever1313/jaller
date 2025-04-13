@@ -123,7 +123,7 @@ public static class UserManager
 
         foreach( Roles role in Enum.GetValues( typeof( Roles ) ) )
         {
-            addResult = userManager.AddToRoleAsync( user, Roles.Admin.GetRoleName() ).Result;
+            addResult = userManager.AddToRoleAsync( user, role.GetRoleName() ).Result;
             if( addResult.Succeeded == false )
             {
                 core.Log.Error( $"Error adding Admin user to {role.GetRoleName()} role:{Environment.NewLine}{addResult.Errors.Select( e => e.Description ).ToListString( "- " )}" );
