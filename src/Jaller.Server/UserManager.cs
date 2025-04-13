@@ -121,15 +121,17 @@ public static class UserManager
             return;
         }
 
-        addResult = userManager.AddToRoleAsync( user, Roles.Admin.GetRoleName() ).Result;
-        if( addResult.Succeeded )
+        foreach( Roles role in Enum.GetValues( typeof( Roles ) ) )
         {
-            core.Log.Debug( "Admin user created!" );
+            addResult = userManager.AddToRoleAsync( user, Roles.Admin.GetRoleName() ).Result;
+            if( addResult.Succeeded == false )
+            {
+                core.Log.Error( $"Error adding Admin user to {role.GetRoleName()} role:{Environment.NewLine}{addResult.Errors.Select( e => e.Description ).ToListString( "- " )}" );
+                return;
+            }
         }
-        else
-        {
-            core.Log.Error( $"Error adding Admin user to admin role:{Environment.NewLine}{addResult.Errors.Select( e => e.Description ).ToListString( "- " )}" );
-        }
+
+        core.Log.Debug( "Admin user created!" );
     }
 
     private static void DisableAdminUser(
