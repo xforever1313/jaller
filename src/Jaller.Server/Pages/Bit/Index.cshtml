@@ -1,0 +1,118 @@
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+
+@page
+@model Jaller.Server.Pages.Bit.IndexModel
+
+@{
+    ViewData["Title"] = "Built-In Test";
+    UserRolesModel? userRoles = this.Model.UserRoles;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2>Your Permissions</h2>
+            </div>
+            <div class="panel-body">
+                @if( userRoles is null )
+                {
+                    <div class="alert alert-danger">
+                        <p>Unable to get information about your user.</p>
+                    </div>
+                }
+                else
+                {
+                    <ul>
+                        <li>
+                            <strong>Is Logged In:</strong> @userRoles.IsLoggedIn
+                            @if( userRoles.IsLoggedIn == false )
+                            {
+                                <ul>
+                                    <li>
+                                        <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+                                    </li>
+                                    @if( this.Model.PublicRegistrationEnabled )
+                                    {
+                                        <li>
+                                            <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                        <li>
+                            <strong>Is Approved User:</strong> @userRoles.IsApprovedUser
+                            @if( userRoles.IsLoggedIn && ( userRoles.IsApprovedUser == false ) )
+                            {
+                                <ul>
+                                    <li>
+                                        Your account still needs to be approved to view privately shared files.
+                                        You can try contacting the adminstrator of this instance to see if
+                                        they missed your registration.
+                                    </li>
+                                </ul>
+                            }
+                        </li>
+                        <li>
+                            <strong>Is Editor:</strong> @userRoles.IsEditor
+                        </li>
+                        <li>
+                            <strong>Is Uploader:</strong> @userRoles.IsUploader
+                        </li>
+                        <li>
+                            <strong>Is Administrator:</strong> @userRoles.IsAdmin
+                            @if (userRoles.IsLoggedIn && ( userRoles.IsAdmin == false ) )
+                            {
+                                @if( this.Model.ApprovedAdminHosts is not null )
+                                {
+                                    @if( this.Model.ApprovedAdminHosts.Any() )
+                                    {
+                                        <ul>
+                                            <li>
+                                                If you think you should be an admin, you may be trying
+                                                to access this instance from an unapproved host.
+                                                Please have an admin check their @nameof(Jaller.Standard.Configuration.IJallerWebConfig.AllowedAdminHosts)
+                                                setting.
+                                            </li>
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <ul>
+                                            <li>
+                                                Admin panel is disabled, no user has admin access.
+                                                Please have an admin check their @nameof(Jaller.Standard.Configuration.IJallerWebConfig.AllowedAdminHosts)
+                                                setting if you think this is an error.
+                                            </li>
+                                        </ul>
+                                    }
+                                }
+                            }
+                        </li>
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

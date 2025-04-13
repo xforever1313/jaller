@@ -27,6 +27,16 @@ public static class ClaimsPrincipalExtensions
 {
     // ---------------- Methods ----------------
 
+    public static bool IsLoggedIn( this ClaimsPrincipal? user )
+    {
+        if( user is null )
+        {
+            return false;
+        }
+
+        return user.Identity?.IsAuthenticated == true;
+    }
+
     public static UserRolesModel ToRolesModel( this ClaimsPrincipal? user, IJallerCore core, HttpRequest request )
     {
         if( user is null )
@@ -36,8 +46,8 @@ public static class ClaimsPrincipalExtensions
 
         return new UserRolesModel
         {
-            IsLoggedIn = user is not null,
-            IsUser = user.IsUserApproved(),
+            IsLoggedIn = user.IsLoggedIn(),
+            IsApprovedUser = user.IsUserApproved(),
             IsEditor = user.CanUserEditMetaData(),
             IsUploader = user.CanUserUploadFiles( core ),
             IsAdmin = user.CanUserAccessAdminPanel( core, request )

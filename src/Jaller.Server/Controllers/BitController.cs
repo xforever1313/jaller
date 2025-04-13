@@ -1,4 +1,4 @@
-//
+﻿//
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
 // 
@@ -16,26 +16,33 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System.Text.Json.Serialization;
+using Jaller.Standard;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Jaller.Server;
+namespace Jaller.Server.Controllers;
 
-public record class UserRolesModel
+[Route( "api/bit" )]
+[ApiController]
+public sealed class BitController : ControllerBase
 {
-    // ---------------- Properties ----------------
+    // ---------------- Fields ----------------
 
-    [JsonPropertyName( "logged_in" )]
-    public bool IsLoggedIn { get; init; } = false;
+    private readonly IJallerCore core;
 
-    [JsonPropertyName( "is_approved_user" )]
-    public bool IsApprovedUser { get; init; } = false;
+    // ---------------- Constructor ----------------
 
-    [JsonPropertyName( "is_editor" )]
-    public bool IsEditor { get; init; } = false;
+    public BitController( IJallerCore core )
+    {
+        this.core = core;
+    }
 
-    [JsonPropertyName( "is_uploader" )]
-    public bool IsUploader { get; init; } = false;
+    // ---------------- Methods ----------------
 
-    [JsonPropertyName( "is_admin" )]
-    public bool IsAdmin { get; init; } = false;
+    [HttpGet( "roles.json" )]
+    public IActionResult UserRoles()
+    {
+        this.HttpContext.Response.ContentType = "application/json";
+
+        return Ok( this.User.ToRolesModel( this.core, this.Request ) );
+    }
 }
