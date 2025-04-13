@@ -21,6 +21,12 @@ namespace Jaller.Standard.Configuration;
 public interface IJallerUserConfig : IJallerDatabaseConfig
 {
     /// <summary>
+    /// Allows for anyone to create their own account if set to true.
+    /// Defaulted to false.
+    /// </summary>
+    bool AllowPublicRegistration { get; }
+
+    /// <summary>
     /// Set to true to allow a default "admin" user in.
     /// Set to false to disable the default "admin" user.
     /// </summary>

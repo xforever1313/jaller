@@ -68,7 +68,7 @@ public sealed class DeleteModel : BasePageModel, IAlert
 
     public async Task<IActionResult> OnGetAsync( int? id )
     {
-        if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+        if( this.AllowMetadataEdit == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }
@@ -101,7 +101,7 @@ public sealed class DeleteModel : BasePageModel, IAlert
         this.WarningMessage = null;
         this.ErrorMessage = null;
 
-        if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+        if( this.AllowMetadataEdit == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }

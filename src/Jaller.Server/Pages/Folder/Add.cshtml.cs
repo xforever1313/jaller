@@ -85,6 +85,11 @@ namespace Jaller.Server.Pages.Folder
 
         public async Task<IActionResult> OnGetAsync( int? parentFolderId )
         {
+            if( this.AllowMetadataEdit == false )
+            {
+                return StatusCode( (int)HttpStatusCode.Forbidden );
+            }
+
             // If no parent folder is specified, assume the root directory.
             // Also, if the id is 0, assume root directory.
             if( parentFolderId is not null && ( parentFolderId.Value != 0 ) )
@@ -107,7 +112,7 @@ namespace Jaller.Server.Pages.Folder
             this.WarningMessage = null;
             this.ErrorMessage = null;
 
-            if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+            if( this.AllowMetadataEdit == false )
             {
                 return StatusCode( (int)HttpStatusCode.Forbidden );
             }

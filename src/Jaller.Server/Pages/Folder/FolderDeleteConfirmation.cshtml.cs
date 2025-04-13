@@ -46,7 +46,7 @@ public class FolderDeleteConfirmationModel : BasePageModel
 
     public IActionResult OnGet( int? id )
     {
-        if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+        if( this.AllowMetadataEdit == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }

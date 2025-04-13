@@ -85,6 +85,11 @@ public sealed class EditModel : BasePageModel, IAlert, IJallerPermissions
 
     public async Task<IActionResult> OnGetAsync( int? id )
     {
+        if( this.AllowMetadataEdit == false )
+        {
+            return StatusCode( (int)HttpStatusCode.Forbidden );
+        }
+
         // If no ID is specified, assume root directory.
         id = id ?? 0;
 
@@ -113,7 +118,7 @@ public sealed class EditModel : BasePageModel, IAlert, IJallerPermissions
         this.WarningMessage = null;
         this.ErrorMessage = null;
 
-        if( this.core.Config.Web.IsAdminRequstAllowed( this.Request ) == false )
+        if( this.AllowMetadataEdit == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }

@@ -119,7 +119,7 @@ else
                         </div>
                         <div class="panel-body">
                             <ul class="no-bullets">
-                                @foreach (JallerFile file in this.Model.FolderContents.Files)
+                                @foreach( JallerFile file in this.Model.FolderContents.Files )
                                 {
                                     <li>
                                         <a href="/File?cid=@file.CidV1">
@@ -134,7 +134,7 @@ else
             </div>
         }
 
-        @if( this.Model.AllowAdminAccess )
+        @if( this.Model.AllowMetadataEdit )
         {
             <div class="row">
                 <div class="col-md-12">

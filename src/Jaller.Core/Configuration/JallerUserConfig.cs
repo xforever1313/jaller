@@ -24,6 +24,8 @@ public sealed record class JallerUserConfig : IJallerUserConfig
 {
     // ---------------- Properties ----------------
 
+    public bool AllowPublicRegistration { get; set; } = false;
+
     public bool AllowAdminUser { get; set; } = false;
 
     public string AdminEmail { get; set; } = "";

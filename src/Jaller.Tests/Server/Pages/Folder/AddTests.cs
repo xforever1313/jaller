@@ -17,6 +17,7 @@
 //
 
 using System.Net;
+using System.Security.Claims;
 using Jaller.Core;
 using Jaller.Core.Configuration;
 using Jaller.Server.Pages.Folder;
@@ -54,6 +55,17 @@ public sealed class AddTests
         this.uut = new AddModel( this.core );
 
         var httpContext = new DefaultHttpContext();
+        var identity = new ClaimsIdentity(
+            new Claim[]
+            {
+                new Claim( ClaimTypes.Name, "testuser@example.com" ),
+                new Claim( ClaimTypes.NameIdentifier, "user-id-123" ),
+                new Claim( ClaimTypes.Role, "Editor" )
+            },
+            "TestAuthentication"
+        );
+
+        httpContext.User = new ClaimsPrincipal( identity );
         this.uut.PageContext = new PageContext
         {
             HttpContext = httpContext

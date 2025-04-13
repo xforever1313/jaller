@@ -147,6 +147,10 @@ this.Search.EncryptionPassword = null;
 // in case an admin wants to encrypt a user database, but doesn't care to encrypt the
 // data database.
 
+// Set to true to allow for anyone to register as a user to this instance of Jaller.
+// Really not recommended on public-facing instances unless you're feeling brave.
+this.Users.AllowPublicRegistration = false;
+
 // Set to true to allow a default "admin" user.
 // Set to false to disable the default "admin" user.
 // This should only really be set to true upon first boot
