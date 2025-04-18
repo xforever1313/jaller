@@ -52,8 +52,8 @@ public sealed class IpfsController : ControllerBase
             return BadRequest( "Invalid or unsupported CID" );
         }
 
-        JallerFile? file = await Task.Run( () => this.core.Files.TryGetFile( realCid.Version1Cid ) );
-        if( ( file is null ) || ( file.DownloadablePolicy != DownloadPolicy.Public ) )
+        JallerFile? file = await Getfile( realCid );
+        if( file is null )
         {
             this.Response.ContentType = "plain/text";
             return NotFound( "Can not find file with given CID.  Either it does not exist, or this server does not allow one to download it." );
@@ -62,5 +62,33 @@ public sealed class IpfsController : ControllerBase
         this.Response.ContentType = file.GetMimeType();
 
         return Ok( this.core.Ipfs.GetFile( realCid.Version1Cid ) );
+    }
+
+    private async Task<JallerFile?> Getfile( Cid realCid )
+    {
+        JallerFile? file = await Task.Run( () => this.core.Files.TryGetFile( realCid.Version1Cid ) );
+
+        if( file is null )
+        {
+            return null;
+        }
+        if( file.DownloadablePolicy == DownloadPolicy.Public )
+        {
+            return file;
+        }
+        else if( file.DownloadablePolicy == DownloadPolicy.NoDownload )
+        {
+            return null;
+        }
+        else if( file.DownloadablePolicy == DownloadPolicy.Private )
+        {
+            if( this.User.IsUserApproved() )
+            {
+                return file;
+            }
+        }
+
+        // All else fails, assume we don't want the file downloaded.
+        return null;
     }
 }
