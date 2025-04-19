@@ -16,26 +16,37 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System.Text.Json.Serialization;
+using Jaller.Server.Models;
+using Jaller.Standard;
 
-namespace Jaller.Server;
+namespace Jaller.Server.Pages.Bit;
 
-public record class UserRolesModel
+public sealed class IndexModel : BasePageModel
 {
+    // ---------------- Fields ----------------
+
+    private readonly IJallerCore core;
+
+    // ---------------- Constructor ----------------
+
+    public IndexModel( IJallerCore core ) :
+        base( core )
+    {
+        this.core = core;
+    }
+
     // ---------------- Properties ----------------
 
-    [JsonPropertyName( "logged_in" )]
-    public bool IsLoggedIn { get; init; } = false;
+    public UserRolesModel? UserRoles { get; private set; }
 
-    [JsonPropertyName( "is_approved_user" )]
-    public bool IsApprovedUser { get; init; } = false;
+    public bool PublicRegistrationEnabled => this.core.Config.Users.AllowPublicRegistration;
 
-    [JsonPropertyName( "is_editor" )]
-    public bool IsEditor { get; init; } = false;
+    public IReadOnlyCollection<string>? ApprovedAdminHosts => this.core.Config.Web.AllowedAdminHosts;
 
-    [JsonPropertyName( "is_uploader" )]
-    public bool IsUploader { get; init; } = false;
+    // ---------------- Methods ----------------
 
-    [JsonPropertyName( "is_admin" )]
-    public bool IsAdmin { get; init; } = false;
+    public void OnGet()
+    {
+        this.UserRoles = this.User.ToRolesModel( this.core, this.Request );
+    }
 }
