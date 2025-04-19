@@ -43,6 +43,7 @@
 else
 {
     ViewData["Title"] = this.Model.JallerFile.Name;
+    ViewData["Description"] = this.Model.JallerFile.Description.NormalizeWhiteSpace();
     string mimeType = this.Model.JallerFile.GetMimeType();
 
     <div class="row">
@@ -111,6 +112,8 @@ else
 
     @if( ( this.Model.JallerFile.Tags is not null ) && this.Model.JallerFile.Tags.Any() )
     {
+        ViewData["Tags"] = this.Model.JallerFile.Tags.ToHtmlDescriptionString();
+
         <div class="row">
             <div class="col-md-12">
                 <h2>Tagged as:</h2>

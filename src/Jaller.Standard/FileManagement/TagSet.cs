@@ -47,6 +47,19 @@ namespace Jaller.Standard.FileManagement
             return builder.ToString();
         }
 
+        public string ToHtmlDescriptionString()
+        {
+            var builder = new StringBuilder();
+            foreach( var tag in this )
+            {
+                builder.Append( $"{tag}," );
+            }
+
+            builder.Remove( builder.Length - 1, 1 );
+
+            return builder.ToString();
+        }
+
         public override bool Equals( object? obj )
         {
             return Equals( obj as TagSet );

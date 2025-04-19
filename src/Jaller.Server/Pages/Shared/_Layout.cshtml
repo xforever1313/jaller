@@ -20,9 +20,21 @@
 
 @{
     string title = "Untitled Page";
-    if (this.ViewData.TryGetValue("Title", out object? titleModel))
+    if( this.ViewData.TryGetValue( "Title", out object? titleModel ) )
     {
         title = titleModel?.ToString() ?? title;
+    }
+
+    string? description = null;
+    if( this.ViewData.TryGetValue( "Description", out object? descriptionModel ) )
+    {
+        description = descriptionModel?.ToString();
+    }
+
+    string? tags = null;
+    if( this.ViewData.TryGetValue( "Tags", out object? tagModel ) )
+    {
+        tags = tagModel?.ToString();
     }
 }
 <!DOCTYPE html>
@@ -32,7 +44,27 @@
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
+    <!-- Title -->
     <title>@title</title>
+    <meta property="og:title" content="@title" />
+
+    <!-- Description -->
+    @if( string.IsNullOrWhiteSpace( description ) == false )
+    {
+        <meta name="description" content="@description" />
+        <meta property="og:description" content="@description" />
+    }
+
+    <!-- Tags -->
+    @if( string.IsNullOrWhiteSpace( tags ) == false )
+    {
+        <meta name="keywords" content="@tags" />
+    }
+
+    <!-- Meta -->
+    <meta property="og:site_name" content="Jaller - An Advanced IPFS Gateway" />
+    <!-- TODO: figure out this: <meta property="og:url" content="https://bsatroop53.com/index.html" /> -->
+    <meta property="og:type" content="article" />
 
     <!-- W3 Styles-->
     <link href="/css/w3.css" rel="stylesheet" />
