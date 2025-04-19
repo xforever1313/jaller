@@ -59,5 +59,7 @@ namespace Jaller.Server.Models
         public bool AllowFileUpload => this.User.CanUserUploadFiles( this.core );
 
         public bool AllowAdminAccess => this.User.CanUserAccessAdminPanel( this.core, this.Request );
+
+        public bool AllowPublicRegistration => this.core.Config.Users.AllowPublicRegistration;
     }
 }

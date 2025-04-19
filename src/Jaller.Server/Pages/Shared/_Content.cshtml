@@ -18,13 +18,13 @@
 //
 *@
 
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @inject SignInManager<LiteDB.Identity.Models.LiteDbUser> SignInManager
 @inject UserManager<LiteDB.Identity.Models.LiteDbUser> UserManager
 
 @{
     string title = "";
-    if (this.ViewData.TryGetValue("Title", out object? titleModel))
+    if( this.ViewData.TryGetValue( "Title", out object? titleModel ) )
     {
         title = titleModel?.ToString() ?? "";
     }
@@ -42,72 +42,74 @@
     @RenderSection("scripts", required: false)
 }
 
-<div id="wrapper">
-    <!-- Top row -->
-    <nav class="navbar navbar-default navbar-cls-top" role="navigation" style="margin-bottom: 0">
-        <!-- Top-left -->
-        <div class="jaller-navbar-header">
-            <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <h1 id="main-title" style="padding:0.5em;">Jaller - An advanced IPFS Gateway</h1>
-    </nav>
 
-    <!-- Side Bar -->
-    <nav class="navbar-default navbar-side" role="navigation">
-        <div class="sidebar-collapse collapse in" style="">
-            <ul class="nav" id="main-menu">
-                <li>
-                    <a href="/"><i class="fa fa-home"></i> Home</a>
-                </li>
-                <li>
-                    <a href="/Search"><i class="fa fa-search"></i> Search</a>
-                </li>
+<!-- Nav Bar -->
+<div class="w3-container w3-theme" id="theTop">
+    <nav class="w3-bar">
+        <a href="/" class="w3-bar-item w3-button w3-padding-16"><i class="fa fa-home"></i> Home</a>
+        <a href="/Search" class="w3-bar-item w3-button w3-padding-16"><i class="fa fa-search"></i> Search</a>
+        <div class="w3-dropdown-hover">
+            <button class="w3-button w3-padding-16">
+                Account <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="w3-dropdown-content w3-card-4 w3-bar-block">
                 @if( SignInManager.IsSignedIn( User ) )
                 {
-                    <li>
-                        <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-user-gear"></i> Manage Account</a>
-                    </li>
+                    <a class="w3-bar-item w3-button" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-user-gear"></i> Manage Account</a>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="w3-bar-item w3-button"><i class="fa-solid fa-door-open"></i> Logout</button>
+                    </form>
                 }
                 else
                 {
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login"><i class="fa-solid fa-user"></i> Login</a>
-                    </li>
+                    @if( this.Model.AllowPublicRegistration )
+                    {
+                        <a class="w3-bar-item w3-button" asp-area="Identity" asp-page="/Account/Register"><i class="fa-solid fa-user-plus"></i> Register</a>
+                    }
+                    <a class="w3-bar-item w3-button" asp-area="Identity" asp-page="/Account/Login"><i class="fa-solid fa-user"></i> Login</a>
                 }
-
-                @if( Model.AllowAdminAccess )
-                {
-                    <li>
-                        <a href="/Admin"><i class="fa-solid fa-gear"></i> Admin Panel</a>
-                    </li>
-                }
-            </ul>
+            </div>
         </div>
-    </nav>
-
-
-    <!-- Main Page -->
-    <div id="page-wrapper">
-        <article id="page-inner">
-            @if( string.IsNullOrWhiteSpace( title ) == false )
-            {
-                <div class="row">
-                    <div class="col-md-12">
-                        <h1 class="page-head-line">@title</h1>
-                    </div>
+        @if( Model.AllowAdminAccess )
+        {
+            <div class="w3-dropdown-hover">
+                <button class="w3-button w3-padding-16">
+                    Admin <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="w3-dropdown-content w3-card-4 w3-bar-block">
+                    <a href="/Admin" class="w3-bar-item w3-button"><i class="fa-solid fa-gear"></i> Dashboard</a>
                 </div>
-            }
+            </div>
+        }
+    </nav>
+</div>
+
+<!-- Header -->
+<header class="w3-container w3-theme w3-padding">
+    <div class="w3-center">
+        <h1 class="w3-xxxlarge w3-animate-bottom">Jaller - An advanced IPFS Gateway</h1>
+    </div>
+</header>
+
+
+<!-- Main Page  -->
+<div>
+    <article id="w3-container">
+        <header class="w3-container w3-blue-grey">
+            <h1>@title</h1>
+        </header>
+        <div class="w3-padding w3-white w3-display-container">
             @RenderSection("beforemain", required: false)
+            
             <!-- Main Content -->
             @RenderBody()
-        </article>
-    </div>
+        </div>
+        <footer class="w3-container w3-blue-grey">
+            <p>&nbsp;</p>
+        </footer>
+    </article>
 </div>
+
 <!-- Footer -->
 <div id="footer-sec">
     <div class="row">
