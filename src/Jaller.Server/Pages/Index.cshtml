@@ -20,6 +20,10 @@
 @page
 @model Jaller.Server.Pages.HomeModel
 
+@{
+    ViewData["Title"] = "File Browser";
+}
+
 @section extrahead {
     <!-- Blazor Stuff -->
     <base href="/" />
@@ -30,13 +34,22 @@
     <script src="_framework/blazor.webassembly.js"></script>
 }
 
-<noscript>
-    JavaScript is required run this application.
-</noscript>
 <div id="app">
     <svg class="loading-progress">
         <circle r="40%" cx="50%" cy="50%" />
         <circle r="40%" cx="50%" cy="50%" />
     </svg>
     <div class="loading-progress-text"></div>
+</div>
+<noscript>
+    <div class="row">
+        <div class="col-md-12">
+            JavaScript is needed in order to view the interactive file browser.
+        </div>
+    </div>
+</noscript>
+<div class="row">
+    <div class="col-md-12">
+        <em>Slow connection?  Try the <a href="/Folder">basic view</a>.</em>
+    </div>
 </div>
