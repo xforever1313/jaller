@@ -16,17 +16,16 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Server.Models;
 using Jaller.Standard;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.About;
 
-public sealed class LicenseModel : BasePageModel
+public sealed class LicenseModel : PageModel
 {
     // ---------------- Constructor ----------------
 
-    public LicenseModel( IJallerCore core ) :
-        base( core )
+    public LicenseModel()
     {
         this.LicenseHtml = Resources.LicenseAsHtml;
     }

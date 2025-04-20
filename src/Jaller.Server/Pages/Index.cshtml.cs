@@ -16,17 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Server.Models;
-using Jaller.Standard;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages
 {
-    public class HomeModel : BasePageModel
+    public class HomeModel : PageModel
     {
         // ---------------- Constructor ----------------
 
-        public HomeModel( IJallerCore core ) :
-            base( core )
+        public HomeModel()
         {
         }
 

@@ -16,17 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Server.Models;
-using Jaller.Standard;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.About;
 
-public sealed class IndexModel : BasePageModel
+public sealed class IndexModel : PageModel
 {
     // ---------------- Constructor ----------------
 
-    public IndexModel( IJallerCore core ) :
-        base( core )
+    public IndexModel()
     {
         this.ReadmeHtml = Resources.ReadmeAsHtml;
     }

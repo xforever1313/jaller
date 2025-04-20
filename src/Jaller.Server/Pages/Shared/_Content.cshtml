@@ -22,6 +22,8 @@
 @inject SignInManager<LiteDB.Identity.Models.LiteDbUser> SignInManager
 @inject UserManager<LiteDB.Identity.Models.LiteDbUser> UserManager
 
+@model Microsoft.AspNetCore.Mvc.RazorPages.PageModel
+
 @{
     string title = "";
     if( this.ViewData.TryGetValue( "Title", out object? titleModel ) )
@@ -29,10 +31,10 @@
         title = titleModel?.ToString() ?? "";
     }
 
+    JallerVersionInfo versionInfo = this.Model.JallerVersionInfo();
+
     Layout = "_Layout";
 }
-
-@model Jaller.Server.Models.BasePageModel;
 
 @section extrahead {
     @RenderSection("extrahead", required: false)
@@ -62,7 +64,7 @@
                 }
                 else
                 {
-                    @if( this.Model.AllowPublicRegistration )
+                    @if( this.Model.AllowPublicRegistration() )
                     {
                         <a class="w3-bar-item w3-button" asp-area="Identity" asp-page="/Account/Register"><i class="fa-solid fa-user-plus"></i> Register</a>
                     }
@@ -70,7 +72,7 @@
                 }
             </div>
         </div>
-        @if( Model.AllowAdminAccess )
+        @if( Model.AllowAdminAccess() )
         {
             <div class="w3-dropdown-hover">
                 <button class="w3-button w3-padding-16">
@@ -132,10 +134,10 @@
         <div class="col-md-4">
             <p class="footertitle"><strong>Software Version</strong></p>
             <ul class="no-bullets">
-                <li>- <strong>Core Version:</strong> @this.Model.JallerVersionInfo.CoreVersion</li>
-                <li>- <strong>Contracts Version:</strong> @this.Model.JallerVersionInfo.ContractsVersion</li>
-                <li>- <strong>Server Version:</strong> @this.Model.JallerVersionInfo.ServerVersion</li>
-                <li>- <strong>Standard Version:</strong> @this.Model.JallerVersionInfo.StandardVersion</li>
+                <li>- <strong>Core Version:</strong> @versionInfo.CoreVersion</li>
+                <li>- <strong>Contracts Version:</strong> @versionInfo.ContractsVersion</li>
+                <li>- <strong>Server Version:</strong> @versionInfo.ServerVersion</li>
+                <li>- <strong>Standard Version:</strong> @versionInfo.StandardVersion</li>
             </ul>
         </div>
     </div>
