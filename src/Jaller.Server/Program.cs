@@ -128,7 +128,7 @@ namespace Jaller.Server
                             {
                                 if( path.Contains("/identity/account/register") || path.EndsWith( "/register" ) )
                                 {
-                                    context.Response.StatusCode = 404;
+                                    context.Response.StatusCode = StatusCodes.Status404NotFound;
                                     await context.Response.WriteAsync(
                                         "Registration is disabled."
                                     );
