@@ -24,10 +24,11 @@ using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.Folder
 {
-    public sealed class AddModel : BasePageModel, IAlert, IJallerPermissions
+    public sealed class AddModel : PageModel, IAlert, IJallerPermissions
     {
         // ---------------- Fields ----------------
 
@@ -35,8 +36,7 @@ namespace Jaller.Server.Pages.Folder
 
         // ---------------- Constructor ----------------
 
-        public AddModel( IJallerCore core ) :
-            base( core )
+        public AddModel( IJallerCore core )
         {
             this.core = core;
         }
@@ -85,7 +85,7 @@ namespace Jaller.Server.Pages.Folder
 
         public async Task<IActionResult> OnGetAsync( int? parentFolderId )
         {
-            if( this.AllowMetadataEdit == false )
+            if( this.AllowMetadataEdit() == false )
             {
                 return StatusCode( (int)HttpStatusCode.Forbidden );
             }
@@ -112,7 +112,7 @@ namespace Jaller.Server.Pages.Folder
             this.WarningMessage = null;
             this.ErrorMessage = null;
 
-            if( this.AllowMetadataEdit == false )
+            if( this.AllowMetadataEdit() == false )
             {
                 return StatusCode( (int)HttpStatusCode.Forbidden );
             }

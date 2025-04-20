@@ -22,10 +22,11 @@ using Jaller.Server.Models;
 using Jaller.Standard;
 using Jaller.Standard.FolderManagement;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.Folder;
 
-public sealed class DeleteModel : BasePageModel, IAlert
+public sealed class DeleteModel : PageModel, IAlert
 {
     // ---------------- Fields ----------------
 
@@ -33,8 +34,7 @@ public sealed class DeleteModel : BasePageModel, IAlert
 
     // ---------------- Constructor ----------------
 
-    public DeleteModel( IJallerCore core ) :
-        base( core )
+    public DeleteModel( IJallerCore core )
     {
         this.core = core;
     }
@@ -68,7 +68,7 @@ public sealed class DeleteModel : BasePageModel, IAlert
 
     public async Task<IActionResult> OnGetAsync( int? id )
     {
-        if( this.AllowMetadataEdit == false )
+        if( this.AllowMetadataEdit() == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }
@@ -101,7 +101,7 @@ public sealed class DeleteModel : BasePageModel, IAlert
         this.WarningMessage = null;
         this.ErrorMessage = null;
 
-        if( this.AllowMetadataEdit == false )
+        if( this.AllowMetadataEdit() == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }

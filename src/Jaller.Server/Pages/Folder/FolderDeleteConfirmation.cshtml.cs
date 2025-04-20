@@ -21,10 +21,11 @@ using Jaller.Server.Extensions;
 using Jaller.Server.Models;
 using Jaller.Standard;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.Folder;
 
-public class FolderDeleteConfirmationModel : BasePageModel
+public sealed class FolderDeleteConfirmationModel : PageModel
 {
     // ---------------- Fields ----------------
 
@@ -32,8 +33,7 @@ public class FolderDeleteConfirmationModel : BasePageModel
 
     // ---------------- Constructor ----------------
 
-    public FolderDeleteConfirmationModel( IJallerCore core ) :
-        base( core )
+    public FolderDeleteConfirmationModel( IJallerCore core )
     {
         this.core = core;
     }
@@ -46,7 +46,7 @@ public class FolderDeleteConfirmationModel : BasePageModel
 
     public IActionResult OnGet( int? id )
     {
-        if( this.AllowMetadataEdit == false )
+        if( this.AllowMetadataEdit() == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }
