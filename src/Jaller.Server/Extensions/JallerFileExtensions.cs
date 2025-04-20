@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.Security.Claims;
 using Jaller.Contracts.FileManagement;
 using Jaller.Standard.FileManagement;
 
@@ -46,5 +47,31 @@ public static class JallerFileExtensions
             Name = file.Name,
             ParentFolderId = file.ParentFolder,
         };
+    }
+
+    public static bool IsDownloadable( this JallerFile? file, ClaimsPrincipal user )
+    {
+        if( file is null )
+        {
+            return false;
+        }
+        if( file.DownloadablePolicy == DownloadPolicy.Public )
+        {
+            return true;
+        }
+        else if( file.DownloadablePolicy == DownloadPolicy.NoDownload )
+        {
+            return false;
+        }
+        else if( file.DownloadablePolicy == DownloadPolicy.Private )
+        {
+            if( user.IsUserApproved() )
+            {
+                return true;
+            }
+        }
+
+        // All else fails, assume we don't want the file downloaded.
+        return false;
     }
 }

@@ -18,6 +18,7 @@
 
 using Jaller.Core;
 using Jaller.Core.FileManagement;
+using Jaller.Server.Extensions;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
 using Microsoft.AspNetCore.Mvc;
@@ -68,27 +69,11 @@ public sealed class IpfsController : ControllerBase
     {
         JallerFile? file = await Task.Run( () => this.core.Files.TryGetFile( realCid.Version1Cid ) );
 
-        if( file is null )
-        {
-            return null;
-        }
-        if( file.DownloadablePolicy == DownloadPolicy.Public )
+        if( file.IsDownloadable( this.User ) )
         {
             return file;
         }
-        else if( file.DownloadablePolicy == DownloadPolicy.NoDownload )
-        {
-            return null;
-        }
-        else if( file.DownloadablePolicy == DownloadPolicy.Private )
-        {
-            if( this.User.IsUserApproved() )
-            {
-                return file;
-            }
-        }
 
-        // All else fails, assume we don't want the file downloaded.
         return null;
     }
 }
