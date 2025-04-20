@@ -118,6 +118,29 @@ namespace Jaller.Server
                     } );
                 }
 
+                if( config.Users.AllowPublicRegistration == false )
+                {
+                    app.Use(
+                        async( context, next ) =>
+                        {
+                            string? path = context.Request.Path.Value?.ToLower();
+                            if( string.IsNullOrWhiteSpace( path ) == false )
+                            {
+                                if( path.Contains("/identity/account/register") || path.EndsWith( "/register" ) )
+                                {
+                                    context.Response.StatusCode = 404;
+                                    await context.Response.WriteAsync(
+                                        "Registration is disabled."
+                                    );
+                                    return;
+                                }
+                            }
+
+                            await next();
+                        }
+                    );
+                }
+
                 app.MapControllers();
 
                 // Configure the HTTP request pipeline.
