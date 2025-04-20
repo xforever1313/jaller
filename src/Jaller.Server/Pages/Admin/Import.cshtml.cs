@@ -23,11 +23,12 @@ using Jaller.Server.Models;
 using Jaller.Standard;
 using Jaller.Standard.Bulk;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using SethCS.Extensions;
 
 namespace Jaller.Server.Pages.Admin
 {
-    public class ImportModel : BasePageModel, IAlert
+    public class ImportModel : PageModel, IAlert
     {
         // ---------------- Fields ----------------
 
@@ -35,8 +36,7 @@ namespace Jaller.Server.Pages.Admin
 
         // ---------------- Constructor ----------------
 
-        public ImportModel( IJallerCore core ) :
-            base( core )
+        public ImportModel( IJallerCore core )
         {
             this.core = core;
 
@@ -67,7 +67,7 @@ namespace Jaller.Server.Pages.Admin
 
         public IActionResult OnGet()
         {
-            if( this.AllowAdminAccess == false )
+            if( this.AllowAdminAccess() == false )
             {
                 return StatusCode( (int)HttpStatusCode.Forbidden );
             }
@@ -77,7 +77,7 @@ namespace Jaller.Server.Pages.Admin
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if( this.AllowAdminAccess == false )
+            if( this.AllowAdminAccess() == false )
             {
                 return StatusCode( (int)HttpStatusCode.Forbidden );
             }

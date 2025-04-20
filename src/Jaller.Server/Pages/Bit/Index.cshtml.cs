@@ -16,12 +16,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Server.Models;
 using Jaller.Standard;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.Bit;
 
-public sealed class IndexModel : BasePageModel
+public sealed class IndexModel : PageModel
 {
     // ---------------- Fields ----------------
 
@@ -29,8 +29,7 @@ public sealed class IndexModel : BasePageModel
 
     // ---------------- Constructor ----------------
 
-    public IndexModel( IJallerCore core ) :
-        base( core )
+    public IndexModel( IJallerCore core )
     {
         this.core = core;
     }

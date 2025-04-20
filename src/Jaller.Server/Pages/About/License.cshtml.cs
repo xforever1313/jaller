@@ -16,7 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Standard;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.About;

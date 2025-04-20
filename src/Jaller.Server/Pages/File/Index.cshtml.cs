@@ -19,14 +19,14 @@
 using System.Net;
 using Jaller.Core;
 using Jaller.Core.FileManagement;
-using Jaller.Server.Models;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.File;
 
-public sealed class IndexModel : BasePageModel
+public sealed class IndexModel : PageModel
 {
     // ---------------- Fields ----------------
 
@@ -46,8 +46,7 @@ public sealed class IndexModel : BasePageModel
 
     // ---------------- Constructor ----------------
 
-    public IndexModel( IJallerCore core ) :
-        base( core )
+    public IndexModel( IJallerCore core )
     {
         this.core = core;
     }

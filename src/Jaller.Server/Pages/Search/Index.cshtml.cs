@@ -17,14 +17,14 @@
 //
 
 using System.Net;
-using Jaller.Server.Models;
 using Jaller.Standard;
 using Jaller.Standard.Search;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.Search;
 
-public sealed class IndexModel : BasePageModel
+public sealed class IndexModel : PageModel
 {
     // ---------------- Fields ----------------
 
@@ -32,8 +32,7 @@ public sealed class IndexModel : BasePageModel
 
     // ---------------- Constructor ----------------
 
-    public IndexModel( IJallerCore core ) :
-        base( core )
+    public IndexModel( IJallerCore core )
     {
         this.core = core;
     }

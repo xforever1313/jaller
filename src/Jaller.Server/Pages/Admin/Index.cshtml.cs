@@ -22,10 +22,11 @@ using Jaller.Server.Extensions;
 using Jaller.Server.Models;
 using Jaller.Standard;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.Admin
 {
-    public class IndexModel : BasePageModel
+    public class IndexModel : PageModel
     {
         // ---------------- Fields ----------------
 
@@ -33,8 +34,7 @@ namespace Jaller.Server.Pages.Admin
 
         // ---------------- Constructor ----------------
 
-        public IndexModel( IJallerCore core ) :
-            base( core )
+        public IndexModel( IJallerCore core )
         {
             this.core = core;
         }
@@ -53,7 +53,7 @@ namespace Jaller.Server.Pages.Admin
 
         public async Task<IActionResult> OnGetAsync()
         {
-            if( this.AllowAdminAccess == false )
+            if( this.AllowAdminAccess() == false )
             {
                 return StatusCode( (int)HttpStatusCode.Forbidden );
             }

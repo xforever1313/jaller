@@ -16,17 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Server.Models;
-using Jaller.Standard;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.Errors
 {
-    public class _403Model : BasePageModel
+    public class _403Model : PageModel
     {
         // ---------------- Constructor ----------------
 
-        public _403Model( IJallerCore core ) :
-            base( core )
+        public _403Model()
         {
         }
 
