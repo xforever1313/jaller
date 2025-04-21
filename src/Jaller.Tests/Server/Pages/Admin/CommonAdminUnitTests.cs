@@ -33,11 +33,7 @@ namespace Jaller.Tests.Server.Pages.Admin
         /// <param name="config"></param>
         public static void DoHostRestrictionTest( Func<IActionResult> action, PageModel model, JallerWebConfig config )
         {
-            var httpContext = new DefaultHttpContext();
-            model.PageContext = new PageContext
-            {
-                HttpContext = httpContext
-            };
+            Assert.IsNotNull( model.PageContext.HttpContext, "HTTP Context must be sent first" );
 
             var urlsToTry = new string[]
             {
