@@ -101,7 +101,7 @@
             <h1>@title</h1>
         </header>
         <div class="w3-padding w3-white w3-display-container">
-            @RenderSection("beforemain", required: false)
+            @await RenderSectionAsync( "beforemain", required: false )
             
             <!-- Main Content -->
             @RenderBody()
