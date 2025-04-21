@@ -28,7 +28,7 @@ using SethCS.Extensions;
 
 namespace Jaller.Server.Pages.Admin
 {
-    public class ImportModel : PageModel, IAlert
+    public sealed class ImportModel : PageModel, IAlert
     {
         // ---------------- Fields ----------------
 
