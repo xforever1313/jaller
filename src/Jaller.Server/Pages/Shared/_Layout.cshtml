@@ -87,12 +87,12 @@
     <link rel="stylesheet" href="/css/fa.solid.min.css">
     <link rel="stylesheet" href="/css/fa.v5-font-face.min.css">
 
-    @RenderSection("extrahead", required: false)
+    @await RenderSectionAsync( "extrahead", required: false )
 </head>
 <body>
     @RenderBody()
 
     <!-- Page-specific scripts -->
-    @RenderSection("scripts", required: false)
+    @await RenderSectionAsync( "scripts", required: false )
 </body>
 </html>

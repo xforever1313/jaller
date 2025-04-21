@@ -37,11 +37,11 @@
 }
 
 @section extrahead {
-    @RenderSection("extrahead", required: false)
+    @await RenderSectionAsync( "extrahead", required: false )
 }
 
 @section scripts {
-    @RenderSection("scripts", required: false)
+    @await RenderSectionAsync( "scripts", required: false )
 }
 
 
