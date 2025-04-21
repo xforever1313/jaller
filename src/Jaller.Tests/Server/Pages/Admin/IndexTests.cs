@@ -77,6 +77,7 @@ public sealed class IndexTests
     {
         // Setup
         var uut = new IndexModel( this.Core );
+        uut.UseCore( this.Core );
 
         // Act / Check
         CommonAdminUnitTests.DoHostRestrictionTest(

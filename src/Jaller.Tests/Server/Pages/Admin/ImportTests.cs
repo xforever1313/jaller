@@ -77,6 +77,7 @@ public sealed class ImportTests
     {
         // Setup
         var uut = new ImportModel( this.Core );
+        uut.UseCore( this.Core );
 
         // Act / Check
         CommonAdminUnitTests.DoHostRestrictionTest(
@@ -91,6 +92,7 @@ public sealed class ImportTests
     {
         // Setup
         var uut = new ImportModel( this.Core );
+        uut.UseCore( this.Core );
 
         // Act / Check
         CommonAdminUnitTests.DoHostRestrictionTest(

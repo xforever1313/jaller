@@ -54,7 +54,6 @@ public sealed class AddTests
 
         this.uut = new AddModel( this.core );
 
-        var httpContext = new DefaultHttpContext();
         var identity = new ClaimsIdentity(
             new Claim[]
             {
@@ -65,11 +64,7 @@ public sealed class AddTests
             "TestAuthentication"
         );
 
-        httpContext.User = new ClaimsPrincipal( identity );
-        this.uut.PageContext = new PageContext
-        {
-            HttpContext = httpContext
-        };
+        this.uut.UseCore( this.core, identity );
     }
 
     [TestCleanup]
