@@ -26,9 +26,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SethCS.Extensions;
 
-namespace Jaller.Server.Pages.Admin;
+namespace Jaller.Server.Pages.Admin.Users;
 
-public sealed class AddUserModel : PageModel, IAlert
+public sealed class AddModel : PageModel, IAlert
 {
     // ---------------- Fields ----------------
 
@@ -38,7 +38,7 @@ public sealed class AddUserModel : PageModel, IAlert
 
     // ---------------- Constructor ----------------
 
-    public AddUserModel( IJallerCore core, UserManager<LiteDbUser> userManager )
+    public AddModel( IJallerCore core, UserManager<LiteDbUser> userManager )
     {
         this.core = core;
         this.userManager = userManager;
