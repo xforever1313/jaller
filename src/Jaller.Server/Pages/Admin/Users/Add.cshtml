@@ -26,5 +26,135 @@
     ViewData["Title"] = "Add User";
 }
 
+
+@if( this.Model.InfoMessage is not null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <ul>
+                    @foreach( string message in this.Model.InfoMessage.ReadLines() )
+                    {
+                        <li>@message</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@if( this.Model.WarningMessage is not null )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning">
+                <p>Warnings when adding new user:</p>
+                <ul>
+                    @foreach( string message in this.Model.WarningMessage.ReadLines() )
+                    {
+                        <li>@message</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@if( this.Model.ErrorMessage is not null )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger">
+                <p>Errors when adding new user:</p>
+                <ul>
+                    @foreach( string message in this.Model.ErrorMessage.ReadLines() )
+                    {
+                        <li>@message</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
 <div class="row">
+    <div class="col-md-12">
+        <form class="form-group" method="post" enctype="multipart/form-data">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Add New User</h3>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <label for="emailInput">User Email</label>
+                    </p>
+                    <p>
+                        <input id="emailInput" class="form-control" type="email" name="@nameof( this.Model.UserEmail )" value="" required />
+                    </p>
+                    <p>
+                        <label for="passwordInput">Password</label>
+                    </p>
+                    <p>
+                        <input id="passwordInput" class="form-control" type="password" name="@nameof( this.Model.Password )" value="" required />
+                    </p>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4>User Roles</h4>
+                        </div>
+                        <div class="panel-body">
+                            <p class="checkbox">
+                                <label for="isEditorCheckBox">
+                                    <input id="isEditorCheckBox" type="checkbox" name="@nameof( this.Model.IsEditor )" />
+                                    Editor
+                                </label>
+                            </p>
+                            <p class="checkbox">
+                                <label for="isUploaderCheckBox">
+                                    <input id="isUploaderCheckBox" type="checkbox" name="@nameof( this.Model.IsUploader )" />
+                                    Uploader
+                                </label>
+                            </p>
+                            <p class="checkbox">
+                                <label for="isAdminCheckBox">
+                                    <input id="isAdminCheckBox" type="checkbox" name="@nameof( this.Model.IsAdmin )" />
+                                    Administrator
+                                </label>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <button class="btn btn-primary" type="submit" id="uploadButton">Add User</button>
+                </div>
+            </div>  
+        </form>
+    </div>
 </div>
+
+@section scripts 
+{
+    <script>
+        var uploadButton;
+        var emailInput;
+        var passwordInput;
+
+        window.onload = function()
+        {
+            uploadButton = document.getElementById( "uploadButton" );
+            uploadButton.disabled = true; // Disabled by default since we won't have files right away.
+
+            emailInput = document.getElementById( "emailInput" );
+            passwordInput = document.getElementById( "passwordInput" );
+
+            emailInput.addEventListener( 'input', checkForm );
+            passwordInput.addEventListener( 'input', checkForm );
+            checkForm();
+        }
+
+        function checkForm() {
+            const isEmailValid = emailInput.validity.valid && emailInput.value.trim() !== '';
+            const isPasswordValid = passwordInput.textLength > 0;
+            uploadButton.disabled = !( isEmailValid && isPasswordValid );
+        }
+    </script>
+}

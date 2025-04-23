@@ -46,14 +46,19 @@ public sealed class AddModel : PageModel, IAlert
 
     // ---------------- Properties ----------------
 
+    [BindProperty]
     public string? UserEmail { get; set; } = null;
     
+    [BindProperty]
     public string? Password { get; set; } = null;
 
+    [BindProperty]
     public bool IsEditor { get; set; } = false;
 
+    [BindProperty]
     public bool IsUploader { get; set; } = false;
 
+    [BindProperty]
     public bool IsAdmin { get; set; } = false;
 
     /// <inheritdoc/>
@@ -160,6 +165,8 @@ public sealed class AddModel : PageModel, IAlert
             this.ErrorMessage = $"User created, but could not add to role:{Environment.NewLine}{addResult.Errors.Select( e => e.Description ).ToListString( "- " )}";
             return RedirectToPage();
         }
+
+        this.InfoMessage = "User Added!";
 
         return RedirectToPage();
     }
