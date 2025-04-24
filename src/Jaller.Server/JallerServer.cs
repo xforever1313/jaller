@@ -41,6 +41,11 @@ public class JallerServer : IDisposable
         this.waitAction = waitAction;
     }
 
+    ~JallerServer()
+    {
+        Dispose( false );
+    }
+
     // ---------------- Properties ----------------
 
     public Serilog.ILogger Log { get; }
@@ -171,6 +176,7 @@ public class JallerServer : IDisposable
         if( this.waitAction is not null )
         {
             this.waitAction.Invoke();
+            app.StopAsync().Wait();
         }
         else
         {
@@ -179,6 +185,12 @@ public class JallerServer : IDisposable
     }
 
     public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool fromDispose )
     {
     }
 
