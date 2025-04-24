@@ -16,13 +16,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Jaller.Core;
 using Jaller.Core.Configuration;
-using Jaller.Server.Logging;
-using Jaller.Standard;
 using Jaller.Standard.Configuration;
 using Mono.Options;
-using Prometheus;
 using SethCS.Extensions;
 
 namespace Jaller.Server
@@ -68,134 +64,10 @@ namespace Jaller.Server
                     return 0;
                 }
 
-                log = HostingExtensions.CreateLog( config, OnTelegramFailure );
+                Action? waitAction = options.UseEnterToExit ? WaitForEnterToExit : null;
 
-                var builder = WebApplication.CreateBuilder( args );
-
-                using var core = new JallerCore( config, new JallerLogger( log ) );
-                core.Init();
-
-                // Add services to the container.
-                builder.Services.AddUserManager( core );
-
-                builder.Services.AddControllers().AddXmlSerializerFormatters();
-                builder.Services.AddMvc();
-                builder.Services.AddRazorPages();
-                builder.Services.AddSingleton<IJallerCore>( core );
-
-                var app = builder.Build();
-
-                if( config.Web.AllowPortsInUrl == false )
-                {
-                    app.Use(
-                        ( HttpContext context, RequestDelegate next ) =>
-                        {
-                            int? port = context.Request.Host.Port;
-                            if( port is not null )
-                            {
-                                // Kill the connection,
-                                // and stop all processing.
-                                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                                context.Connection.RequestClose();
-                                return Task.CompletedTask;
-                            }
-
-                            return next( context );
-                        }
-                    );
-                }
-                
-                if( config.Web.RewriteDoubleSlashes )
-                {
-                    app.Use( ( context, next ) =>
-                    {
-                        string? value = context.Request.Path.Value;
-                        if( ( value is not null ) && value.StartsWith( "//" ) )
-                        {
-                            context.Request.Path = new PathString( value.Replace( "//", "/" ) );
-                        }
-                        return next();
-                    } );
-                }
-
-                if( config.Users.AllowPublicRegistration == false )
-                {
-                    app.Use(
-                        async( context, next ) =>
-                        {
-                            string? path = context.Request.Path.Value?.ToLower();
-                            if( string.IsNullOrWhiteSpace( path ) == false )
-                            {
-                                if( path.Contains("/identity/account/register") || path.EndsWith( "/register" ) )
-                                {
-                                    context.Response.StatusCode = StatusCodes.Status404NotFound;
-                                    await context.Response.WriteAsync(
-                                        "Registration is disabled."
-                                    );
-                                    return;
-                                }
-                            }
-
-                            await next();
-                        }
-                    );
-                }
-
-                app.MapControllers();
-
-                // Configure the HTTP request pipeline.
-                if( app.Environment.IsDevelopment() )
-                {
-                    app.UseWebAssemblyDebugging();
-                }
-                else
-                {
-                    app.UseExceptionHandler( "/Error" );
-                }
-
-                app.UseDefaultFiles();
-                app.UseStaticFiles();
-                app.UseStatusCodePagesWithReExecute( "/Errors/{0}" );
-
-                app.UseRouting();
-
-                app.UseAuthentication();
-                app.UseAuthorization();
-
-                if( config.Web.EnableMetrics )
-                {
-                    // Per https://learn.microsoft.com/en-us/aspnet/core/diagnostics/asp0014?view=aspnetcore-8.0:
-                    // Warnings from this rule can be suppressed if
-                    // the target UseEndpoints invocation is invoked without
-                    // any mappings as a strategy to organize middleware ordering.
-                    #pragma warning disable ASP0014 // Suggest using top level route registrations
-                    app.UseEndpoints(
-                        endpoints =>
-                        {
-                            endpoints.MapMetrics( "/Metrics" );
-                        }
-                    );
-                    #pragma warning restore ASP0014 // Suggest using top level route registrations
-                }
-
-                // Unsure what we're doing about this yet...
-                //app.UseAuthorization();
-
-                app.MapRazorPages();
-
-                app.UseBlazorFrameworkFiles();
-
-                app.Services.InitDatabase( core );
-
-                if( options.UseEnterToExit )
-                {
-                    Console.WriteLine( RunningMessage );
-                    Console.ReadLine();
-                }
-                else
-                {
-                    app.Run();
-                }
+                using var server = new JallerServer( config, waitAction );
+                server.Run( args );
 
                 log?.Information( "Application Exiting" );
                 Console.WriteLine( "Application Exiting" );
@@ -291,9 +163,10 @@ namespace Jaller.Server
             File.WriteAllText( fileLocation.FullName, fileContents );
         }
 
-        private static void OnTelegramFailure( Exception e )
+        private static void WaitForEnterToExit()
         {
-            log?.Warning( $"Telegram message did not send:{Environment.NewLine}{e}" );
+            Console.WriteLine( RunningMessage );
+            Console.ReadLine();
         }
     }
 }
