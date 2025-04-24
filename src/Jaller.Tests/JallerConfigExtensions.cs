@@ -22,10 +22,12 @@ namespace Jaller.Tests;
 
 public static class JallerConfigExtensions
 {
-    public static void UseInMemoryDatabase( this JallerConfig config )
+    public static JallerConfig UseInMemoryDatabase( this JallerConfig config )
     {
         config.Database.DatabaseLocation = null;
         config.Users.DatabaseLocation = null;
         config.Search.DatabaseLocation = null;
+
+        return config;
     }
 }

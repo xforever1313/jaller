@@ -173,6 +173,8 @@ public class JallerServer : IDisposable
 
         app.Services.InitDatabase( core );
 
+        SetupCompleted();
+
         if( this.waitAction is not null )
         {
             this.waitAction.Invoke();
@@ -191,6 +193,10 @@ public class JallerServer : IDisposable
     }
 
     protected virtual void Dispose( bool fromDispose )
+    {
+    }
+
+    protected virtual void SetupCompleted()
     {
     }
 

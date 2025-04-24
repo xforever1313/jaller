@@ -27,6 +27,8 @@ public class TestJallerServer : JallerServer
 
     private readonly ManualResetEventSlim exitEvent;
 
+    private readonly ManualResetEventSlim setupCompleted;
+
     // ---------------- Constructor ----------------
 
     public TestJallerServer( IJallerConfig config ) :
@@ -38,9 +40,22 @@ public class TestJallerServer : JallerServer
         base( config, () => exitEvent.Wait() )
     {
         this.exitEvent = exitEvent;
+        this.setupCompleted = new ManualResetEventSlim( false );
     }
 
     // ---------------- Methods ----------------
+
+    public Task RunAsync()
+    {
+        Task task = Task.Run( () => this.Run() );
+        if( this.setupCompleted.Wait( new TimeSpan( 0, 1, 0 ) ) == false )
+        {
+            Assert.Fail( "Failed to start up Jaller in under a minute." );
+        }
+
+        Thread.Sleep( new TimeSpan( 0, 0, 7 ) );
+        return task;
+    }
 
     /// <summary>
     /// Stop running the server.
@@ -54,6 +69,13 @@ public class TestJallerServer : JallerServer
     {
         this.exitEvent.Set();
         this.exitEvent.Dispose();
+
+        this.setupCompleted.Dispose();
         base.Dispose( fromDispose );
+    }
+
+    protected override void SetupCompleted()
+    {
+        this.setupCompleted.Set();
     }
 }
