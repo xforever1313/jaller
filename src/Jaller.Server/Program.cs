@@ -67,6 +67,7 @@ namespace Jaller.Server
                 Action? waitAction = options.UseEnterToExit ? WaitForEnterToExit : null;
 
                 using var server = new JallerServer( config, waitAction );
+                log = server.Log;
                 server.Run( args );
 
                 log?.Information( "Application Exiting" );

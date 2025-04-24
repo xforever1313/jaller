@@ -30,8 +30,6 @@ public class JallerServer : IDisposable
 
     private readonly IJallerConfig config;
 
-    private readonly Serilog.ILogger log;
-
     private readonly Action? waitAction;
 
     // ---------------- Constructor ----------------
@@ -39,9 +37,13 @@ public class JallerServer : IDisposable
     public JallerServer( IJallerConfig config, Action? waitAction )
     {
         this.config = config;
-        this.log = HostingExtensions.CreateLog( config, OnTelegramFailure );
+        this.Log = HostingExtensions.CreateLog( config, OnTelegramFailure );
         this.waitAction = waitAction;
     }
+
+    // ---------------- Properties ----------------
+
+    public Serilog.ILogger Log { get; }
 
     // ---------------- Methods ----------------
 
@@ -54,7 +56,7 @@ public class JallerServer : IDisposable
     {
         var builder = WebApplication.CreateBuilder( args );
 
-        using var core = new JallerCore( config, new JallerLogger( log ) );
+        using var core = new JallerCore( config, new JallerLogger( Log ) );
         core.Init();
 
         // Add services to the container.
@@ -182,6 +184,6 @@ public class JallerServer : IDisposable
 
     private void OnTelegramFailure( Exception e )
     {
-        this.log.Warning( $"Telegram message did not send:{Environment.NewLine}{e}" );
+        this.Log.Warning( $"Telegram message did not send:{Environment.NewLine}{e}" );
     }
 }
