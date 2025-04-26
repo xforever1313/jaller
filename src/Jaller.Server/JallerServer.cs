@@ -21,6 +21,7 @@ using Jaller.Server.Logging;
 using Jaller.Standard;
 using Jaller.Standard.Configuration;
 using Prometheus;
+using Serilog;
 
 namespace Jaller.Server;
 
@@ -71,6 +72,8 @@ public class JallerServer : IDisposable
         builder.Services.AddMvc();
         builder.Services.AddRazorPages();
         builder.Services.AddSingleton<IJallerCore>( core );
+
+        builder.Host.UseSerilog( this.Log );
 
         var app = builder.Build();
 
