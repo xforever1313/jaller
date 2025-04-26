@@ -54,6 +54,7 @@ public class TestJallerServer : JallerServer
         }
 
         Thread.Sleep( new TimeSpan( 0, 0, 7 ) );
+        this.Log.Information( "Test Server Started" );
         return task;
     }
 
@@ -62,6 +63,7 @@ public class TestJallerServer : JallerServer
     /// </summary>
     public void Stop()
     {
+        this.Log.Information( "Test Server Stopping..." );
         this.exitEvent.Set();
     }
 

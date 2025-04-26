@@ -24,6 +24,8 @@ public sealed record class JallerWebConfig : IJallerWebConfig
 {
     public IReadOnlyCollection<string>? AllowedAdminHosts { get; set; } = null;
 
+    public IReadOnlyCollection<string>? AspNetCoreUrls { get; set; } = null;
+
     public bool EnableMetrics { get; set; } = false;
 
     public bool AllowPortsInUrl { get; set; } = false;

@@ -74,6 +74,10 @@ public class JallerServer : IDisposable
         builder.Services.AddSingleton<IJallerCore>( core );
 
         builder.Host.UseSerilog( this.Log );
+        if( ( config.Web.AspNetCoreUrls is not null ) && config.Web.AspNetCoreUrls.Any() )
+        {
+            builder.WebHost.UseUrls( config.Web.AspNetCoreUrls.ToArray() );
+        }
 
         var app = builder.Build();
 

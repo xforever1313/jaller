@@ -34,6 +34,16 @@ public interface IJallerWebConfig
     IReadOnlyCollection<string>? AllowedAdminHosts { get; }
 
     /// <summary>
+    /// What is passed into ASP.NET Core Urls Setting.
+    /// See: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/endpoints?view=aspnetcore-8.0
+    /// for more information.
+    /// 
+    /// Set to null to not set the setting.  This may be useful if you want to use Environment
+    /// Variables or a JSON file instead to set this setting.
+    /// </summary>
+    IReadOnlyCollection<string>? AspNetCoreUrls { get; }
+
+    /// <summary>
     /// If set to false, a URL that contains a port number
     /// will be rejected.  This should generally be set to
     /// true in a development environment or if behind

@@ -18,6 +18,7 @@
 
 using System.Net;
 using Jaller.Core.Configuration;
+using Jaller.Standard.Logging;
 
 namespace Jaller.Tests.System;
 
@@ -55,8 +56,9 @@ public sealed class AboutTests
     {
         var config = new JallerConfig
         {
-
         }.UseInMemoryDatabase();
+        config.Logging.ConsoleLogLevel = JallerLogLevel.Verbose;
+        config.Web.AspNetCoreUrls = ["http://localhost:5000"];
 
         this.server = new TestJallerServer( config );
         this.runTask = this.server.RunAsync();

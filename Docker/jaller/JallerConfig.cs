@@ -219,6 +219,14 @@ this.Web.EnableMetrics = false;
 // only allows the Proxy URL to work.
 this.Web.AllowPortsInUrl = true;
 
+// List of endpoints Jaller will allow requests to come through.
+// See for more information:
+// https://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/endpoints?view=aspnetcore-8.0
+//
+// Set to null to not set the setting.  This may be useful if you want to use Environment
+// Variables or a JSON file instead to set this setting.
+this.Web.AspNetCoreUrls = ["http://localhost:9253" ];
+
 // If set to true, if the requested URL that contains "//" this will
 // rewrite the URL so each "//" becomes "/" instead.
 //
