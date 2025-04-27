@@ -17,79 +17,76 @@
 //
 
 using System.Net;
-using Jaller.Core.Configuration;
-using Jaller.Standard.Logging;
 
 namespace Jaller.Tests.System;
 
 /// <summary>
 /// Tests to ensure we can query all the about pages.
 /// </summary>
-//[TestClass]
-//[DoNotParallelize]
+[TestClass]
+[DoNotParallelize]
 public sealed class AboutTests
 {
     // ---------------- Fields ----------------
 
-    private TestJallerServer? server;
-
-    private Task? runTask;
-
-    private static HttpClient? client;
+    private static JallerTestHarness? harness;
 
     // ---------------- Setup / Teardown ----------------
 
+    // No shared state between these tests; they're all read-only tests anyways.
+    // It is safe to use fixture-level stuff.
+
     [ClassInitialize]
-    public static void FixtureSetup( TestContext context )
+    public static void TestFixtureSetup( TestContext context )
     {
-        client = new HttpClient();
+        harness = new JallerTestHarness( new StandardTestConfig( typeof( AboutTests ).Name, 7000 ) );
+        harness.DoTestSetup();
     }
 
     [ClassCleanup]
-    public static void FixtureTeardown()
+    public static void TestFixtureTearDown()
     {
-        client?.Dispose();
+        harness?.DoTestTeardown();
     }
 
     [TestInitialize]
     public void TestSetup()
     {
-        var config = new JallerConfig
-        {
-        }.UseInMemoryDatabase();
-        config.Logging.ConsoleLogLevel = JallerLogLevel.Verbose;
-        config.Web.AspNetCoreUrls = ["http://localhost:5000"];
-
-        this.server = new TestJallerServer( config );
-        this.runTask = this.server.RunAsync();
     }
 
     [TestCleanup]
     public void TestTeardown()
     {
-        this.server?.Stop();
-        this.runTask?.Wait();
-        this.server?.Dispose();
     }
 
     // ---------------- Properties ----------------
 
-    public static HttpClient Client
+    public static JallerTestHarness Harness
     {
         get
         {
-            Assert.IsNotNull( client );
-            return client;
+            Assert.IsNotNull( harness );
+            return harness;
         }
     }
 
     // ---------------- Tests ----------------
 
     [TestMethod]
+    public void TestIndex()
+    {
+        // Act
+        HttpResponseMessage message = Harness.Client.GetAsync( "/About/" ).Result;
+
+        // Check
+        Assert.AreEqual( HttpStatusCode.OK, message.StatusCode );
+    }
+
+    [TestMethod]
     public void TestLicense()
     {
         // Act
-        HttpResponseMessage message = Client.GetAsync( "http://localhost:5000/About/License" ).Result;
+        HttpResponseMessage message = Harness.Client.GetAsync( "/About/License" ).Result;
 
         // Check
         Assert.AreEqual( HttpStatusCode.OK, message.StatusCode );
@@ -99,7 +96,7 @@ public sealed class AboutTests
     public void TestCredits()
     {
         // Act
-        HttpResponseMessage message = Client.GetAsync( "http://localhost:5000/About/Credits" ).Result;
+        HttpResponseMessage message = Harness.Client.GetAsync( "/About/Credits" ).Result;
 
         // Check
         Assert.AreEqual( HttpStatusCode.OK, message.StatusCode );
