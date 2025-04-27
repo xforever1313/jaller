@@ -62,4 +62,18 @@ public interface IJallerWebConfig
     /// rewrite the URL so each "//" becomes "/" instead.
     /// </summary>
     bool RewriteDoubleSlashes { get; }
+
+    /// <summary>
+    /// The base path at which the application runs.
+    /// It is where the runtime looks for the executables and libraries.
+    /// 
+    /// Leave null to use the default location.
+    /// </summary>
+    string? ContentRoot { get; }
+
+    /// <summary>
+    /// Where the static files are located.  Set to null to use the ASP.NET Core
+    /// default location.
+    /// </summary>
+    string? WebRoot { get; }
 }

@@ -31,4 +31,8 @@ public sealed record class JallerWebConfig : IJallerWebConfig
     public bool AllowPortsInUrl { get; set; } = false;
 
     public bool RewriteDoubleSlashes { get; set; } = false;
+
+    public string? ContentRoot { get; set; } = null;
+
+    public string? WebRoot { get; set; } = null;
 }

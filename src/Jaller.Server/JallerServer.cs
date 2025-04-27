@@ -60,10 +60,29 @@ public class JallerServer : IDisposable
 
     public void Run( string[] args )
     {
-        var builder = WebApplication.CreateBuilder( args );
+        try
+        {
+            RunInternal( args );
+        }
+        catch( Exception e )
+        {
+            ExceptionCaught( e );
+            throw;
+        }
+    }
 
+    public void RunInternal( string[] args )
+    {
         using var core = new JallerCore( config, new JallerLogger( Log ) );
         core.Init();
+
+        var webOptions = new WebApplicationOptions
+        {
+            Args = args,
+            ContentRootPath = config.Web.ContentRoot,
+            WebRootPath = config.Web.WebRoot
+        };
+        WebApplicationBuilder builder = WebApplication.CreateBuilder( webOptions );
 
         // Add services to the container.
         builder.Services.AddUserManager( core );
@@ -184,8 +203,10 @@ public class JallerServer : IDisposable
 
         if( this.waitAction is not null )
         {
+            Task runTask = app.RunAsync();
             this.waitAction.Invoke();
             app.StopAsync().Wait();
+            runTask.Wait();
         }
         else
         {
@@ -204,6 +225,10 @@ public class JallerServer : IDisposable
     }
 
     protected virtual void SetupCompleted()
+    {
+    }
+
+    protected virtual void ExceptionCaught( Exception e )
     {
     }
 

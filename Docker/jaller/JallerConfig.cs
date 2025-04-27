@@ -250,3 +250,16 @@ this.Web.RewriteDoubleSlashes = false;
 // Set to null to have no restrictions.  An empty array means the Admin
 // interface will simply not work.
 this.Web.AllowedAdminHosts = ["localhost"];
+
+// The base path at which the application runs.
+// It is where the runtime looks for the executables and libraries.
+// 
+// Leave null to use the default location.  Unless you know what you're
+// doing, you should probably leave this null.
+this.Web.ContentRoot = null;
+
+// Where the static files are located.  Set to null to use the ASP.NET Core
+// default location.  For the most part, this should be left null
+// unless you know what you're doing and moved the static files
+// somewhere for some reason.
+this.Web.WebRoot = null;

@@ -96,7 +96,6 @@ namespace Jaller.Server
             return 0;
         }
 
-
         private static IJallerConfig? GetConfig( ArgumentParser options, out int? exitCode )
         {
             FileInfo? configFile = options.GetConfigFilePath();
