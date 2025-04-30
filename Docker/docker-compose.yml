@@ -1,6 +1,5 @@
-version: '3.9'
 services:
-rau:
+  jaller:
     container_name: jaller
     build:
       context: ./jaller
@@ -18,7 +17,7 @@ rau:
       - TZ=America/New_York
 
       # You can add any additional Environment Variables you want here.  You should be able
-      # to get access to them in your RauConfig.cs file by invoking C#'s
+      # to get access to them in your JallerConfig.cs file by invoking C#'s
       # Environment.GetEnvironmentVariable() method. This way you can have all of your
       # variables defined all in one spot instead of in multiple files.
     restart: always
