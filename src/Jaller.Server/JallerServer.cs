@@ -71,7 +71,7 @@ public class JallerServer : IDisposable
         }
     }
 
-    public void RunInternal( string[] args )
+    private void RunInternal( string[] args )
     {
         using var core = new JallerCore( config, new JallerLogger( Log ) );
         core.Init();

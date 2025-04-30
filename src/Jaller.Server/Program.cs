@@ -121,7 +121,7 @@ namespace Jaller.Server
                 if( configFile.Exists == false )
                 {
                     WriteDefaultConfig( configFile );
-                    Console.WriteLine( "No configuration file has been specifed, and a default one does not exist." );
+                    Console.WriteLine( "No configuration file has been specified, and a default one does not exist." );
                     Console.WriteLine( $"A default configuration file has been created at: {configFile.FullName}" );
                     Console.WriteLine( "Please fill out the configuration file, and re-run this program." );
                     Console.WriteLine();

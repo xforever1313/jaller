@@ -105,6 +105,10 @@
             @await RenderSectionAsync( "beforemain", required: false )
             
             <!-- Main Content -->
+            <div class="alert alert-warning">
+                <p><strong>WARNING!</strong>  This software is should be considered alpha-quality.</p>
+                <p>There are bugs and unfinished features.</p>
+            </div>
             @RenderBody()
         </div>
         <footer class="w3-container w3-blue-grey">
