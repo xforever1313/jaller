@@ -25,5 +25,5 @@ internal static class VersionInfo
     /// Needs to be there and not in the .csproj since Blazor WASM
     /// doesn't seem to do reflection well.
     /// </summary>
-    internal const string Version = "1.0.0";
+    internal const string Version = "0.1.0";
 }
