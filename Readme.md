@@ -30,10 +30,11 @@ First, you need to decide what the scope of your Jaller node will be.  Do you wa
 
 ### Installing Jaller
 
-TODO.
+Jaller is under active development.  There is no public release at the moment.
+You can compile from source and run it that way, but bare in mind that this is currently pre-alpha quality software.
 
 ## Name Meaning
 
-Jaller's name is inspired by a Lefo Bionicle character, [Jaller](https://bionicle.fandom.com/wiki/Jaller).  Jaller was the guard captain of his in-universe village, Ta-Koro.  This software aims to be a guard for a user's IPFS gateway, deciding which files can be downloaded by it.
+Jaller's name is inspired by a Lego Bionicle character, [Jaller](https://bionicle.fandom.com/wiki/Jaller).  Jaller was the guard captain of his in-universe village, Ta-Koro.  This software aims to be a guard for a user's IPFS gateway, deciding which files can be downloaded by it.
 
 This software is not associated with nor endorsed by Lego.  Just created by one of their fans.
