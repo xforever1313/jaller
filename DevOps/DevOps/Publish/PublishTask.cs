@@ -162,7 +162,7 @@ namespace DevOps.Publish
                 Configuration = "Release",
                 OutputDirectory = binFolder.ToString(),
                 MSBuildSettings = context.GetBuildSettings(),
-                PublishReadyToRun = true,
+                PublishReadyToRun = false,
                 PublishReadyToRunShowWarnings = true,
                 SelfContained = false,
                 Runtime = this.Rid
