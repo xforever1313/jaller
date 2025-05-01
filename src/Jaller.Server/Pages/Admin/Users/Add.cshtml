@@ -104,19 +104,19 @@
                         <div class="panel-body">
                             <p class="checkbox">
                                 <label for="isEditorCheckBox">
-                                    <input id="isEditorCheckBox" type="checkbox" name="@nameof( this.Model.IsEditor )" />
+                                    <input id="isEditorCheckBox" type="checkbox" asp-for="IsEditor" />
                                     Editor
                                 </label>
                             </p>
                             <p class="checkbox">
                                 <label for="isUploaderCheckBox">
-                                    <input id="isUploaderCheckBox" type="checkbox" name="@nameof( this.Model.IsUploader )" />
+                                    <input id="isUploaderCheckBox" type="checkbox" asp-for="IsUploader" />
                                     Uploader
                                 </label>
                             </p>
                             <p class="checkbox">
                                 <label for="isAdminCheckBox">
-                                    <input id="isAdminCheckBox" type="checkbox" name="@nameof( this.Model.IsAdmin )" />
+                                    <input id="isAdminCheckBox" type="checkbox" asp-for="IsAdmin" />
                                     Administrator
                                 </label>
                             </p>
