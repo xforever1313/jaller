@@ -164,7 +164,6 @@ namespace DevOps.Publish
                 MSBuildSettings = context.GetBuildSettings(),
                 PublishReadyToRun = false,
                 PublishReadyToRunShowWarnings = true,
-                SelfContained = false,
                 Runtime = this.Rid
             };
 
