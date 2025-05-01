@@ -36,7 +36,7 @@ namespace DevOps
             this.RepoRoot = context.Environment.WorkingDirectory;
             this.SrcDir = this.RepoRoot.Combine( "src" );
             this.Solution = this.SrcDir.CombineWithFilePath( "Jaller.sln" );
-            this.ServiceProject = this.SrcDir.CombineWithFilePath( "Jaller/Jaller.csproj" );
+            this.ServiceProject = this.SrcDir.CombineWithFilePath( "Jaller.Server/Jaller.Server.csproj" );
             this.DistFolder = this.RepoRoot.Combine( "dist" );
 
             this.LooseFilesDistFolder = this.DistFolder.Combine( "files" );
