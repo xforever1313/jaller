@@ -49,14 +49,14 @@ public sealed class IpfsController : ControllerBase
         Cid? realCid = Cid.TryParse( cid );
         if( realCid is null )
         {
-            this.Response.ContentType = "plain/text";
+            this.Response.ContentType = "text/plain";
             return BadRequest( "Invalid or unsupported CID" );
         }
 
         JallerFile? file = await Getfile( realCid );
         if( file is null )
         {
-            this.Response.ContentType = "plain/text";
+            this.Response.ContentType = "text/plain";
             return NotFound( "Can not find file with given CID.  Either it does not exist, or this server does not allow one to download it." );
         }
 
