@@ -46,10 +46,23 @@ public sealed class BulkController : ControllerBase
     // ---------------- Methods ----------------
 
     [HttpGet( "jaller.xml" )]
-    public async Task<IActionResult> DownloadXml()
+    public async Task<IActionResult> DownloadXml( [FromQuery] bool? includePrivate )
     {
+        MetadataPolicy privacyType = MetadataPolicy.Public;
+        if( includePrivate == true )
+        {
+            if( this.User.IsUserApproved() )
+            {
+                privacyType = MetadataPolicy.Private;
+            }
+            else
+            {
+                return Forbid( "User must be logged-in in order to access private metadata" );
+            }
+        }
+
         XDocument doc = await Task.Run(
-            () => this.core.BulkOperations.BulkGetAllMetaData( MetadataPolicy.Public )
+            () => this.core.BulkOperations.BulkGetAllMetaData( privacyType )
         );
 
         return new ContentResult
@@ -61,10 +74,23 @@ public sealed class BulkController : ControllerBase
     }
 
     [HttpGet( "jaller.csv" )]
-    public async Task<IActionResult> DownloadCsv()
+    public async Task<IActionResult> DownloadCsv( [FromQuery] bool? includePrivate )
     {
+        MetadataPolicy privacyType = MetadataPolicy.Public;
+        if( includePrivate == true )
+        {
+            if( this.User.IsUserApproved() )
+            {
+                privacyType = MetadataPolicy.Private;
+            }
+            else
+            {
+                return Forbid( "User must be logged-in in order to access private metadata" );
+            }
+        }
+
         string csv = await Task.Run(
-            () => this.core.BulkOperations.GetAllFileMetadataAsCsv( MetadataPolicy.Public )
+            () => this.core.BulkOperations.GetAllFileMetadataAsCsv( privacyType )
         );
 
         return new ContentResult
@@ -81,6 +107,11 @@ public sealed class BulkController : ControllerBase
         if( "POST".EqualsIgnoreCase( this.Request.Method ) == false )
         {
             return BadRequest( "This must be a POST request." );
+        }
+
+        if( this.User.CanUserAccessAdminPanel( this.core, this.Request ) == false )
+        {
+            return Forbid( "This operation can only be performed by admins." );
         }
 
         string? validationMessgae = model.TryValidate();

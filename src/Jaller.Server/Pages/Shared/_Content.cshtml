@@ -72,6 +72,19 @@
                 }
             </div>
         </div>
+        <div class="w3-dropdown-hover">
+            <button class="w3-button w3-padding-16">
+                Export <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="w3-dropdown-content w3-card-4 w3-bar-block">
+                <a href="/api/bulk/jaller.xml" target="_blank" class="w3-bar-item w3-button">
+                    <i class="fa-solid fa-file-export"></i> Export Metadata as XML
+                </a>
+                <a href="/api/bulk/jaller.csv" target="_blank" class="w3-bar-item w3-button">
+                    <i class="fa-solid fa-file-export"></i> Export Metadata as CSV
+                </a>
+            </div>
+        </div>
         @if( Model.AllowAdminAccess() )
         {
             <div class="w3-dropdown-hover">
