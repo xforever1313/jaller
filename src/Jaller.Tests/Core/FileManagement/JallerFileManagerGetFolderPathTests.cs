@@ -80,7 +80,7 @@ public sealed class JallerFileManagerGetFolderPathTests
     public void CidDoesntExistTest()
     {
         // Act
-        IReadOnlyList<JallerFolder>? folderPath = this.Core.Files.GetFolderPath(
+        IReadOnlyList<JallerFolder>? folderPath = this.Core.Files.TryGetFolderPath(
             "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
             MetadataPolicy.Public
         );
@@ -105,7 +105,7 @@ public sealed class JallerFileManagerGetFolderPathTests
         };
 
         // Act
-        IReadOnlyList<JallerFolder>? folderPath = this.Core.Files.GetFolderPath( file, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath = this.Core.Files.TryGetFolderPath( file, MetadataPolicy.Public );
 
         // Check
         Assert.IsNull( folderPath );
@@ -127,7 +127,7 @@ public sealed class JallerFileManagerGetFolderPathTests
         this.Core.Files.ConfigureFile( file );
 
         // Act
-        IReadOnlyList<JallerFolder>? folderPath = this.Core.Files.GetFolderPath( file, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath = this.Core.Files.TryGetFolderPath( file, MetadataPolicy.Public );
 
         // Check
         Assert.IsNotNull( folderPath );
@@ -162,7 +162,7 @@ public sealed class JallerFileManagerGetFolderPathTests
         this.Core.Files.ConfigureFile( file );
 
         // Act
-        IReadOnlyList<JallerFolder>? folderPath = this.Core.Folders.GetFolderPath( newFolder, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath = this.Core.Folders.TryGetFolderPath( newFolder, MetadataPolicy.Public );
 
         // Check
         Assert.IsNotNull( folderPath );
@@ -220,7 +220,7 @@ public sealed class JallerFileManagerGetFolderPathTests
         this.Core.Files.ConfigureFile( file );
 
         // Act
-        IReadOnlyList<JallerFolder>? folderPath3 = this.Core.Files.GetFolderPath( file, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath3 = this.Core.Files.TryGetFolderPath( file, MetadataPolicy.Public );
 
         // Check
         Assert.IsNotNull( folderPath3 );

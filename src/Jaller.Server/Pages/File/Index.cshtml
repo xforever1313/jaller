@@ -46,6 +46,8 @@ else
     ViewData["Description"] = this.Model.JallerFile.Description.NormalizeWhiteSpace();
     string mimeType = this.Model.JallerFile.GetMimeType();
 
+    <partial name="_FolderPath" model="this.Model.FolderPath" />
+
     <div class="row">
         <div class="col-md-12">
             <p><strong>CID V0:</strong> @( this.Model.CIDV0 ?? "Unknown" )</p>

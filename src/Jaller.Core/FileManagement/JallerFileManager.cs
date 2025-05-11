@@ -273,7 +273,7 @@ internal sealed class JallerFileManager : IJallerFileManager
         this.db.Commit();
     }
 
-    public IReadOnlyList<JallerFolder>? GetFolderPath( string fileCid, MetadataPolicy visibility )
+    public IReadOnlyList<JallerFolder>? TryGetFolderPath( string fileCid, MetadataPolicy visibility )
     {
         JallerFile? file = TryGetFile( fileCid );
         if( file is null )
@@ -287,6 +287,6 @@ internal sealed class JallerFileManager : IJallerFileManager
             return new List<JallerFolder>().AsReadOnly();
         }
 
-        return this.core.Folders.GetFolderPath( file.ParentFolder, visibility );
+        return this.core.Folders.TryGetFolderPath( file.ParentFolder, visibility );
     }
 }

@@ -42,6 +42,8 @@ public sealed class IndexModel : PageModel
 
     public JallerFolder? JallerFolder { get; private set; }
 
+    public IReadOnlyList<JallerFolder>? FolderPath { get; private set; }
+
     public FolderContents? FolderContents { get; private set; }
 
     public string? GetRequestErrorMessage { get; private set; }
@@ -50,6 +52,9 @@ public sealed class IndexModel : PageModel
 
     public async Task<IActionResult> OnGetAsync( int? id )
     {
+        // TODO: Pass in proper policy.
+        const MetadataPolicy visibility = MetadataPolicy.Public;
+
         // If no ID is specified, assume root directory.
         id = id ?? 0;
 
@@ -64,10 +69,21 @@ public sealed class IndexModel : PageModel
                 Name = "Root",
                 ParentFolder = null
             };
+
+            this.FolderPath = new List<JallerFolder>().AsReadOnly();
         }
         else
         {
-            this.JallerFolder = await Task.Run( () => this.core.Folders.TryGetFolder( id.Value ) );
+            // TODO: Pass in proper policy.
+            this.FolderPath = await Task.Run( () => this.core.Folders.TryGetFolderPath( id.Value, visibility ) );
+            if( this.FolderPath is null )
+            {
+                this.JallerFolder = null;
+            }
+            else
+            {
+                this.JallerFolder = this.FolderPath.LastOrDefault();
+            }
         }
         
         if( this.JallerFolder is null )
@@ -79,11 +95,12 @@ public sealed class IndexModel : PageModel
 
         if( id == 0 )
         {
-            this.FolderContents = await Task.Run( () => this.core.Folders.GetRootFolder( MetadataPolicy.Public ) );
+            // TODO: Pass in proper policy.
+            this.FolderContents = await Task.Run( () => this.core.Folders.GetRootFolder( visibility ) );
         }
         else
         {
-            this.FolderContents = await Task.Run( () => this.core.Folders.TryGetFolderContents( id.Value, MetadataPolicy.Public ) );
+            this.FolderContents = await Task.Run( () => this.core.Folders.TryGetFolderContents( id.Value, visibility ) );
         }
 
         return Page();

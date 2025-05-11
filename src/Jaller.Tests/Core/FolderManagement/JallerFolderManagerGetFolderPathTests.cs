@@ -80,7 +80,7 @@ public sealed class JallerFolderManagerGetFolderPathTests
     public void NullRootFolderIdTest()
     {
         // Act
-        IReadOnlyList<JallerFolder>? folderPath = this.Core.Folders.GetFolderPath( null, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath = this.Core.Folders.TryGetFolderPath( null, MetadataPolicy.Public );
 
         // Check
         Assert.IsNotNull( folderPath );
@@ -94,7 +94,7 @@ public sealed class JallerFolderManagerGetFolderPathTests
     public void NullRootFolderTest()
     {
         // Act
-        IReadOnlyList<JallerFolder>? folderPath = IFolderManagerExtensions.GetFolderPath(
+        IReadOnlyList<JallerFolder>? folderPath = IFolderManagerExtensions.TryGetFolderPath(
             this.Core.Folders,
             null,
             MetadataPolicy.Public
@@ -112,7 +112,7 @@ public sealed class JallerFolderManagerGetFolderPathTests
     public void ZeroRootFolderTest()
     {
         // Act
-        IReadOnlyList<JallerFolder>? folderPath = this.Core.Folders.GetFolderPath( null, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath = this.Core.Folders.TryGetFolderPath( null, MetadataPolicy.Public );
 
         // Check
         Assert.IsNotNull( folderPath );
@@ -126,7 +126,7 @@ public sealed class JallerFolderManagerGetFolderPathTests
     public void FolderDoesNotExistTest()
     {
         // Act
-        IReadOnlyList<JallerFolder>? folderPath = this.Core.Folders.GetFolderPath( 1, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath = this.Core.Folders.TryGetFolderPath( 1, MetadataPolicy.Public );
 
         // Check
         Assert.IsNull( folderPath );
@@ -152,7 +152,7 @@ public sealed class JallerFolderManagerGetFolderPathTests
         };
 
         // Act
-        IReadOnlyList<JallerFolder>? folderPath = this.Core.Folders.GetFolderPath( newFolder, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath = this.Core.Folders.TryGetFolderPath( newFolder, MetadataPolicy.Public );
 
         // Check
         Assert.IsNotNull( folderPath );
@@ -190,8 +190,8 @@ public sealed class JallerFolderManagerGetFolderPathTests
         };
 
         // Act
-        IReadOnlyList<JallerFolder>? folderPath1 = this.Core.Folders.GetFolderPath( newFolder1, MetadataPolicy.Public );
-        IReadOnlyList<JallerFolder>? folderPath2 = this.Core.Folders.GetFolderPath( newFolder2, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath1 = this.Core.Folders.TryGetFolderPath( newFolder1, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath2 = this.Core.Folders.TryGetFolderPath( newFolder2, MetadataPolicy.Public );
 
         // Check
         Assert.IsNotNull( folderPath1 );
@@ -245,9 +245,9 @@ public sealed class JallerFolderManagerGetFolderPathTests
         };
 
         // Act
-        IReadOnlyList<JallerFolder>? folderPath1 = this.Core.Folders.GetFolderPath( newFolder1, MetadataPolicy.Public );
-        IReadOnlyList<JallerFolder>? folderPath2 = this.Core.Folders.GetFolderPath( newFolder2, MetadataPolicy.Public );
-        IReadOnlyList<JallerFolder>? folderPath3 = this.Core.Folders.GetFolderPath( newFolder3, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath1 = this.Core.Folders.TryGetFolderPath( newFolder1, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath2 = this.Core.Folders.TryGetFolderPath( newFolder2, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath3 = this.Core.Folders.TryGetFolderPath( newFolder3, MetadataPolicy.Public );
 
         // Check
         Assert.IsNotNull( folderPath1 );
@@ -299,8 +299,8 @@ public sealed class JallerFolderManagerGetFolderPathTests
         };
 
         // Act
-        IReadOnlyList<JallerFolder>? folderPath1 = this.Core.Folders.GetFolderPath( newFolder1, MetadataPolicy.Public );
-        IReadOnlyList<JallerFolder>? folderPath2 = this.Core.Folders.GetFolderPath( newFolder2, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath1 = this.Core.Folders.TryGetFolderPath( newFolder1, MetadataPolicy.Public );
+        IReadOnlyList<JallerFolder>? folderPath2 = this.Core.Folders.TryGetFolderPath( newFolder2, MetadataPolicy.Public );
 
         // Check
         Assert.IsNotNull( folderPath1 );

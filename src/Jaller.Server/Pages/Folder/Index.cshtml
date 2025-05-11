@@ -44,35 +44,7 @@ else
 {
     ViewData["Title"] = $"Folder: {this.Model.JallerFolder.Name}";
 
-    if( this.Model.JallerFolder.Id == 0 )
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <a href="/">
-                        <i class="fa fa-home"></i> Go Home
-                    </a>
-                </p>
-            </div>
-        </div>
-    }
-    else if( this.Model.JallerFolder.Id != 0 )
-    {
-        // If we are not already the root folder, we can add a button to go up one directory.
-        // If the parent directory is the root folder, then we can point it to the root
-        // directory by setting the parent ID to 0.
-        int parentId = this.Model.JallerFolder.ParentFolder ?? 0;
-
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <a href="/Folder?id=@parentId">
-                        <i class="fa-regular fa-square-caret-up"></i> Go to parent folder...
-                    </a>
-                </p>
-            </div>
-        </div>
-    }
+    <partial name="_FolderPath" model="this.Model.FolderPath" />
 
     if( this.Model.FolderContents.IsNullOrEmpty() )
     {

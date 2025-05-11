@@ -21,6 +21,7 @@ using Jaller.Core;
 using Jaller.Core.FileManagement;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
+using Jaller.Standard.FolderManagement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -55,6 +56,8 @@ public sealed class IndexModel : PageModel
 
     public JallerFile? JallerFile { get; private set; }
 
+    public IReadOnlyList<JallerFolder>? FolderPath { get; private set; }
+
     public string? CIDV0 { get; private set; }
 
     public string? ErrorMessage { get; private set; }
@@ -69,6 +72,9 @@ public sealed class IndexModel : PageModel
 
     public async Task<IActionResult> OnGet( string? cid )
     {
+        // TODO: Make proper visibility
+        const MetadataPolicy visibility = MetadataPolicy.Public;
+
         if( cid is null )
         {
             this.ErrorMessage = "No CID specified.  Please include a CID at the end of the URL.";
@@ -97,6 +103,7 @@ public sealed class IndexModel : PageModel
 
         string mimeType = this.JallerFile.GetMimeType();
 
+        // TODO: Need to handle private downloads.
         if( this.JallerFile.DownloadablePolicy == DownloadPolicy.Public )
         {
             if( renderableDocumentType.Contains( mimeType ) )
@@ -108,6 +115,8 @@ public sealed class IndexModel : PageModel
                 this.PreviewDocumentType = mimeType;
             }
         }
+
+        this.FolderPath = await Task.Run( () => this.core.Files.TryGetFolderPath( this.JallerFile, visibility ) );
 
         return Page();
     }

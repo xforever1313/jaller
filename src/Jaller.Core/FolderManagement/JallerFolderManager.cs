@@ -430,7 +430,7 @@ internal sealed class JallerFolderManager : IJallerFolderManager
         };
     }
 
-    public IReadOnlyList<JallerFolder>? GetFolderPath( int? folderId, MetadataPolicy visiblity )
+    public IReadOnlyList<JallerFolder>? TryGetFolderPath( int? folderId, MetadataPolicy visiblity )
     {
         var list = new List<JallerFolder>();
 

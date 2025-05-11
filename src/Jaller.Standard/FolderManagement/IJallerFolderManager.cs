@@ -92,7 +92,7 @@ public interface IJallerFolderManager
     /// 
     /// Null if the given folder is not found.
     /// </returns>
-    IReadOnlyList<JallerFolder>? GetFolderPath( int? folderId, MetadataPolicy visibility );
+    IReadOnlyList<JallerFolder>? TryGetFolderPath( int? folderId, MetadataPolicy visibility );
 }
 
 public static class IFolderManagerExtensions
@@ -132,8 +132,8 @@ public static class IFolderManagerExtensions
     /// 
     /// Null if the given folder is not found.
     /// </returns>
-    public static IReadOnlyList<JallerFolder>? GetFolderPath( this IJallerFolderManager mgr, JallerFolder? folder, MetadataPolicy visiblity )
+    public static IReadOnlyList<JallerFolder>? TryGetFolderPath( this IJallerFolderManager mgr, JallerFolder? folder, MetadataPolicy visiblity )
     {
-        return mgr.GetFolderPath( folder?.Id, visiblity );
+        return mgr.TryGetFolderPath( folder?.Id, visiblity );
     }
 }

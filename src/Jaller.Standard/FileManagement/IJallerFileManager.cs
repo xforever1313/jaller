@@ -61,7 +61,7 @@ public interface IJallerFileManager
     /// 
     /// Null if the given file is not found.
     /// </returns>
-    IReadOnlyList<JallerFolder>? GetFolderPath( string fileCid, MetadataPolicy visibility );
+    IReadOnlyList<JallerFolder>? TryGetFolderPath( string fileCid, MetadataPolicy visibility );
 }
 
 public static class IJallerFileManagerExtensions
@@ -91,8 +91,8 @@ public static class IJallerFileManagerExtensions
     /// 
     /// Null if the given file is not found.
     /// </returns>
-    public static IReadOnlyList<JallerFolder>? GetFolderPath( this IJallerFileManager files, JallerFile file, MetadataPolicy visibility )
+    public static IReadOnlyList<JallerFolder>? TryGetFolderPath( this IJallerFileManager files, JallerFile file, MetadataPolicy visibility )
     {
-        return files.GetFolderPath( file.CidV1, visibility );
+        return files.TryGetFolderPath( file.CidV1, visibility );
     }
 }
