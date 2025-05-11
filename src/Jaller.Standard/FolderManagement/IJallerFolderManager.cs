@@ -74,6 +74,25 @@ public interface IJallerFolderManager
     /// Deletes the given folder.
     /// </summary>
     void DeleteFolder( int folderId );
+
+    /// <summary>
+    /// Gets the path of folders to the given folder ID.
+    /// </summary>
+    /// <remarks>
+    /// An exception is thrown if while building the path, a folder is found
+    /// between the passed in folder and the root no longer exists.
+    /// </remarks>
+    /// <param name="folderId">The folder id to get the path of.</param>
+    /// <returns>
+    /// A list of folders that represent the path to the given folder.
+    /// The 0th index in the list represents the folder closest to the root folder.
+    /// The last element in the list is the passed in folder.
+    ///
+    /// Returns an empty list if null is passed into represent the root folder.
+    /// 
+    /// Null if the given folder is not found.
+    /// </returns>
+    IReadOnlyList<JallerFolder>? GetFolderPath( int? folderId, MetadataPolicy visibility );
 }
 
 public static class IFolderManagerExtensions
@@ -94,5 +113,27 @@ public static class IFolderManagerExtensions
     public static void DeleteFolder( this IJallerFolderManager mgr, JallerFolder folder )
     {
         mgr.DeleteFolder( folder.Id );
+    }
+
+    /// <summary>
+    /// Gets the path of folders to the given folder.
+    /// </summary>
+    /// <remarks>
+    /// An exception is thrown if while building the path, a folder is found
+    /// between the passed in folder and the root no longer exists.
+    /// </remarks>
+    /// <param name="folderId">The folder id to get the path of.</param>
+    /// <returns>
+    /// A list of folders that represent the path to the given folder.
+    /// The 0th index in the list represents the folder closest to the root folder.
+    /// The last element in the list is the passed in folder.
+    ///
+    /// Returns an empty list if null is passed into represent the root folder.
+    /// 
+    /// Null if the given folder is not found.
+    /// </returns>
+    public static IReadOnlyList<JallerFolder>? GetFolderPath( this IJallerFolderManager mgr, JallerFolder? folder, MetadataPolicy visiblity )
+    {
+        return mgr.GetFolderPath( folder?.Id, visiblity );
     }
 }

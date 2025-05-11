@@ -16,6 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Jaller.Standard.FolderManagement;
+
 namespace Jaller.Standard.FileManagement;
 
 public interface IJallerFileManager
@@ -41,6 +43,25 @@ public interface IJallerFileManager
     /// Deletes the file and its information.
     /// </summary>
     void DeleteFile( string fileCid );
+
+    /// <summary>
+    /// Gets the path of folders to the given file's CID.
+    /// </summary>
+    /// <remarks>
+    /// An exception is thrown if while building the path, a folder is found
+    /// between the passed in folder and the root no longer exists.
+    /// </remarks>
+    /// <param name="fileCid">The file id to get the path of.</param>
+    /// <returns>
+    /// A list of folders that represent the path to the given file.
+    /// The 0th index in the list represents the folder closest to the root folder.
+    /// The last element in the list is the folder that contains the CID.
+    ///
+    /// Returns an empty list if the file is in the root file.
+    /// 
+    /// Null if the given file is not found.
+    /// </returns>
+    IReadOnlyList<JallerFolder>? GetFolderPath( string fileCid, MetadataPolicy visibility );
 }
 
 public static class IJallerFileManagerExtensions
@@ -51,5 +72,27 @@ public static class IJallerFileManagerExtensions
     public static bool FileExists( this IJallerFileManager files, string cid )
     {
         return files.TryGetFile( cid ) is not null;
+    }
+
+    /// <summary>
+    /// Gets the path of folders to the given file's CID.
+    /// </summary>
+    /// <remarks>
+    /// An exception is thrown if while building the path, a folder is found
+    /// between the passed in folder and the root no longer exists.
+    /// </remarks>
+    /// <param name="file">The file to get the path of.</param>
+    /// <returns>
+    /// A list of folders that represent the path to the given file.
+    /// The 0th index in the list represents the folder closest to the root folder.
+    /// The last element in the list is the folder that contains the CID.
+    ///
+    /// Returns an empty list if the file is in the root file.
+    /// 
+    /// Null if the given file is not found.
+    /// </returns>
+    public static IReadOnlyList<JallerFolder>? GetFolderPath( this IJallerFileManager files, JallerFile file, MetadataPolicy visibility )
+    {
+        return files.GetFolderPath( file.CidV1, visibility );
     }
 }

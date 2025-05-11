@@ -429,4 +429,41 @@ internal sealed class JallerFolderManager : IJallerFolderManager
             Files = files
         };
     }
+
+    public IReadOnlyList<JallerFolder>? GetFolderPath( int? folderId, MetadataPolicy visiblity )
+    {
+        var list = new List<JallerFolder>();
+
+        folderId = folderId ?? 0;
+
+        if( folderId == 0 )
+        {
+            // Root folder, return an empty list to represent the root folder.
+            return list.AsReadOnly();
+        }
+
+        JallerFolder? folder = TryGetFolder( folderId.Value );
+        if( folder is null )
+        {
+            // Folder not found, return null.
+            return null;
+        }
+
+        list.Add( folder );
+
+        while( folder.ParentFolder is not null )
+        {
+            folder = TryGetFolder( folder.ParentFolder.Value );
+            if( folder is null )
+            {
+                throw new FolderNotFoundException(
+                    $"Could not find a folder as part of the path of folder ID {folderId}."
+                );
+            }
+
+            list.Insert( 0, folder );
+        }
+
+        return list.AsReadOnly();
+    }
 }

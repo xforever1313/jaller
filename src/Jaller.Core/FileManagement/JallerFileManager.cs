@@ -20,6 +20,7 @@ using Jaller.Core.Database;
 using Jaller.Core.Exceptions;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
+using Jaller.Standard.FolderManagement;
 
 namespace Jaller.Core.FileManagement;
 
@@ -270,5 +271,22 @@ internal sealed class JallerFileManager : IJallerFileManager
             throw;
         }
         this.db.Commit();
+    }
+
+    public IReadOnlyList<JallerFolder>? GetFolderPath( string fileCid, MetadataPolicy visibility )
+    {
+        JallerFile? file = TryGetFile( fileCid );
+        if( file is null )
+        {
+            return null;
+        }
+
+        if( file.ParentFolder is null )
+        {
+            // At the root, send back an empty list to represent this.
+            return new List<JallerFolder>().AsReadOnly();
+        }
+
+        return this.core.Folders.GetFolderPath( file.ParentFolder, visibility );
     }
 }
