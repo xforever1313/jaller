@@ -32,12 +32,14 @@ internal static class IpfsFileExtensions
         {
             CidV1 = file.Cid,
             Description = file.Description,
+            Details = file.Details,
             DownloadablePolicy = file.DownloadablePolicy,
             MetadataPrivacy = file.MetadataPrivacy,
             MimeType = file.MimeType,
             Name = file.FileName,
             ParentFolder = file.ParentFolder,
-            Tags = file.Tags
+            Tags = file.Tags,
+            Title = file.Title
         };
     }
 }

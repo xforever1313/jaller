@@ -20,6 +20,8 @@ namespace Jaller.Standard.FileManagement;
 
 public sealed record class JallerFile
 {
+    // ---------------- Properties ----------------
+
     /// <summary>
     /// The content ID (CID) of the file.
     /// This must be version 1 of IPFS's CID hashing protocol.
@@ -31,9 +33,26 @@ public sealed record class JallerFile
     /// </summary>
     public required int? ParentFolder { get; init; }
 
+    /// <summary>
+    /// File name
+    /// </summary>
     public required string Name { get; init; } = "Untitled";
 
+    /// <summary>
+    /// The title of the file.  This is different than the name.
+    /// If this is null, it falls back to <see cref="Name"/> .
+    /// </summary>
+    public string? Title { get; init; } = null;
+
+    /// <summary>
+    /// A one line sentence that describes what the file is.
+    /// </summary>
     public string? Description { get; init; } = null;
+
+    /// <summary>
+    /// Long details about the file.  Markdown is supported.
+    /// </summary>
+    public string? Details { get; init; } = null;
 
     /// <summary>
     /// Overloads the file name's mime type.  Set to null
@@ -50,4 +69,18 @@ public sealed record class JallerFile
     /// Set to null if no tags are associated with this file.
     /// </summary>
     public TagSet? Tags { get; init; }
+
+    // ---------------- Methods ----------------
+
+    public string GetTitle()
+    {
+        if( string.IsNullOrEmpty( this.Title ) )
+        {
+            return this.Name;
+        }
+        else
+        {
+            return this.Title;
+        }
+    }
 }

@@ -38,9 +38,19 @@ internal sealed record class IpfsFile
     public string FileName { get; init; } = "Untitled";
 
     /// <summary>
+    /// The title of the file.
+    /// </summary>
+    public string? Title { get; init; } = null;
+
+    /// <summary>
     /// Optional description of the file.
     /// </summary>
     public string? Description { get; init; } = null;
+
+    /// <summary>
+    /// Long details about the file.  Markdown is supported.
+    /// </summary>
+    public string? Details { get; init; } = null;
 
     /// <summary>
     /// Overload the mime type of the file.  If set to null,
