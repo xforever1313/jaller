@@ -42,7 +42,7 @@
 }
 else
 {
-    ViewData["Title"] = this.Model.JallerFile.Name;
+    ViewData["Title"] = this.Model.JallerFile.GetTitle();
     ViewData["Description"] = this.Model.JallerFile.Description.NormalizeWhiteSpace();
     string mimeType = this.Model.JallerFile.GetMimeType();
 
@@ -56,7 +56,7 @@ else
             {
                 <h3>Description</h3>
                 <div>
-                    @this.Html.Raw( MarkdownToHtmlConverter.Convert( this.Model.JallerFile.Description ) )
+                    @this.Model.JallerFile.Description
                 </div>
             }
 
@@ -104,6 +104,24 @@ else
                                 <p>Unable to display PDF file, try downloading it directly instead.</p>
                             </object>
                         }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <hr class="post-bottom-hr"/>
+
+    @if( string.IsNullOrWhiteSpace( this.Model.JallerFile.Details ) == false )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        File Details
+                    </div>
+                    <div class="panel-body">
+                        @this.Html.Raw( MarkdownToHtmlConverter.Convert( this.Model.JallerFile.Details ) )
                     </div>
                 </div>
             </div>
