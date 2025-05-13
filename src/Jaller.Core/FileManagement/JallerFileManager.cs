@@ -101,12 +101,14 @@ internal sealed class JallerFileManager : IJallerFileManager
             dbFile = dbFile with
             {
                 Description = file.Description,
+                Details = file.Details,
                 DownloadablePolicy = file.DownloadablePolicy,
                 MetadataPrivacy = file.MetadataPrivacy,
                 MimeType = file.MimeType,
                 FileName = file.Name,
                 ParentFolder = file.ParentFolder,
-                Tags = file.Tags
+                Tags = file.Tags,
+                Title = file.Title
             };
 
             JallerDirectory? oldParentDirectory = null;

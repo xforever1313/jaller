@@ -86,6 +86,13 @@ internal static class JallerFileExtensions
                     Description = childElement.Value,
                 };
             }
+            else if( "details".EqualsIgnoreCase( childName ) )
+            {
+                file = file with
+                {
+                    Details = childElement.Value
+                };
+            }
             else if( "downloadable".EqualsIgnoreCase( childName ) )
             {
                 file = file with
@@ -120,6 +127,13 @@ internal static class JallerFileExtensions
                     Tags = tags
                 };
             }
+            else if( "title".EqualsIgnoreCase( childName ) )
+            {
+                file = file with 
+                {
+                    Title = childElement.Value
+                };
+            }
         }
 
         return file;
@@ -131,9 +145,11 @@ internal static class JallerFileExtensions
         element.Add(
             new XElement( "cid", file.CidV1 ),
             new XElement( "description", file.Description ),
+            new XElement( "details", file.Details ),
             new XElement( "downloadable", file.DownloadablePolicy ),
             new XElement( "metadata", file.MetadataPrivacy ),
             new XElement( "mimetype", file.MimeType ),
+            new XElement( "title", file.Title ),
             new XAttribute( "name", file.Name )
             // Ignore directory ID; that's determined by the parent XML node.
         );

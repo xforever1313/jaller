@@ -130,8 +130,10 @@ namespace Jaller.Tests.Core.Bulk
                 CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
                 Name = "Theater Merit Badge Requirements.pdf",
                 Description = "Theater Merit Badge Requirements for Scouting America",
+                Details = "Requirements for the Theater Merit Badge",
                 ParentFolder = null,
-                Tags = new TagSet { "Scouting America", "BSA" }
+                Tags = new TagSet { "Scouting America", "BSA" },
+                Title = "Theater Merit Badge",
             };
             this.ExportCore.Files.ConfigureFile( file );
 
