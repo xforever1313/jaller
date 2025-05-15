@@ -20,6 +20,14 @@ namespace Jaller.Standard.FileManagement;
 
 public sealed record class JallerFile
 {
+    // ---------------- Fields ----------------
+
+    public static readonly string DefaultFilename = "Untitled";
+
+    public static readonly MetadataPolicy DefaultMetadataPolicy = MetadataPolicy.Private;
+
+    public static readonly DownloadPolicy DefaultDownloadablePolicy = DownloadPolicy.Private;
+
     // ---------------- Properties ----------------
 
     /// <summary>
@@ -60,9 +68,9 @@ public sealed record class JallerFile
     /// </summary>
     public string? MimeType { get; init; } = null;
 
-    public MetadataPolicy MetadataPrivacy { get; init; } = MetadataPolicy.Private;
+    public MetadataPolicy MetadataPrivacy { get; init; } = DefaultMetadataPolicy;
 
-    public DownloadPolicy DownloadablePolicy { get; init; } = DownloadPolicy.Private;
+    public DownloadPolicy DownloadablePolicy { get; init; } = DefaultDownloadablePolicy;
 
     /// <summary>
     /// Tags for this file, if any.

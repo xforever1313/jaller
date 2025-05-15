@@ -1,0 +1,173 @@
+@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+
+@page
+
+@model Jaller.Server.Pages.File.AddModel
+
+@if( string.IsNullOrWhiteSpace( this.Model.GetRequestErrorMessage ) == false )
+{
+    ViewData["Title"] = "Can not find parent folder";
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger">
+                @if( this.Model.GetRequestErrorMessage is null )
+                {
+                    <p>Unknown Error :(</p>
+                }
+                else
+                {
+                    <p>@this.Model.GetRequestErrorMessage</p>
+                }
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    @if( this.Model.InfoMessage is not null )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <ul>
+                        @foreach( string message in this.Model.InfoMessage.ReadLines() )
+                        {
+                            <li>@message</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if( this.Model.WarningMessage is not null )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning">
+                    <p>Warnings when trying to add file metadata:</p>
+                    <ul>
+                        @foreach( string message in this.Model.WarningMessage.ReadLines() )
+                        {
+                            <li>@message</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if( this.Model.ErrorMessage is not null )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    <p>Errors when adding file metadata:</p>
+                    <ul>
+                        @foreach( string message in this.Model.ErrorMessage.ReadLines() )
+                        {
+                            <li>@message</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+    string folderName = this.Model.ParentFolder?.Name ?? "Root";
+    ViewData["Title"] = $"Add file metadata to {folderName}";
+
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-group" method="post" enctype="multipart/form-data">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Add filemeta to @folderName</h3>
+                    </div>
+                    <div class="panel-body">
+                        <input type="hidden" name="@nameof( this.Model.ParentFolderId )" value="@(this.Model.ParentFolder?.Id ?? 0)" readonly/>
+                        <div>
+                            <p>
+                                <label for="cidLabel">CID</label>
+                            </p>
+                            <p>
+                                <input id="cidLabel" class="form-control" type="text" name="@nameof( this.Model.Cid )" value="" placeholder="Can be V0 or V1 CID." />
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                <label for="nameInput">File Name</label>
+                            </p>
+                            <p>
+                                <input id="nameInput" class="form-control" type="text" name="@nameof( this.Model.FileName )" value="" placeholder="Name of the file that appears on a filesystem." />
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                <label for="titleInput">Title</label>
+                            </p>
+                            <p>
+                                <input id="titleInput" class="form-control" type="text" name="@nameof( this.Model.Title )" value="" placeholder="Name that appears at the top of Jaller's file page." />
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                <label for="descriptionInput">Description</label>
+                            </p>
+                            <p>
+                                <input id="descriptionInput" class="form-control" type="text" name="@nameof( this.Model.Description )" value="" placeholder="One-sentence description of the file." />
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                <label for="detailsInput">Details (<a href="https://en.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener noreferrer nofollow">Markdown</a> Supported).</label>
+                            </p>
+                            <p>
+                                <input id="detailsInput" class="form-control" type="textarea" name="@nameof( this.Model.Details )" value="" />
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                <label for="mimeTypeInput">Override MimeType</label>
+                            </p>
+                            <p>
+                                <input id="mimeTypeInput" class="form-control" type="text" name="@nameof( this.Model.MimeType )" value="" placeholder="Leave blank to use the default mime type based on the file name." />
+                            </p>
+                        </div>
+                        <partial name="_MetadataPolicyDropDown" model="JallerFile.DefaultMetadataPolicy" />
+                        <partial name="_DownloadPolicyDropDown" model="JallerFile.DefaultDownloadablePolicy" />
+                        <div>
+                            <p>
+                                <label for="tagInput">Tags (space-separated)</label>
+                            </p>
+                            <p>
+                                <input id="tagInput" class="form-control" type="text" name="@nameof( this.Model.Tags )" value="" placeholder="Terms one would search for to find this file." />
+                            </p>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-primary" type="submit" id="uploadButton">Create Folder</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
