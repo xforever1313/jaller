@@ -1,4 +1,4 @@
-@*
+﻿@*
 //
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
@@ -20,11 +20,11 @@
 
 @page
 
-@model Jaller.Server.Pages.Folder.DeleteModel
+@model Jaller.Server.Pages.File.DeleteModel
 
-@if( this.Model.JallerFolder is null )
+@if( this.Model.JallerFile is null )
 {
-    ViewData["Title"] = "Can not find folder";
+    ViewData["Title"] = "Can not find file";
 
     <div class="row">
         <div class="col-md-12">
@@ -43,26 +43,27 @@
 }
 else
 {
-    const string warningHeader = "Warnings when trying to delete folder:";
-    const string errorHeader = "Errors when deleting folder:";
+    const string warningHeader = "Warnings when trying to delete file:";
+    const string errorHeader = "Errors when deleting file:";
 
     <partial name="_Alert" model="this.Model.ToAlertModel( warningHeading: warningHeader, errorHeading: errorHeader )" />
 
-    string folderName = this.Model.JallerFolder.Name;
-    ViewData["Title"] = $"Delete {folderName}";
+    string fileName = this.Model.JallerFile.Name;
+    ViewData["Title"] = $"Delete {fileName}";
 
     <div class="row">
         <div class="col-md-12">
             <form class="form-group" method="post" enctype="multipart/form-data">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3>Delete @folderName?</h3>
+                        <h3>Delete @fileName?</h3>
                     </div>
                     <div class="panel-body">
-                        <input type="hidden" name="@nameof( this.Model.FolderToDelete )" value="@this.Model.JallerFolder.Id" readonly />
-                        <p>This will delete <strong>all</strong> sub-folders and files that are contained within this folder.</p>
+                        <input type="hidden" name="@nameof( this.Model.FileToDelete )" value="@this.Model.JallerFile.CidV1" readonly />
+                        <p>This will delete the file's metadata from Jaller, making it not viewable or downloadable through Jaller.</p>
+                        <p>This will <strong>NOT</strong> delete the file from the backing IPFS node if it was uploaded to it.</p>
                         <p>If you are sure, hit the "Delete" button below.</p>
-                        <p>Otherwise, <a href="/Folder?id=@(this.Model.JallerFolder.Id)">click here</a> to go back to the folder's information page.</p>
+                        <p>Otherwise, <a href="/File?cid=@(this.Model.JallerFile.CidV1)">click here</a> to go back to the file's information page.</p>
                     </div>
                     <div class="panel-footer">
                         <button class="btn btn-danger" type="submit" id="uploadButton">Delete</button>

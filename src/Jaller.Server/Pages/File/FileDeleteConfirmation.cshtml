@@ -1,0 +1,50 @@
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+
+@page
+
+@model Jaller.Server.Pages.File.FileDeleteConfirmationModel
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @if( this.Model.DeletedFileCid is null )
+                {
+                    <p>
+                        File with invalid CID... you just went to this address directly, didn't you?
+                    </p>
+                }
+                else
+                {
+                    <p>
+                        File Metadata Deleted!  Its CID was @this.Model.DeletedFileCid.
+                    </p>
+                    <p>
+                        If the file was uploaded to your IPFS node, it is still there, but no longer able to be accessed through Jaller.
+                    </p>
+                }
+            </div>
+            <div class="panel-footer">
+                <a href="/"><i class="fa-solid fa-house"></i> Return Home</a>
+            </div>
+        </div>
+    </div>
+</div>

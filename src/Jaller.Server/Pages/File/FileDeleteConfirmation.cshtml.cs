@@ -22,9 +22,9 @@ using Jaller.Standard;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Jaller.Server.Pages.Folder;
+namespace Jaller.Server.Pages.File;
 
-public sealed class FolderDeleteConfirmationModel : PageModel
+public sealed class FileDeleteConfirmationModel : PageModel
 {
     // ---------------- Fields ----------------
 
@@ -32,25 +32,25 @@ public sealed class FolderDeleteConfirmationModel : PageModel
 
     // ---------------- Constructor ----------------
 
-    public FolderDeleteConfirmationModel( IJallerCore core )
+    public FileDeleteConfirmationModel( IJallerCore core )
     {
         this.core = core;
     }
 
     // ---------------- Methods ----------------
 
-    public int? DeletedFolderId { get; private set; }
+    public string? DeletedFileCid { get; private set; }
 
     // ---------------- Properties ----------------
 
-    public IActionResult OnGet( int? id )
+    public IActionResult OnGet( string? cid )
     {
         if( this.AllowMetadataEdit() == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }
 
-        this.DeletedFolderId = id;
+        this.DeletedFileCid = cid;
 
         return Page();
     }
