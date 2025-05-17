@@ -141,7 +141,8 @@ else
                                 <label for="detailsInput">Details (<a href="https://en.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener noreferrer nofollow">Markdown</a> Supported).</label>
                             </p>
                             <p>
-                                <input id="detailsInput" class="form-control" type="textarea" name="@nameof( this.Model.Details )" value="" />
+                                <textarea id="detailsInput" class="form-control" name="@nameof( this.Model.Details )" rows="10">
+                                </textarea>
                             </p>
                         </div>
                         <div>
@@ -164,7 +165,7 @@ else
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <button class="btn btn-primary" type="submit" id="uploadButton">Create Folder</button>
+                        <button class="btn btn-primary" type="submit" id="uploadButton">Add File Metadata</button>
                     </div>
                 </div>
             </form>

@@ -102,11 +102,15 @@ public sealed class IndexModel : PageModel
         this.CIDV0 = realCid.Version0Cid;
 
         string mimeType = this.JallerFile.GetMimeType();
+        string? mimeCategory = Path.GetDirectoryName( mimeType );
 
         // TODO: Need to handle private downloads.
         if( this.JallerFile.DownloadablePolicy == DownloadPolicy.Public )
         {
-            if( renderableDocumentType.Contains( mimeType ) )
+            if(
+                ( string.IsNullOrWhiteSpace( mimeCategory ) == false ) &&
+                renderableDocumentType.Contains( mimeCategory )
+            )
             {
                 this.PreviewDocumentType = Path.GetDirectoryName( mimeType );
             }

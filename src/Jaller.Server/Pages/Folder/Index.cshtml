@@ -106,28 +106,46 @@ else
             </div>
         }
 
-        @if( this.Model.AllowMetadataEdit() )
-        {
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3>Manage Folder</h3>
-                        </div>
-                        <div class="panel-body">
-                            <span>
-                                <a href="/Folder/Add?parentFolderId=@this.Model.JallerFolder.Id" class="btn btn-primary" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i> Create Sub-Folder</a>
-                            </span>
-                            <span>
-                                <a href="/Folder/Edit?id=@this.Model.JallerFolder.Id" class="btn btn-warning" title="Edit folder"><i class="fa-solid fa-gear"></i> Edit Folder</a>
-                            </span>
-                            <span>
-                                <a href="/Folder/Delete?id=@this.Model.JallerFolder.Id" class="btn btn-danger" title="Delete folder"><i class="fa-solid fa-folder-minus"></i> Delete Folder</a>
-                            </span>
-                        </div>
+    }
+
+    @if( this.Model.AllowMetadataEdit() )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Manage Files</h3>
+                    </div>
+                    <div class="panel-body">
+                        <span>
+                            <a href="/File/Add?parentFolderId=@this.Model.JallerFolder.Id" class="btn btn-primary" title="Add File Metadata"><i class="fa-solid fa-folder-plus"></i> Add File Metadata</a>
+                        </span>
+                        <span>
+                            <a href="/File/Upload?parentFolderId=@this.Model.JallerFolder.Id" class="btn btn-success" title="Upload File"><i class="fa-solid fa-upload"></i> Upload File</a>
+                        </span>
                     </div>
                 </div>
             </div>
-        }
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Manage Folder</h3>
+                    </div>
+                    <div class="panel-body">
+                        <span>
+                            <a href="/Folder/Add?parentFolderId=@this.Model.JallerFolder.Id" class="btn btn-primary" title="Create sub-folder"><i class="fa-solid fa-folder-plus"></i> Create Sub-Folder</a>
+                        </span>
+                        <span>
+                            <a href="/Folder/Edit?id=@this.Model.JallerFolder.Id" class="btn btn-warning" title="Edit folder"><i class="fa-solid fa-gear"></i> Edit Folder</a>
+                        </span>
+                        <span>
+                            <a href="/Folder/Delete?id=@this.Model.JallerFolder.Id" class="btn btn-danger" title="Delete folder"><i class="fa-solid fa-folder-minus"></i> Delete Folder</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 }

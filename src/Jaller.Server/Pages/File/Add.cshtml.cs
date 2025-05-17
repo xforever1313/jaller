@@ -194,6 +194,11 @@ public class AddModel : PageModel, IAlert, IJallerPermissions
             }
         }
 
+        if( string.IsNullOrWhiteSpace( this.MimeType ) )
+        {
+            this.MimeType = this.FileName.GetMimeType();
+        }
+
         var file = new JallerFile
         {
             CidV1 = cid.Version1Cid,
@@ -219,6 +224,6 @@ public class AddModel : PageModel, IAlert, IJallerPermissions
         }
 
         this.InfoMessage = $"File Metadata Added!";
-        return RedirectToPage( "/File", new { cid = file.CidV1 }  );
+        return RedirectToPage( "Index", new { cid = file.CidV1 }  );
     }
 }
