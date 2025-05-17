@@ -24,58 +24,59 @@ using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.File;
 
-public sealed class AddModel : FileAddEditModel
+public sealed class EditModel : FileAddEditModel
 {
     // ---------------- Constructor ----------------
 
-    public AddModel( IJallerCore core ) :
+    public EditModel( IJallerCore core ) :
         base( core )
     {
     }
 
     // ---------------- Properties ----------------
 
-    [BindNever]
-    public JallerFolder? ParentFolder { get; private set; }
-
     // -------- Messages --------
 
     /// <inheritdoc/>
-    [TempData( Key = "AddFileInfoMessage" )]
+    [TempData( Key = "EditFileInfoMessage" )]
     public override string? InfoMessage { get; set; }
 
     /// <inheritdoc/>
-    [TempData( Key = "AddFileWarningMessage" )]
+    [TempData( Key = "EditFileWarningMessage" )]
     public override string? WarningMessage { get; set; }
 
     /// <inheritdoc/>
-    [TempData( Key = "AddFileErrorMessage" )]
+    [TempData( Key = "EditFileErrorMessage" )]
     public override string? ErrorMessage { get; set; }
 
     // ---------------- Methods ----------------
 
-    public async Task<IActionResult> OnGetAsync( int? parentFolderId )
+    public async Task<IActionResult> OnGetAsync( string? cid )
     {
         if( this.AllowMetadataEdit() == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }
-
-        // If no parent folder is specified, assume the root directory.
-        // Also, if the id is 0, assume root directory.
-        if( parentFolderId is not null && ( parentFolderId.Value != 0 ) )
+        else if( string.IsNullOrWhiteSpace( cid ) )
         {
-            this.ParentFolder = await Task.Run( () => this.core.Folders.TryGetFolder( parentFolderId.Value ) );
-            if( this.ParentFolder is null )
-            {
-                this.GetRequestErrorMessage = $"Can not find parent folder with ID {parentFolderId}.";
-                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                return Page();
-            }
+            this.GetRequestErrorMessage = "CID not specified.";
+            this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return Page();
         }
+
+        JallerFile? file = await Task.Run( () => this.core.Files.TryGetFile( cid ) );
+        if( file is null )
+        {
+            this.GetRequestErrorMessage = "Could not find file with given CID.";
+            this.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            return Page();
+        }
+
+        FromJallerFile( file );
 
         return Page();
     }
@@ -107,7 +108,7 @@ public sealed class AddModel : FileAddEditModel
             return RedirectToPage();
         }
 
-        this.InfoMessage = $"File Metadata Added!";
-        return RedirectToPage( "Index", new { cid = file.CidV1 }  );
+        this.InfoMessage = $"File Metadata Edited!";
+        return RedirectToPage( "Index", new { cid = file.CidV1 } );
     }
 }

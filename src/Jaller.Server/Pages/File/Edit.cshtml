@@ -1,4 +1,4 @@
-@*
+﻿@*
 //
 // Jaller - An advanced IPFS Gateway
 // Copyright (C) 2025 Seth Hendrick
@@ -20,7 +20,7 @@
 
 @page
 
-@model Jaller.Server.Pages.File.AddModel
+@model Jaller.Server.Pages.File.EditModel
 
 @if( string.IsNullOrWhiteSpace( this.Model.GetRequestErrorMessage ) == false )
 {
@@ -42,29 +42,28 @@
 }
 else
 {
-    const string warningHeader = "Warnings when trying to add file metadata:";
-    const string errorHeader = "Errors when adding file metadata:";
+    ViewData["Title"] = $"Editing {this.Model.FileName}";
+
+    const string warningHeader = "Warnings when trying to edit file metadata:";
+    const string errorHeader = "Errors when adding edit metadata:";
 
     <partial name="_Alert" model="this.Model.ToAlertModel( warningHeading: warningHeader, errorHeading: errorHeader )" />
-
-    string folderName = this.Model.ParentFolder?.Name ?? "Root";
-    ViewData["Title"] = $"Add file metadata to {folderName}";
 
     <div class="row">
         <div class="col-md-12">
             <form class="form-group" method="post" enctype="multipart/form-data">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3>Add file metadata to @folderName</h3>
+                        <h3>Editing file metadata for @this.Model.FileName</h3>
                     </div>
                     <div class="panel-body">
-                        <input type="hidden" name="@nameof( this.Model.ParentFolderId )" value="@(this.Model.ParentFolder?.Id ?? 0)" readonly/>
+                        <input type="hidden" name="@nameof( this.Model.ParentFolderId )" value="@(this.Model.ParentFolderId ?? 0)" readonly />
                         <div>
                             <p>
-                                <label for="cidLabel">CID</label>
+                                <label for="cidLabel">CID (Can not edit)</label>
                             </p>
                             <p>
-                                <input id="cidLabel" class="form-control" type="text" name="@nameof( this.Model.Cid )" value="" placeholder="Can be V0 or V1 CID." />
+                                <input id="cidLabel" class="form-control" type="text" name="@nameof( this.Model.Cid )" value="@this.Model.Cid" readonly />
                             </p>
                         </div>
                         <div>
@@ -72,7 +71,7 @@ else
                                 <label for="nameInput">File Name</label>
                             </p>
                             <p>
-                                <input id="nameInput" class="form-control" type="text" name="@nameof( this.Model.FileName )" value="" placeholder="Name of the file that appears on a filesystem." />
+                                <input id="nameInput" class="form-control" type="text" name="@nameof( this.Model.FileName )" value="@this.Model.FileName" placeholder="Name of the file that appears on a filesystem." />
                             </p>
                         </div>
                         <div>
@@ -80,7 +79,7 @@ else
                                 <label for="titleInput">Title</label>
                             </p>
                             <p>
-                                <input id="titleInput" class="form-control" type="text" name="@nameof( this.Model.Title )" value="" placeholder="Name that appears at the top of Jaller's file page." />
+                                <input id="titleInput" class="form-control" type="text" name="@nameof( this.Model.Title )" value="@this.Model.Title" placeholder="Name that appears at the top of Jaller's file page." />
                             </p>
                         </div>
                         <div>
@@ -88,7 +87,7 @@ else
                                 <label for="descriptionInput">Description</label>
                             </p>
                             <p>
-                                <input id="descriptionInput" class="form-control" type="text" name="@nameof( this.Model.Description )" value="" placeholder="One-sentence description of the file." />
+                                <input id="descriptionInput" class="form-control" type="text" name="@nameof( this.Model.Description )" value="@this.Model.Description" placeholder="One-sentence description of the file." />
                             </p>
                         </div>
                         <div>
@@ -96,7 +95,7 @@ else
                                 <label for="detailsInput">Details (<a href="https://en.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener noreferrer nofollow">Markdown</a> Supported).</label>
                             </p>
                             <p>
-                                <textarea id="detailsInput" class="form-control" name="@nameof( this.Model.Details )" rows="10"></textarea>
+                                <textarea id="detailsInput" class="form-control" name="@nameof( this.Model.Details )" rows="10">@this.Model.Details</textarea>
                             </p>
                         </div>
                         <div>
@@ -104,22 +103,25 @@ else
                                 <label for="mimeTypeInput">Override MimeType</label>
                             </p>
                             <p>
-                                <input id="mimeTypeInput" class="form-control" type="text" name="@nameof( this.Model.MimeType )" value="" placeholder="Leave blank to use the default mime type based on the file name." />
+                                @{
+                                    string mimeType = ( this.Model.MimeTypeOverridden ? this.Model.MimeType : "" ) ?? "";
+                                }
+                                <input id="mimeTypeInput" class="form-control" type="text" name="@nameof( this.Model.MimeType )" value="@mimeType" placeholder="Leave blank to use the default mime type based on the file name." />
                             </p>
                         </div>
-                        <partial name="_MetadataPolicyDropDown" model="JallerFile.DefaultMetadataPolicy" />
-                        <partial name="_DownloadPolicyDropDown" model="JallerFile.DefaultDownloadablePolicy" />
+                        <partial name="_MetadataPolicyDropDown" model="@this.Model.MetadataPrivacy" />
+                        <partial name="_DownloadPolicyDropDown" model="@this.Model.DownloadablePolicy" />
                         <div>
                             <p>
                                 <label for="tagInput">Tags (space-separated)</label>
                             </p>
                             <p>
-                                <input id="tagInput" class="form-control" type="text" name="@nameof( this.Model.Tags )" value="" placeholder="Terms one would search for to find this file." />
+                                <input id="tagInput" class="form-control" type="text" name="@nameof( this.Model.Tags )" value="@this.Model.Tags" placeholder="Terms one would search for to find this file." />
                             </p>
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <button class="btn btn-primary" type="submit" id="uploadButton">Add File Metadata</button>
+                        <button class="btn btn-success" type="submit" id="uploadButton">Edit File Metadata</button>
                     </div>
                 </div>
             </form>
