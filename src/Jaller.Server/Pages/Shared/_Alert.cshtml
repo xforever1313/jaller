@@ -25,9 +25,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-info">
-                @if( string.IsNullOrWhiteSpace( this.Model.InfoMessage ) == false )
+                @if( string.IsNullOrWhiteSpace( this.Model.InfoHeading ) == false )
                 {
-                    <p>@this.Model.InfoMessage</p>
+                    <p>@this.Model.InfoHeading</p>
                 }
                 <ul>
                     @foreach( string message in this.Model.InfoMessage.ReadLines() )
@@ -47,7 +47,7 @@
             <div class="alert alert-warning">
                 @if( string.IsNullOrWhiteSpace( this.Model.WarningHeading ) == false )
                 {
-                    <p>@this.Model.WarningMessage</p>
+                    <p>@this.Model.WarningHeading</p>
                 }
                 <ul>
                     @foreach( string message in this.Model.WarningMessage.ReadLines() )
@@ -65,9 +65,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-danger">
-                @if( string.IsNullOrWhiteSpace( this.Model.ErrorMessage ) == false )
+                @if( string.IsNullOrWhiteSpace( this.Model.ErrorHeading ) == false )
                 {
-                    <p>@this.Model.ErrorMessage</p>
+                    <p>@this.Model.ErrorHeading</p>
                 }
                 <ul>
                     @foreach( string message in this.Model.ErrorMessage.ReadLines() )
