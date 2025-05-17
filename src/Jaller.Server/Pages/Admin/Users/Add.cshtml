@@ -24,58 +24,12 @@
 
 @{
     ViewData["Title"] = "Add User";
+
+    const string warningHeader = "Warnings when adding new user:";
+    const string errorHeader = "Errors when adding new user:";
 }
 
-
-@if( this.Model.InfoMessage is not null)
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-info">
-                <ul>
-                    @foreach( string message in this.Model.InfoMessage.ReadLines() )
-                    {
-                        <li>@message</li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
-}
-
-@if( this.Model.WarningMessage is not null )
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-warning">
-                <p>Warnings when adding new user:</p>
-                <ul>
-                    @foreach( string message in this.Model.WarningMessage.ReadLines() )
-                    {
-                        <li>@message</li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
-}
-
-@if( this.Model.ErrorMessage is not null )
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-danger">
-                <p>Errors when adding new user:</p>
-                <ul>
-                    @foreach( string message in this.Model.ErrorMessage.ReadLines() )
-                    {
-                        <li>@message</li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
-}
+<partial name="_Alert" model="this.Model.ToAlertModel( warningHeading: warningHeader, errorHeading: errorHeader )" />
 
 <div class="row">
     <div class="col-md-12">

@@ -18,45 +18,31 @@
 
 namespace Jaller.Server.Models;
 
-public interface IAlert
+public sealed record class Alert : IAlert
 {
     // ---------------- Properties ----------------
 
     /// <summary>
-    /// An information message after a POST request happens.
+    /// Optional heading that appears with the information message.
     /// </summary>
-    string? InfoMessage { get; }
+    public string? InfoHeading { get; init; }
+
+    /// <inheritdoc/>
+    public string? InfoMessage { get; init; }
 
     /// <summary>
-    /// A warning message after a POST request happens.
+    /// Optional heading that appears with the warning message.
     /// </summary>
-    string? WarningMessage { get; }
-    
+    public string? WarningHeading { get; init; }
+
+    /// <inheritdoc/>
+    public string? WarningMessage { get; init; }
+
     /// <summary>
-    /// An error message after a POST request happens.
+    /// Optional heading that appears with the error message.
     /// </summary>
-    string? ErrorMessage { get; }
-}
+    public string? ErrorHeading { get; init; }
 
-public static class IAlertExtensions
-{
-    // ---------------- Methods ----------------
-
-    public static Alert ToAlertModel(
-        this IAlert alert,
-        string? infoHeading = null,
-        string? warningHeading = null,
-        string? errorHeading = null
-    )
-    {
-        return new Alert
-        {
-            ErrorHeading = errorHeading,
-            ErrorMessage = alert.ErrorMessage,
-            InfoHeading = infoHeading,
-            InfoMessage = alert.InfoMessage,
-            WarningHeading = warningHeading,
-            WarningMessage = alert.WarningMessage,
-        };
-    }
+    /// <inheritdoc/>
+    public string? ErrorMessage { get; init; }
 }

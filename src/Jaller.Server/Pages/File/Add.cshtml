@@ -42,55 +42,10 @@
 }
 else
 {
-    @if( this.Model.InfoMessage is not null )
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-info">
-                    <ul>
-                        @foreach( string message in this.Model.InfoMessage.ReadLines() )
-                        {
-                            <li>@message</li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-    }
+    const string warningHeader = "Warnings when trying to add file metadata:";
+    const string errorHeader = "Errors when adding file metadata:";
 
-    @if( this.Model.WarningMessage is not null )
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-warning">
-                    <p>Warnings when trying to add file metadata:</p>
-                    <ul>
-                        @foreach( string message in this.Model.WarningMessage.ReadLines() )
-                        {
-                            <li>@message</li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-    }
-
-    @if( this.Model.ErrorMessage is not null )
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-danger">
-                    <p>Errors when adding file metadata:</p>
-                    <ul>
-                        @foreach( string message in this.Model.ErrorMessage.ReadLines() )
-                        {
-                            <li>@message</li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-    }
+    <partial name="_Alert" model="this.Model.ToAlertModel( warningHeading: warningHeader, errorHeading: errorHeader )" />
 
     string folderName = this.Model.ParentFolder?.Name ?? "Root";
     ViewData["Title"] = $"Add file metadata to {folderName}";

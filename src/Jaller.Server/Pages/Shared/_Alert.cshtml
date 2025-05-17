@@ -1,0 +1,81 @@
+﻿@*
+//
+// Jaller - An advanced IPFS Gateway
+// Copyright (C) 2025 Seth Hendrick
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+*@
+
+@model Alert;
+
+@if( this.Model.InfoMessage is not null )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                @if( string.IsNullOrWhiteSpace( this.Model.InfoMessage ) == false )
+                {
+                    <p>@this.Model.InfoMessage</p>
+                }
+                <ul>
+                    @foreach( string message in this.Model.InfoMessage.ReadLines() )
+                    {
+                        <li>@message</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@if( this.Model.WarningMessage is not null )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning">
+                @if( string.IsNullOrWhiteSpace( this.Model.WarningHeading ) == false )
+                {
+                    <p>@this.Model.WarningMessage</p>
+                }
+                <ul>
+                    @foreach( string message in this.Model.WarningMessage.ReadLines() )
+                    {
+                        <li>@message</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@if( this.Model.ErrorMessage is not null )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger">
+                @if( string.IsNullOrWhiteSpace( this.Model.ErrorMessage ) == false )
+                {
+                    <p>@this.Model.ErrorMessage</p>
+                }
+                <ul>
+                    @foreach( string message in this.Model.ErrorMessage.ReadLines() )
+                    {
+                        <li>@message</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
