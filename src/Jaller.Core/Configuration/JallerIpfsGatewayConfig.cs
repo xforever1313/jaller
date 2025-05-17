@@ -26,3 +26,11 @@ public sealed record class JallerIpfsGatewayConfig : IJallerIpfsGatewayConfig
 
     public uint TimeoutMultiplier { get; set; } = 1;
 }
+
+public static class JallerIpfsGatewayConfigExtensions
+{
+    /// <summary>
+    /// Returns true if there's a backing IPFS node, else false.
+    /// </summary>
+    public static bool IsIpfsConnected( this IJallerIpfsGatewayConfig config ) => config.KuboUrl is not null;
+}

@@ -17,6 +17,7 @@
 //
 
 using System.Security.Claims;
+using Jaller.Core.Configuration;
 using Jaller.Server.Extensions;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
@@ -117,7 +118,7 @@ public static class ClaimsPrincipalExtensions
         {
             return false;
         }
-        else if( core.Config.Ipfs.KuboUrl is null )
+        else if( core.Config.Ipfs.IsIpfsConnected() == false )
         {
             return false;
         }
