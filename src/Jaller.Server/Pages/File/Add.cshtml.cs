@@ -194,6 +194,8 @@ public class AddModel : PageModel, IAlert, IJallerPermissions
             }
         }
 
+        // If this is null, we'll attempt to determine the mime type from the
+        // file name.
         if( string.IsNullOrWhiteSpace( this.MimeType ) )
         {
             this.MimeType = this.FileName.GetMimeType();
