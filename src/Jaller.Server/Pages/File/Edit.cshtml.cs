@@ -21,10 +21,7 @@ using Jaller.Server.Extensions;
 using Jaller.Server.Models;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
-using Jaller.Standard.FolderManagement;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages.File;
 
@@ -108,7 +105,6 @@ public sealed class EditModel : FileAddEditModel
             return RedirectToPage();
         }
 
-        this.InfoMessage = $"File Metadata Edited!";
-        return RedirectToPage( "Index", new { cid = file.CidV1 } );
+        return RedirectToPage( "Index", new { cid = file.CidV1, redirectFrom = IndexModel.RedirectFrom.Edit } );
     }
 }

@@ -107,7 +107,6 @@ public sealed class AddModel : FileAddEditModel
             return RedirectToPage();
         }
 
-        this.InfoMessage = $"File Metadata Added!";
-        return RedirectToPage( "Index", new { cid = file.CidV1 }  );
+        return RedirectToPage( "Index", new { cid = file.CidV1, redirectFrom = IndexModel.RedirectFrom.Add }  );
     }
 }

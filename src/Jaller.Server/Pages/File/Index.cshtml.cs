@@ -54,6 +54,8 @@ public sealed class IndexModel : PageModel
 
     // ---------------- Properties ----------------
 
+    public string? RedirectMessage { get; private set; }
+
     public JallerFile? JallerFile { get; private set; }
 
     public IReadOnlyList<JallerFolder>? FolderPath { get; private set; }
@@ -70,8 +72,16 @@ public sealed class IndexModel : PageModel
 
     // ---------------- Methods ----------------
 
-    public async Task<IActionResult> OnGet( string? cid )
+    public async Task<IActionResult> OnGet( string? cid, RedirectFrom? redirectFrom )
     {
+        this.RedirectMessage = redirectFrom switch
+        {
+            null => this.RedirectMessage = null,
+            RedirectFrom.Add => "File Metadata Added!",
+            RedirectFrom.Edit => "File Metadata Edited!",
+            _ => this.RedirectMessage = null
+        };
+
         // TODO: Make proper visibility
         const MetadataPolicy visibility = MetadataPolicy.Public;
 
@@ -123,5 +133,23 @@ public sealed class IndexModel : PageModel
         this.FolderPath = await Task.Run( () => this.core.Files.TryGetFolderPath( this.JallerFile, visibility ) );
 
         return Page();
+    }
+
+    // ---------------- Helper Enums ----------------
+
+    /// <summary>
+    /// Where the page was redirected from.
+    /// </summary>
+    public enum RedirectFrom : byte
+    {
+        /// <summary>
+        /// Redirected to after adding the file.
+        /// </summary>
+        Add = 1,
+
+        /// <summary>
+        /// Redirected to after editing the file.
+        /// </summary>
+        Edit = 2
     }
 }

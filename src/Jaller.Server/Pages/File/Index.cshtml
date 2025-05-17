@@ -48,6 +48,20 @@ else
 
     <partial name="_FolderPath" model="this.Model.FolderPath" />
 
+    @if( string.IsNullOrWhiteSpace( this.Model.RedirectMessage ) == false )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    @foreach( string message in this.Model.RedirectMessage.ReadLines() )
+                    {
+                        <p>@message</p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
     <div class="row">
         <div class="col-md-12">
             <p><strong>CID V0:</strong> @( this.Model.CIDV0 ?? "Unknown" )</p>
