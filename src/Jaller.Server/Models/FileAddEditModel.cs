@@ -177,14 +177,7 @@ public abstract class FileAddEditModel : PageModel, IAlert, IJallerPermissions
             string[] tagSplit = tagString.Split( ' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries );
             if( tagSplit.Any() )
             {
-                tags = new TagSet();
-                foreach( string tag in tagSplit )
-                {
-                    if( tag.Contains( tag ) == false )
-                    {
-                        tags.Add( tag );
-                    }
-                }
+                tags = [.. tagSplit];
             }
         }
 
