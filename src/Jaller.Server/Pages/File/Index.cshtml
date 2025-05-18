@@ -126,7 +126,9 @@ else
                         }
                         else if( this.Model.PreviewDocumentType == RenderableMimeType.PlainText )
                         {
-                            // TODO.
+                            <object class="mediapreview" data="/ipfs/@this.Model.JallerFile.CidV1" type="@mimeType" height="500">
+                                <p>Unable to display plain text file, try downloading it directly instead.</p>
+                            </object>
                         }
                     </div>
                 </div>
