@@ -57,7 +57,7 @@ public sealed class AddModel : FileAddEditModel
 
     // ---------------- Methods ----------------
 
-    public async Task<IActionResult> OnGetAsync( int? parentFolderId )
+    public async Task<IActionResult> OnGetAsync( int? parentFolderId, string? cid, string? fileName )
     {
         if( this.AllowMetadataEdit() == false )
         {
@@ -76,6 +76,9 @@ public sealed class AddModel : FileAddEditModel
                 return Page();
             }
         }
+
+        this.Cid = cid;
+        this.FileName = fileName;
 
         return Page();
     }

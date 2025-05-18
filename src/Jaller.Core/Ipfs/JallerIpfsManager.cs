@@ -16,6 +16,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System;
+using System.IO;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 using Jaller.Standard;
 using Jaller.Standard.Ipfs;
 
@@ -59,7 +63,7 @@ namespace Jaller.Core.Ipfs
         public Stream GetFile( string cid )
         {
             string versionPath = apiPath + $"/cat?progress=false&arg={cid}";
-            
+
             var request = new HttpRequestMessage
             {
                 RequestUri = new Uri( versionPath, UriKind.Relative ),
@@ -70,6 +74,91 @@ namespace Jaller.Core.Ipfs
             response.EnsureSuccessStatusCode();
 
             return response.Content.ReadAsStream();
+        }
+
+        public async Task<IpfsUploadResult> UploadFileAsync( string fileName, Stream stream, CancellationToken token )
+        {
+            const string uploadUrl = apiPath + "/add?quieter=true&progress=false&cid-version=1&pin=true";
+
+            TimeSpan timeout;
+            if( this.core.Config.Ipfs.TimeoutMultiplier <= 0 )
+            {
+                timeout = Timeout.InfiniteTimeSpan;
+            }
+            else
+            {
+                long fileSizeBits = stream.Length * 8;
+
+                long seconds = fileSizeBits / ( 100 * 1000 * 1000 ); // Assuming 100 Mbps connection.
+
+                // 100 seconds is the default timeout for HttpClient, add that
+                // in case its not a smooth 100Mbps connection for wiggle room.
+                seconds = ( seconds * this.core.Config.Ipfs.TimeoutMultiplier ) + 100;
+                timeout = TimeSpan.FromSeconds( seconds );
+            }
+
+            using var fileVaue = new StreamContent( stream );
+            var dataContent = new MultipartFormDataContent
+            {
+                { fileVaue, "path", Path.GetFileName( fileName ) }
+            };
+
+            using var tokenSource = new CancellationTokenSource( timeout );
+
+            HttpResponseMessage response = await this.httpClient.PostAsync(
+                uploadUrl,
+                dataContent,
+                tokenSource.Token
+            );
+
+            if( response.IsSuccessStatusCode == false )
+            {
+                string body = await response.Content.ReadAsStringAsync( token );
+
+                throw new HttpRequestException(
+                    $"HTTP Error {response.StatusCode} when uploading: {body}"
+                );
+            }
+            else if( response.Content is null )
+            {
+                throw new HttpRequestException(
+                    "HTTP Content was null!"
+                );
+            }
+
+            InnerIpfsUploadResult? jsonResponse = response.Content.ReadFromJsonAsync<InnerIpfsUploadResult>().Result;
+            if( jsonResponse is null )
+            {
+                throw new HttpRequestException(
+                    "JSON Response was null!"
+                );
+            }
+            else if( string.IsNullOrWhiteSpace( jsonResponse.Hash ) )
+            {
+                throw new HttpRequestException(
+                    "Received JSON response did not containa hash!"
+                );
+            }
+
+            Cid cid = Cid.Parse( jsonResponse.Hash );
+
+            return new IpfsUploadResult( CidV1: cid.Version1Cid, FileName: fileName );
+        }
+
+        // ---------------- Helper Classes ----------------
+
+        private sealed class InnerIpfsUploadResult
+        {
+            // ---------------- Properties ----------------
+
+            [JsonPropertyName( "Name" )]
+            public string? FileName { get; set; }
+
+            [JsonPropertyName( "Hash" )]
+            public string? Hash { get; set; }
+
+            [JsonPropertyName( "Size" )]
+            public long? FileSize { get; set; }
         }
     }
 }

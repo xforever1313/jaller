@@ -64,7 +64,7 @@ else
                                 <label for="cidLabel">CID</label>
                             </p>
                             <p>
-                                <input id="cidLabel" class="form-control" type="text" name="@nameof( this.Model.Cid )" value="" placeholder="Can be V0 or V1 CID." />
+                                <input id="cidLabel" class="form-control" type="text" name="@nameof( this.Model.Cid )" value="@this.Model.Cid" placeholder="Can be V0 or V1 CID." />
                             </p>
                         </div>
                         <div>
@@ -72,7 +72,7 @@ else
                                 <label for="nameInput">File Name</label>
                             </p>
                             <p>
-                                <input id="nameInput" class="form-control" type="text" name="@nameof( this.Model.FileName )" value="" placeholder="Name of the file that appears on a filesystem." />
+                                <input id="nameInput" class="form-control" type="text" name="@nameof( this.Model.FileName )" value="@this.Model.FileName" placeholder="Name of the file that appears on a filesystem." />
                             </p>
                         </div>
                         <div>

@@ -43,7 +43,10 @@
 else
 {
     ViewData["Title"] = this.Model.JallerFile.GetTitle();
-    ViewData["Description"] = this.Model.JallerFile.Description.NormalizeWhiteSpace();
+    if( string.IsNullOrWhiteSpace( this.Model.JallerFile.Description ) == false )
+    {
+        ViewData["Description"] = this.Model.JallerFile.Description.NormalizeWhiteSpace();
+    }
     string mimeType = this.Model.JallerFile.GetMimeType();
 
     <partial name="_FolderPath" model="this.Model.FolderPath" />

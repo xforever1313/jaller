@@ -18,20 +18,7 @@
 
 namespace Jaller.Standard.Ipfs;
 
-public interface IJallerIpfsManager
-{
-    /// <summary>
-    /// Retrieves the version information from the gateway.
-    /// </summary>
-    Stream GetVersionInfo();
-
-    /// <summary>
-    /// Reads the file from the IPFS Gateway.
-    /// </summary>
-    Stream GetFile( string cid );
-
-    /// <summary>
-    /// Uploads a file to the backing IPFS node.
-    /// </summary>
-    Task<IpfsUploadResult> UploadFileAsync( string fileName, Stream stream, CancellationToken token );
-}
+/// <summary>
+/// Result from uploading a file to IPFS
+/// </summary>
+public record class IpfsUploadResult( string CidV1, string FileName );

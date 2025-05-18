@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.Net.Http.Headers;
 using Jaller.Core.Bulk;
 using Jaller.Core.Database;
 using Jaller.Core.FileManagement;
@@ -51,6 +52,13 @@ namespace Jaller.Core
             {
                 BaseAddress = config.Ipfs.KuboUrl
             };
+            this.ipfsGatewayClient.DefaultRequestHeaders.UserAgent.Clear();
+            this.ipfsGatewayClient.DefaultRequestHeaders.UserAgent.Add(
+                new ProductInfoHeaderValue(
+                    "Jaller",
+                    this.GetType().Assembly.GetName()?.Version?.ToString( 3 ) ?? "0.0.0"
+                )
+            );
 
             this.Database = new JallerDatabase( this.Config );
             this.SearchCache = new JallerSearchCache( this.Config );

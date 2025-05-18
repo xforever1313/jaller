@@ -21,6 +21,7 @@ using Jaller.Server.Extensions;
 using Jaller.Server.Models;
 using Jaller.Standard;
 using Jaller.Standard.FolderManagement;
+using Jaller.Standard.Ipfs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -116,9 +117,31 @@ public sealed class UploadModel : PageModel, IAlert
             return RedirectToPage();
         }
 
-        await Task.Delay( 0 );
+        using Stream fileStream = this.UploadedFile.OpenReadStream();
 
-        this.ErrorMessage = "Not Implemented Yet";
-        return RedirectToPage();
+        IpfsUploadResult uploadResult;
+        try
+        {
+            uploadResult = await this.core.Ipfs.UploadFileAsync(
+                this.UploadedFile.FileName,
+                fileStream,
+                CancellationToken.None
+            );
+        }
+        catch( Exception e )
+        {
+            this.ErrorMessage = e.Message;
+            return RedirectToPage();
+        }
+
+        return RedirectToPage(
+            "Add",
+            new
+            {
+                parentFolderId = this.ParentFolderId,
+                cid = uploadResult.CidV1,
+                fileName = uploadResult.FileName
+            }
+        );
     }
 }
