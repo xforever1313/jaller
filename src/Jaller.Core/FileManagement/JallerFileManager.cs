@@ -157,7 +157,13 @@ internal sealed class JallerFileManager : IJallerFileManager
                 {
                     files = new List<string>();
                 }
-                files.Add( dbFile.Cid );
+                if( files.Contains( dbFile.Cid ) == false )
+                {
+                    // I wonder if we should make this a HashSet instead of a List...
+                    // We'll have to update the database layer itself, which may mean
+                    // dumping the database before releasing 1.0.0.
+                    files.Add( dbFile.Cid );
+                }
 
                 newParentDirectory = newParentDirectory with
                 {

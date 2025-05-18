@@ -226,7 +226,6 @@ public sealed class JallerFileManagerTests
         Assert.AreEqual( file, folderContents.Files.First() );
     }
 
-
     [TestMethod]
     public void MoveFileIntoDifferentFolderTest()
     {
@@ -586,5 +585,75 @@ public sealed class JallerFileManagerTests
         // Check
         Assert.AreEqual( 0, this.Core.Folders.GetFolderCount() );
         Assert.AreEqual( 0, this.Core.Files.GetFileCount() );
+    }
+
+    [TestMethod]
+    public void EditFileInDirectoryTest()
+    {
+        // Setup
+        var newFolder = new JallerFolder
+        {
+            Name = "Test Folder",
+            ParentFolder = null
+        };
+
+        var file = new JallerFile
+        {
+            CidV1 = "bafybeifzgn4th5udmc4u6hnv4b4xeaommqn64g763ifwbc3pa6ihemfx4u",
+            Name = "file.txt",
+            ParentFolder = null,
+            DownloadablePolicy = DownloadPolicy.Private,
+            MetadataPrivacy = MetadataPolicy.Private
+        };
+
+        // Act
+        int newFolderId = this.Core.Folders.ConfigureFolder( newFolder );
+        Assert.AreNotEqual( 0, newFolderId );
+
+        file = file with
+        {
+            ParentFolder = newFolderId
+        };
+
+        this.Core.Files.ConfigureFile( file );
+
+        int totalFilesBeforeEdit = this.Core.Files.GetFileCount();
+        JallerFile? actualFileBeforeEdit = this.Core.Files.TryGetFile( file.CidV1 );
+        FolderContents? folderContentsBeforeEdit = this.Core.Folders.TryGetFolderContents( newFolderId, MetadataPolicy.Private );
+
+        JallerFile editedFile = file with
+        {
+            DownloadablePolicy = DownloadPolicy.Public,
+            MetadataPrivacy = MetadataPolicy.Public
+        };
+
+        this.Core.Files.ConfigureFile( editedFile );
+
+        int totalFilesAfterEdit = this.Core.Files.GetFileCount();
+        JallerFile? actualFileAfterEdit = this.Core.Files.TryGetFile( file.CidV1 );
+        FolderContents? folderContentsAfterEdit = this.Core.Folders.TryGetFolderContents( newFolderId, MetadataPolicy.Private );
+
+        // Check
+        Assert.AreEqual( 1, totalFilesBeforeEdit );
+        Assert.IsNotNull( actualFileBeforeEdit );
+        Assert.AreEqual( file, actualFileBeforeEdit );
+        Assert.IsTrue( this.Core.Files.FileExists( file.CidV1 ) );
+
+        Assert.IsNotNull( folderContentsBeforeEdit );
+        Assert.IsNull( folderContentsBeforeEdit.ChildFolders );
+        Assert.IsNotNull( folderContentsBeforeEdit.Files );
+        Assert.AreEqual( 1, folderContentsBeforeEdit.Files.Count() );
+        Assert.AreEqual( file, folderContentsBeforeEdit.Files.First() );
+
+        Assert.AreEqual( 1, totalFilesAfterEdit );
+        Assert.IsNotNull( actualFileAfterEdit );
+        Assert.AreEqual( editedFile, actualFileAfterEdit );
+        Assert.IsTrue( this.Core.Files.FileExists( file.CidV1 ) );
+
+        Assert.IsNotNull( folderContentsAfterEdit );
+        Assert.IsNull( folderContentsAfterEdit.ChildFolders );
+        Assert.IsNotNull( folderContentsAfterEdit.Files );
+        Assert.AreEqual( 1, folderContentsAfterEdit.Files.Count() );
+        Assert.AreEqual( editedFile, folderContentsAfterEdit.Files.First() );
     }
 }
