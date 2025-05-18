@@ -91,7 +91,7 @@ else
     <!-- DB Mime Type: @this.Model.JallerFile.MimeType -->
     <!-- Actual Mime Type: @this.Model.JallerFile.GetMimeType() -->
 
-    @if( string.IsNullOrWhiteSpace( this.Model.PreviewDocumentType ) == false )
+    @if( ( this.Model.PreviewDocumentType ?? RenderableMimeType.NotRenderable ) != RenderableMimeType.NotRenderable )
     {
         <div class="row">
             <div class="col-md-12">
@@ -100,29 +100,33 @@ else
                         Preview
                     </div>
                     <div class="panel-body">
-                        @if( "image".EqualsIgnoreCase( this.Model.PreviewDocumentType ) )
+                        @if( this.Model.PreviewDocumentType == RenderableMimeType.Image )
                         {
                             <img class="mediapreview" src="/ipfs/@this.Model.JallerFile.CidV1" alt="@this.Model.JallerFile.Name" />
                         }
-                        else if( "audio".EqualsIgnoreCase( this.Model.PreviewDocumentType ) )
+                        else if( this.Model.PreviewDocumentType == RenderableMimeType.Audio )
                         {
                             <audio class="mediapreview" controls>
                                 <source src="/ipfs/@this.Model.JallerFile.CidV1" type="@mimeType" />
                                 Your browser does not support the audio element.
                             </audio>
                         }
-                        else if( "video".EqualsIgnoreCase( this.Model.PreviewDocumentType ) )
+                        else if( this.Model.PreviewDocumentType == RenderableMimeType.Video )
                         {
                             <video class="mediapreview" controls>
                                 <source src="/ipfs/@this.Model.JallerFile.CidV1" type="@mimeType" />
                                 Your browser does not support the video element.
                             </video>
                         }
-                        else if( "application/pdf".EqualsIgnoreCase( this.Model.PreviewDocumentType ) )
+                        else if( this.Model.PreviewDocumentType == RenderableMimeType.Pdf )
                         {
                             <object class="mediapreview" data="/ipfs/@this.Model.JallerFile.CidV1" type="@mimeType" height="500">
                                 <p>Unable to display PDF file, try downloading it directly instead.</p>
                             </object>
+                        }
+                        else if( this.Model.PreviewDocumentType == RenderableMimeType.PlainText )
+                        {
+                            // TODO.
                         }
                     </div>
                 </div>

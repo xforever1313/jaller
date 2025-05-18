@@ -18,7 +18,9 @@
 
 using System.Security.Claims;
 using Jaller.Contracts.FileManagement;
+using Jaller.Core.FileManagement;
 using Jaller.Standard.FileManagement;
+using SethCS.Extensions;
 
 namespace Jaller.Server.Extensions;
 
@@ -73,5 +75,34 @@ public static class JallerFileExtensions
 
         // All else fails, assume we don't want the file downloaded.
         return false;
+    }
+
+    public static RenderableMimeType IsRenderable( this JallerFile file )
+    {
+        string mimeType = file.GetMimeType();
+        if( mimeType.EqualsIgnoreCase( "application/pdf" ) )
+        {
+            return RenderableMimeType.Pdf;
+        }
+        else if( mimeType.StartsWith( "audio/", StringComparison.OrdinalIgnoreCase ) )
+        {
+            return RenderableMimeType.Audio;
+        }
+        else if( mimeType.StartsWith( "video/", StringComparison.OrdinalIgnoreCase ) )
+        {
+            return RenderableMimeType.Video;
+        }
+        else if( mimeType.StartsWith( "image/", StringComparison.OrdinalIgnoreCase ) )
+        {
+            return RenderableMimeType.Image;
+        }
+        else if( mimeType.EqualsIgnoreCase( "text/plain" ) )
+        {
+            return RenderableMimeType.PlainText;
+        }
+        else
+        {
+            return RenderableMimeType.NotRenderable;
+        }
     }
 }

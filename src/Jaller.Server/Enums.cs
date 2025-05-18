@@ -41,6 +41,42 @@ public enum Roles
     Admin
 }
 
+/// <summary>
+/// If the file is renderable, how it should be rendered.
+/// </summary>
+public enum RenderableMimeType
+{
+    /// <summary>
+    /// File is not renderable.
+    /// </summary>
+    NotRenderable,
+
+    /// <summary>
+    /// File is an image, and can be rendered via img src.
+    /// </summary>
+    Image,
+
+    /// <summary>
+    /// File is an audio file, and can be rendered via the audio tag.
+    /// </summary>
+    Audio,
+
+    /// <summary>
+    /// File is a video file, and can be rendered via the video tag.
+    /// </summary>
+    Video,
+
+    /// <summary>
+    /// File is a PDF, and can be rendered with the object tag.
+    /// </summary>
+    Pdf,
+
+    /// <summary>
+    /// File is plain-text.
+    /// </summary>
+    PlainText
+}
+
 public static class EnumExtensions
 {
     public static string GetRoleName( this Roles role )

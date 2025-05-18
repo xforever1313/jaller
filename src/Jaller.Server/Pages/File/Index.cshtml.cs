@@ -19,6 +19,7 @@
 using System.Net;
 using Jaller.Core;
 using Jaller.Core.FileManagement;
+using Jaller.Server.Extensions;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
@@ -68,7 +69,7 @@ public sealed class IndexModel : PageModel
     /// If the document type is renderable in html, this is set to not null
     /// so we can have a preview in the webpage.
     /// </summary>
-    public string? PreviewDocumentType { get; private set; }
+    public RenderableMimeType? PreviewDocumentType { get; private set; }
 
     // ---------------- Methods ----------------
 
@@ -115,19 +116,9 @@ public sealed class IndexModel : PageModel
         string? mimeCategory = Path.GetDirectoryName( mimeType );
 
         // TODO: Need to handle private downloads.
-        if( this.JallerFile.DownloadablePolicy == DownloadPolicy.Public )
+        if( this.JallerFile.IsDownloadable( this.User ) )
         {
-            if(
-                ( string.IsNullOrWhiteSpace( mimeCategory ) == false ) &&
-                renderableDocumentType.Contains( mimeCategory )
-            )
-            {
-                this.PreviewDocumentType = Path.GetDirectoryName( mimeType );
-            }
-            else if( renderableMimeType.Contains( mimeType ) )
-            {
-                this.PreviewDocumentType = mimeType;
-            }
+            this.PreviewDocumentType = this.JallerFile.IsRenderable();
         }
 
         this.FolderPath = await Task.Run( () => this.core.Files.TryGetFolderPath( this.JallerFile, visibility ) );
