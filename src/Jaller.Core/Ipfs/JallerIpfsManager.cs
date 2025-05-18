@@ -16,8 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System;
-using System.IO;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using Jaller.Standard;

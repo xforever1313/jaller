@@ -88,6 +88,9 @@ else
 
     <hr class="post-bottom-hr" />
 
+    <!-- DB Mime Type: @this.Model.JallerFile.MimeType -->
+    <!-- Actual Mime Type: @this.Model.JallerFile.GetMimeType() -->
+
     @if( string.IsNullOrWhiteSpace( this.Model.PreviewDocumentType ) == false )
     {
         <div class="row">

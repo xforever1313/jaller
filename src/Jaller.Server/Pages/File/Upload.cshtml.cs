@@ -140,7 +140,8 @@ public sealed class UploadModel : PageModel, IAlert
             {
                 parentFolderId = this.ParentFolderId,
                 cid = uploadResult.CidV1,
-                fileName = uploadResult.FileName
+                fileName = uploadResult.FileName,
+                redirectFrom = AddModel.RedirectFrom.Upload
             }
         );
     }

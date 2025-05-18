@@ -42,13 +42,27 @@
 }
 else
 {
+    string folderName = this.Model.ParentFolder?.Name ?? "Root";
+    ViewData["Title"] = $"Add file metadata to {folderName}";
+
     const string warningHeader = "Warnings when trying to add file metadata:";
     const string errorHeader = "Errors when adding file metadata:";
 
     <partial name="_Alert" model="this.Model.ToAlertModel( warningHeading: warningHeader, errorHeading: errorHeader )" />
 
-    string folderName = this.Model.ParentFolder?.Name ?? "Root";
-    ViewData["Title"] = $"Add file metadata to {folderName}";
+    @if( string.IsNullOrWhiteSpace( this.Model.RedirectMessage ) == false )
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    @foreach( string message in this.Model.RedirectMessage.ReadLines() )
+                    {
+                        <p>@message</p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
 
     <div class="row">
         <div class="col-md-12">

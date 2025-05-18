@@ -43,6 +43,8 @@ public sealed class AddModel : FileAddEditModel
 
     // -------- Messages --------
 
+    public string? RedirectMessage { get; private set; }
+
     /// <inheritdoc/>
     [TempData( Key = "AddFileInfoMessage" )]
     public override string? InfoMessage { get; set; }
@@ -57,12 +59,19 @@ public sealed class AddModel : FileAddEditModel
 
     // ---------------- Methods ----------------
 
-    public async Task<IActionResult> OnGetAsync( int? parentFolderId, string? cid, string? fileName )
+    public async Task<IActionResult> OnGetAsync( int? parentFolderId, string? cid, string? fileName, RedirectFrom? redirectFrom )
     {
         if( this.AllowMetadataEdit() == false )
         {
             return StatusCode( (int)HttpStatusCode.Forbidden );
         }
+
+        this.RedirectMessage = redirectFrom switch
+        {
+            null => this.RedirectMessage = null,
+            RedirectFrom.Upload => "File Uploaded!  Use this form to add Metadata.",
+            _ => this.RedirectMessage = null
+        };
 
         // If no parent folder is specified, assume the root directory.
         // Also, if the id is 0, assume root directory.
@@ -111,5 +120,18 @@ public sealed class AddModel : FileAddEditModel
         }
 
         return RedirectToPage( "Index", new { cid = file.CidV1, redirectFrom = IndexModel.RedirectFrom.Add }  );
+    }
+
+    // ---------------- Helper Enums ----------------
+
+    /// <summary>
+    /// Where the page was redirected from.
+    /// </summary>
+    public enum RedirectFrom : byte
+    {
+        /// <summary>
+        /// Redirected to after uploading.
+        /// </summary>
+        Upload = 1
     }
 }
