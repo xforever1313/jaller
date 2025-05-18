@@ -34,17 +34,6 @@ public sealed class IndexModel : PageModel
 
     private readonly IJallerCore core;
 
-    private static readonly HashSet<string> renderableDocumentType = new HashSet<string>
-    {
-        "audio",
-        "image",
-        "video"
-    };
-
-    private static readonly HashSet<string> renderableMimeType = new HashSet<string>
-    {
-        "application/pdf"
-    };
 
     // ---------------- Constructor ----------------
 
