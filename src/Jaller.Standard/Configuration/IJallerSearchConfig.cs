@@ -37,4 +37,11 @@ public interface IJallerSearchConfig : IJallerDatabaseConfig
     /// Defaulted to every day at midnight.
     /// </summary>
     string IndexUpdateRate { get; }
+
+    /// <summary>
+    /// Set to true to allow a user to search the Jaller instance via DuckDuckGo.
+    /// 
+    /// Defaulted to true.
+    /// </summary>
+    bool EnableDuckDuckGoSearch { get; }
 }

@@ -28,6 +28,8 @@ public sealed record class JallerSearchConfig : IJallerSearchConfig
 
     public string IndexUpdateRate { get; set; } = "0 0 0 * * ?";
 
+    public bool EnableDuckDuckGoSearch { get; set; } = true;
+
     public FileInfo? DatabaseLocation { get; set; } = new FileInfo(
         Path.Combine(
             JallerConfig.DefaultPersistenceDirectory.FullName,

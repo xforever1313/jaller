@@ -120,6 +120,15 @@ this.Search.UpdateIndexOnStartup = true;
 // Defaulted to every day at midnight.
 this.Search.IndexUpdateRate = "0 0 0 * * ?";
 
+// If set to true, this gives the user an option on the search page to search the Jaller
+// instance via DuckDuckGo.
+//
+// Set this to false if:
+// - The Jaller instance is not publically accessible (won't do any good in DuckDuckGo's crawlers can't find it).
+// - Search crawlers are blocked.
+// - Most users of the instance have JavaScript blocked.
+this.Search.EnableDuckDuckGoSearch = true;
+
 // Set this to true unless you need the search cache to be shared
 // by multiple applications (most folks should leave this set to true).
 this.Search.DirectConnection = true;
