@@ -23,6 +23,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
     <PackageReference Include="Mono.Options" />
     <PackageReference Include="prometheus-net.AspNetCore" />
+	<PackageReference Include="Quartz.Extensions.Hosting" />
     <PackageReference Include="Serilog" />
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Sinks.Console" />

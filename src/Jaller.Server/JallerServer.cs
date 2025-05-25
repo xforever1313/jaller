@@ -18,9 +18,11 @@
 
 using Jaller.Core;
 using Jaller.Server.Logging;
+using Jaller.Server.Tasks;
 using Jaller.Standard;
 using Jaller.Standard.Configuration;
 using Prometheus;
+using Quartz;
 using Serilog;
 
 namespace Jaller.Server;
@@ -97,6 +99,21 @@ public class JallerServer : IDisposable
         {
             builder.WebHost.UseUrls( config.Web.AspNetCoreUrls.ToArray() );
         }
+
+        builder.Services.AddQuartz(
+            q =>
+            {
+                UpdateSearchIndexTaskExtensions.AddSearchTask( q, core );
+            }
+        );
+
+        builder.Services.AddQuartzHostedService(
+            options =>
+            {
+                options.AwaitApplicationStarted = true;
+                options.WaitForJobsToComplete = true;
+            }
+        );
 
         var app = builder.Build();
 

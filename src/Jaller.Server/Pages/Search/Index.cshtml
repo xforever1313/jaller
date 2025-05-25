@@ -43,6 +43,17 @@
     </div>
 }
 
+@if( this.Model.Core().Search.IsIndexing )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> Search indexing is underway.  You can still search, but results may not be fully accurrate.
+            </div>
+        </div>
+    </div>
+}
+
 <div class="row">
     <div class="col-md-12">
         <div class="search-container">
