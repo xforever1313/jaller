@@ -18,6 +18,7 @@
 
 using Jaller.Core.Configuration;
 using Jaller.Server;
+using Jaller.Server.Configuration;
 using Jaller.Standard.Configuration;
 
 namespace Jaller.Tests.Core.Configuration;
@@ -42,7 +43,7 @@ public sealed class ConfigCompilerTests
         // Act
         uut.Preprocess();
         IJallerConfig config = uut.Compile();
-        List<string> validationErrors = config.TryValidate();
+        IList<string> validationErrors = config.TryValidate( new CronStringValidator() );
 
         // Check
         Assert.IsNotNull( config );

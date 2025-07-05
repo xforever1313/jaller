@@ -69,13 +69,15 @@ public record class JallerConfig : IJallerConfig
 
     public JallerWebConfig Web { get; }
     IJallerWebConfig IJallerConfig.Web => this.Web;
-}
 
-public static class IJallerConfigExtensions
-{
-    public static List<string> TryValidate( this IJallerConfig config )
+    // ---------------- Methods ----------------
+
+    public IList<string> TryValidate( ICronStringValidator cronStringValidator )
     {
-        // TODO: Validate.
-        return new List<string>();
+        var list = new List<string>();
+
+        list.AddRange( this.Monitoring.TryValidate( cronStringValidator ) );
+
+        return list;
     }
 }

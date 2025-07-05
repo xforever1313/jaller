@@ -16,33 +16,23 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Standard.Configuration;
+using Jaller.Standard.Configuration;
+using Quartz;
 
-public interface IJallerConfig
+namespace Jaller.Server.Configuration;
+
+public sealed class CronStringValidator : ICronStringValidator
 {
-    // ---------------- Properties ----------------
+    // ---------------- Constructor ----------------
 
-    IJallerDatabaseConfig Database { get; }
-
-    IJallerIpfsGatewayConfig Ipfs { get; }
-
-    IJallerLoggingConfig Logging { get; }
-
-    IJallerMonitoringConfig Monitoring { get; }
-
-    IJallerSearchConfig Search { get; }
-
-    IJallerUserConfig Users { get; }
-
-    IJallerWebConfig Web { get; }
+    public CronStringValidator()
+    {
+    }
 
     // ---------------- Methods ----------------
 
-    /// <summary>
-    /// Goes through the config and checks to see what is valid and what is not.
-    /// </summary>
-    /// <returns>
-    /// An empty list if nothing is invalid.  Otherwise, errors with the config.
-    /// </returns>
-    IList<string> TryValidate( ICronStringValidator cronStringValidator );
+    public bool IsValid( string cronString )
+    {
+        return CronExpression.IsValidExpression( cronString );
+    }
 }

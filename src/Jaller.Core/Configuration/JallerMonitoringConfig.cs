@@ -27,4 +27,23 @@ public sealed record class JallerMonitoringConfig : IJallerMonitoringConfig
     public IEnumerable<FileInfo>? CanaryFiles { get; set; } = null;
 
     public string CanaryCheckRate { get; set; } = "0 0/10 * * * ?";
+
+    // ---------------- Methods ----------------
+
+    public List<string> TryValidate( ICronStringValidator cronStringValidator )
+    {
+        var errors = new List<string>();
+
+        if( this.CanaryFiles is null || ( this.CanaryFiles.Any() == false ) )
+        {
+            return errors;
+        }
+
+        if( cronStringValidator.IsValid( this.CanaryCheckRate ) == false )
+        {
+            errors.Add( $"{nameof( IJallerMonitoringConfig )} - {this.CanaryCheckRate} is invalid for {nameof( this.CanaryCheckRate )}" );
+        }
+
+        return errors;
+    }
 }

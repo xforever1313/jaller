@@ -17,6 +17,7 @@
 //
 
 using Jaller.Core.Configuration;
+using Jaller.Server.Configuration;
 using Jaller.Standard.Configuration;
 using Mono.Options;
 using SethCS.Extensions;
@@ -143,7 +144,7 @@ namespace Jaller.Server
             configCompiler.Preprocess();
             
             IJallerConfig config = configCompiler.Compile();
-            List<string> errors = config.TryValidate();
+            IList<string> errors = config.TryValidate( new CronStringValidator() );
             if( errors.Any() )
             {
                 Console.WriteLine( "Bot is misconfigured." );
