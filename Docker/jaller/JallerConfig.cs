@@ -93,6 +93,35 @@ this.Logging.TelegramChatId = null;
 // if either of the Telegram settings are null, not specified, or commented out.
 this.Logging.TelegramLogLevel = JallerLogLevel.Warning;
 
+// ---------------- Monitoring ----------------
+
+// A list of files that Jaller will look to see if they exist or not every so often.
+// If any file can not be read, a Fatal message is generated.
+// If the file comes back, another JallerLogLevel.Fatal message saying it is all
+// clear will be generated (this is so the all clear shows up in the same log).
+// 
+// The use case for this is to detect if a drive where IPFS files or the Jaller database
+// files are located goes down.  For example, on the PC of Jaller's creator
+// a drive mysteriously got unplugged and caused a bunch of mysterious 500 errors.
+// After some debugging, it was noticed the drive was unplugged, and also going bad.
+// This feature was born out of that so it can be detected if the drive gets unplugged again.
+//
+// The file(s) MUST exist prior to Jaller starting up, or Jaller will abort.
+//
+// Set to null to not look for canary files.
+this.Monitoring.CanaryFiles = null;
+// this.Monitoring.CanaryFiles = [new FileInfo( "/ipfs/canary.txt" )]
+
+// A cron-string to determine how often to check the canary files listed in the CanaryFiles setting.
+// This setting is ignored if CanaryFiles is null or empty.
+//
+// See https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#cron-expressions
+// for more information on how to make this string.
+//
+// Defaulted to firing every 10 minutes.
+this.Monitoring.CanaryCheckRate = "0 0/10 * * * ?";
+
+
 // ---------------- Search Settings ----------------
 
 // These settings configure the search index of Jaller.
@@ -112,7 +141,7 @@ this.Search.DatabaseLocation = new FileInfo( @"/var/jaller/jaller_search_cache.l
 // mean that the search data may be out-of-date.
 this.Search.UpdateIndexOnStartup = true;
 
-// A cron-string on often to update the search index.
+// A cron-string to determine how often to update the search index.
 // 
 // See https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#cron-expressions
 // for more information on how to make this string.

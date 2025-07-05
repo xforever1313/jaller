@@ -16,21 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-namespace Jaller.Standard.Configuration;
+using Jaller.Standard.Configuration;
 
-public interface IJallerConfig
+namespace Jaller.Core.Configuration;
+
+public sealed record class JallerMonitoringConfig : IJallerMonitoringConfig
 {
-    IJallerDatabaseConfig Database { get; }
+    // ---------------- Properties ----------------
 
-    IJallerIpfsGatewayConfig Ipfs { get; }
+    public IEnumerable<FileInfo>? CanaryFiles { get; set; } = null;
 
-    IJallerLoggingConfig Logging { get; }
-
-    IJallerMonitoringConfig Monitoring { get; }
-
-    IJallerSearchConfig Search { get; }
-
-    IJallerUserConfig Users { get; }
-
-    IJallerWebConfig Web { get; }
+    public string CanaryCheckRate { get; set; } = "0 0/10 * * * ?";
 }
