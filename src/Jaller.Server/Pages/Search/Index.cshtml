@@ -43,17 +43,6 @@
     </div>
 }
 
-@if( this.Model.Core().Search.IsIndexing )
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-warning">
-                <strong>Warning!</strong> Search indexing is underway.  You can still search, but results may not be fully accurrate.
-            </div>
-        </div>
-    </div>
-}
-
 <div class="row">
     <div class="col-md-6">
         <div class="search-container">
@@ -63,6 +52,13 @@
                         <h3>Search For Files</h3>
                     </div>
                     <div class="panel-body">
+                        @if( this.Model.Core().Search.IsIndexing )
+                        {
+                            <div class="alert alert-warning">
+                                <strong>Warning!</strong> Search indexing is underway.  You can still search, but results may not be fully accurrate.
+                            </div>
+                        }
+
                         <label for="jaller_search">
                             Search using Jaller's built-in search engine.
                         </label>
@@ -103,28 +99,31 @@
     }
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3>Search Results</h3>
-            </div>
-            <div class="panel-body">
-                @if( this.Model.FoundFiles is not null && this.Model.FoundFiles.Any() )
-                {
-                    <ul>
-                        @foreach( JallerSearchResult result in this.Model.FoundFiles )
-                        {
-                            <li><a href="/File?cid=@result.CidV1">@result.FileName</a></li>
-                        }
-                    </ul>
-                }
-                else if( this.Model.Query is not null )
-                {
-                    // We tried to query something, but nothing showed up, that's a not found result.
-                    <p>No Results Found :(</p>
-                }
+@if( this.Model.Query is not null )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Search Results</h3>
+                </div>
+                <div class="panel-body">
+                    @if( this.Model.FoundFiles is not null && this.Model.FoundFiles.Any() )
+                    {
+                        <ul>
+                            @foreach( JallerSearchResult result in this.Model.FoundFiles )
+                            {
+                                <li><a href="/File?cid=@result.CidV1">@result.FileName</a></li>
+                            }
+                        </ul>
+                    }
+                    else if( this.Model.Query is not null )
+                    {
+                        // We tried to query something, but nothing showed up, that's a not found result.
+                        <p>No Results Found :(</p>
+                    }
+                </div>
             </div>
         </div>
     </div>
-</div>
+}
