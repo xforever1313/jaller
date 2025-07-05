@@ -22,7 +22,7 @@ namespace Jaller.Standard.Monitoring;
 /// Monitors <see cref="Configuration.IJallerMonitoringConfig.CanaryFiles"/> and reports if any files
 /// are not readable.
 /// </summary>
-public interface ICanaryFileMonitor
+public interface IJallerCanaryFileMonitor
 {
     // ---------------- Methods ----------------
 

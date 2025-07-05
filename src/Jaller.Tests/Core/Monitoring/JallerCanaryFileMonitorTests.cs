@@ -24,7 +24,7 @@ namespace Jaller.Tests.Core.Monitoring;
 
 [TestClass]
 [DoNotParallelize] // <- Doing file IO, do not parallelize so tests don't step on each other.
-public sealed class CanaryFileMonitorTests
+public sealed class JallerCanaryFileMonitorTests
 {
     // ---------------- Fields ----------------
 
@@ -125,7 +125,7 @@ public sealed class CanaryFileMonitorTests
         CreateFile( CanaryFile2 );
         CreateFile( CanaryFile3 );
 
-        var uut = new CanaryFileMonitor( config, new StubLogger() );
+        var uut = new JallerCanaryFileMonitor( config, new StubLogger() );
 
         // Act
         uut.Refresh();
@@ -145,7 +145,7 @@ public sealed class CanaryFileMonitorTests
             CanaryFiles = [this.CanaryFile1, this.CanaryFile2, this.CanaryFile3]
         };
 
-        var uut = new CanaryFileMonitor( config, new StubLogger() );
+        var uut = new JallerCanaryFileMonitor( config, new StubLogger() );
 
         // Act
         uut.Refresh();
@@ -173,7 +173,7 @@ public sealed class CanaryFileMonitorTests
         CreateFile( CanaryFile2 );
         CreateFile( CanaryFile3 );
 
-        var uut = new CanaryFileMonitor( config, new StubLogger() );
+        var uut = new JallerCanaryFileMonitor( config, new StubLogger() );
 
         // Act
         uut.Refresh();
@@ -203,7 +203,7 @@ public sealed class CanaryFileMonitorTests
         CreateFile( CanaryFile2 );
         CreateFile( CanaryFile3 );
 
-        var uut = new CanaryFileMonitor( config, new StubLogger() );
+        var uut = new JallerCanaryFileMonitor( config, new StubLogger() );
 
         // Act
         uut.Refresh();

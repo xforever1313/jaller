@@ -18,10 +18,11 @@
 
 using Jaller.Standard.Configuration;
 using Jaller.Standard.Logging;
+using Jaller.Standard.Monitoring;
 
 namespace Jaller.Core.Monitoring;
 
-internal sealed class CanaryFileMonitor
+internal sealed class JallerCanaryFileMonitor : IJallerCanaryFileMonitor
 {
     // ---------------- Fields ----------------
 
@@ -33,7 +34,7 @@ internal sealed class CanaryFileMonitor
 
     // ---------------- Constructor ----------------
 
-    public CanaryFileMonitor( IJallerMonitoringConfig config, IJallerLogger log )
+    public JallerCanaryFileMonitor( IJallerMonitoringConfig config, IJallerLogger log )
     {
         this.config = config;
         this.log = log;

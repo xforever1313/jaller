@@ -19,9 +19,11 @@
 using System.Net.Http.Headers;
 using Jaller.Core.Bulk;
 using Jaller.Core.Database;
+using Jaller.Core.Exceptions;
 using Jaller.Core.FileManagement;
 using Jaller.Core.FolderManagement;
 using Jaller.Core.Ipfs;
+using Jaller.Core.Monitoring;
 using Jaller.Core.Search;
 using Jaller.Standard;
 using Jaller.Standard.Bulk;
@@ -30,8 +32,10 @@ using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Jaller.Standard.Ipfs;
 using Jaller.Standard.Logging;
+using Jaller.Standard.Monitoring;
 using Jaller.Standard.Search;
 using Jaller.Standard.UserManagement;
+using SethCS.Extensions;
 
 namespace Jaller.Core
 {
@@ -64,6 +68,7 @@ namespace Jaller.Core
             this.SearchCache = new JallerSearchCache( this.Config );
 
             this.BulkOperations = new JallerBulkOperations( this );
+            this.CanaryFileMonitor = new JallerCanaryFileMonitor( this.Config.Monitoring, this.Log );
             this.Files = new JallerFileManager( this, this.Database );
             this.Folders = new JallerFolderManager( this, this.Database );
             this.Ipfs = new JallerIpfsManager( this, this.ipfsGatewayClient );
@@ -73,6 +78,8 @@ namespace Jaller.Core
         // ---------------- Properties ----------------
 
         public IJallerBulkOperations BulkOperations { get; }
+
+        public IJallerCanaryFileMonitor CanaryFileMonitor { get; }
 
         public IJallerConfig Config { get; }
 
@@ -96,7 +103,22 @@ namespace Jaller.Core
 
         public void Init()
         {
-            this.Search.Index( CancellationToken.None );
+            this.CanaryFileMonitor.Refresh();
+            IList<FileInfo> missingFiles = this.CanaryFileMonitor.GetMissingFiles();
+            if( missingFiles.Any() )
+            {
+                throw new MissingCanaryFileException(
+                    "Canary files were missing during startup.  " +
+                    "These files must be created before Jaller is started up in order to properly detect when they disappear.  " +
+                    "Please create the files (they can be empty) or disable canary files by setting the setting to null in the config file." + Environment.NewLine +
+                    $"Missing files:{Environment.NewLine}{missingFiles.Select( m => m.FullName ).ToListString( " - " )}"
+                );
+            }
+
+            if( this.Config.Search.UpdateIndexOnStartup )
+            {
+                this.Search.Index( CancellationToken.None );
+            }
         }
 
         public void Dispose()
