@@ -108,6 +108,15 @@ this.Logging.TelegramLogLevel = JallerLogLevel.Warning;
 //
 // The file(s) MUST exist prior to Jaller starting up, or Jaller will abort.
 //
+// Note that in a Docker environment, you'll probably have to create bind mounts or volume mounts
+// if you want to monitor anything on the host system.
+// You can do that in your docker-compose.yml file via:
+// volumes:
+//   - /somewhere/on/host/machine/ipfs_data:/ipfs:ro
+// Where the left is the host volume, the middle is the container folder, and ro means "read-only".
+// And then set the canary file to /ipfs/canary.txt.  Note, you'll have to create the file on the host
+// machine first.
+//
 // Set to null to not look for canary files.
 this.Monitoring.CanaryFiles = null;
 // this.Monitoring.CanaryFiles = [new FileInfo( "/ipfs/canary.txt" )]
