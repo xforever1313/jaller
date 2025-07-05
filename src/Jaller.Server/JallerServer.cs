@@ -103,7 +103,14 @@ public class JallerServer : IDisposable
         builder.Services.AddQuartz(
             q =>
             {
+                if( TimeZoneInfo.Local is null )
+                {
+                    core.Log.Warning(
+                        "Warning! Local Time Zone has not been set. All events will fire based on UTC.  Please set your Time Zone if you want to use local time."
+                    );
+                }
                 UpdateSearchIndexTaskExtensions.AddSearchTask( q, core );
+                CanaryFileCheckTaskExtensions.AddCanaryCheckTask( q, core );
             }
         );
 

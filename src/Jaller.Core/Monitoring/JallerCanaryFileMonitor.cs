@@ -54,18 +54,18 @@ internal sealed class JallerCanaryFileMonitor : IJallerCanaryFileMonitor
     }
 
     /// <inheritdoc/>
-    public void Refresh()
+    public void Refresh( CancellationToken cancelToken )
     {
-        RefreshAndLogMissingFiles( null );
+        RefreshAndLogMissingFiles( null, cancelToken );
     }
 
     /// <inheritdoc/>
-    public void RefreshAndLogMissingFiles()
+    public void RefreshAndLogMissingFiles( CancellationToken cancelToken )
     {
-        RefreshAndLogMissingFiles( this.log );
+        RefreshAndLogMissingFiles( this.log, cancelToken );
     }
 
-    private void RefreshAndLogMissingFiles( IJallerLogger? log )
+    private void RefreshAndLogMissingFiles( IJallerLogger? log, CancellationToken cancelToken )
     {
         if( this.config.CanaryFiles is null )
         {
@@ -80,8 +80,11 @@ internal sealed class JallerCanaryFileMonitor : IJallerCanaryFileMonitor
 
         foreach( FileInfo canary in this.config.CanaryFiles )
         {
+            cancelToken.ThrowIfCancellationRequested();
+
             try
             {
+                canary.Refresh();
                 if( canary.Exists == false )
                 {
                     badFiles.Add( canary );
@@ -100,7 +103,7 @@ internal sealed class JallerCanaryFileMonitor : IJallerCanaryFileMonitor
             {
                 if( this.missingFiles.Contains( badFile ) == false )
                 {
-                    log?.Fatal( $"A canary file is missing or could not be read.  A drive may have gone down.  File location: {badFile.FullName}" );
+                    log?.Fatal( $"**CANARY DEAD** A canary file is missing or could not be read.  A drive may have gone down.  File location: {badFile.FullName}" );
                     this.missingFiles.Add( badFile );
                 }
             }
@@ -109,7 +112,7 @@ internal sealed class JallerCanaryFileMonitor : IJallerCanaryFileMonitor
             {
                 if( badFiles.Contains( cachedFile ) == false )
                 {
-                    log?.Fatal( $"A canary file has reappaered after disappearing.  A drive may have come back.  File location: {cachedFile.FullName}" );
+                    log?.Fatal( $"**RESOLVED** A canary file has reappeared after disappearing.  A drive may have come back.  File location: {cachedFile.FullName}" );
                     this.missingFiles.Remove( cachedFile );
                 }
             }

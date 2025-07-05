@@ -18,13 +18,14 @@
 
 using Jaller.Core.Configuration;
 using Jaller.Core.Monitoring;
+using Jaller.Standard.Monitoring;
 using Jaller.Tests.Mocks;
 
 namespace Jaller.Tests.Core.Monitoring;
 
 [TestClass]
 [DoNotParallelize] // <- Doing file IO, do not parallelize so tests don't step on each other.
-public sealed class JallerCanaryFileMonitorTests
+public sealed class CanaryFileMonitorTests
 {
     // ---------------- Fields ----------------
 

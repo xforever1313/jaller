@@ -121,7 +121,6 @@ this.Monitoring.CanaryFiles = null;
 // Defaulted to firing every 10 minutes.
 this.Monitoring.CanaryCheckRate = "0 0/10 * * * ?";
 
-
 // ---------------- Search Settings ----------------
 
 // These settings configure the search index of Jaller.

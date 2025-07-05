@@ -22,7 +22,7 @@ using Quartz;
 
 namespace Jaller.Server.Tasks;
 
-public sealed class UpdateSearchIndexTask : IJob
+public sealed class CanaryFileCheckTask : IJob
 {
     // ---------------- Fields ----------------
 
@@ -30,7 +30,7 @@ public sealed class UpdateSearchIndexTask : IJob
 
     // ---------------- Constructor ----------------
 
-    public UpdateSearchIndexTask( IJallerCore core )
+    public CanaryFileCheckTask( IJallerCore core )
     {
         this.core = core;
     }
@@ -41,25 +41,37 @@ public sealed class UpdateSearchIndexTask : IJob
     {
         try
         {
-            await Task.Run( () => this.core.Search.Index( context.CancellationToken ) );
+            this.core.Log.Verbose( "Checking for canary files" );
+            await Task.Run( () => this.core.CanaryFileMonitor.RefreshAndLogMissingFiles( context.CancellationToken ) );
         }
         catch( OperationCanceledException )
         {
         }
         catch( Exception e )
         {
-            this.core.Log.Error( "Error seen when updating index: " + e.Message );
+            this.core.Log.Error( "Error seen when checking for canay files: " + e.Message );
         }
     }
 }
 
-internal static class UpdateSearchIndexTaskExtensions
+internal static class CanaryFileCheckTaskExtensions
 {
-    internal static void AddSearchTask(
+    internal static void AddCanaryCheckTask(
         this IServiceCollectionQuartzConfigurator quartzConfig,
         IJallerCore core
     )
     {
+        if( core.Config.Monitoring.CanaryFiles is null )
+        {
+            core.Log.Verbose( "Canary files setting null, will not monitor canary files." );
+            return;
+        }
+        else if( core.Config.Monitoring.CanaryFiles.Any() == false )
+        {
+            core.Log.Verbose( "Canary files setting empty, will not monitor canary files." );
+            return;
+        }
+
         TimeZoneInfo timeZone;
         if( TimeZoneInfo.Local is null )
         {
@@ -70,15 +82,15 @@ internal static class UpdateSearchIndexTaskExtensions
             timeZone = TimeZoneInfo.Local;
         }
 
-        JobKey key = JobKey.Create( nameof( UpdateSearchIndexTask ) );
+        JobKey key = JobKey.Create( nameof( CanaryFileCheckTask ) );
 
-        quartzConfig.AddJob<UpdateSearchIndexTask>( key );
+        quartzConfig.AddJob<CanaryFileCheckTask>( key );
 
         quartzConfig.AddTrigger(
             ( ITriggerConfigurator triggerConfig ) =>
             {
                 triggerConfig.WithCronSchedule(
-                    core.Config.Search.GetUpdateString( core.Log ),
+                    core.Config.Monitoring.CanaryCheckRate,
                     ( CronScheduleBuilder cronBuilder ) =>
                     {
                         // Use the local time zone.)
@@ -87,7 +99,7 @@ internal static class UpdateSearchIndexTaskExtensions
                         // If we misfire, don't do anything.  We'll just do it the next go around.
                         cronBuilder.WithMisfireHandlingInstructionDoNothing();
                     }
-                ).WithDescription( "Search Index Updater" )
+                ).WithDescription( "Canary File Checker" )
                  .ForJob( key )
                  .StartNow();
             }

@@ -22,6 +22,7 @@ using Jaller.Standard.FileManagement;
 using Jaller.Standard.FolderManagement;
 using Jaller.Standard.Ipfs;
 using Jaller.Standard.Logging;
+using Jaller.Standard.Monitoring;
 using Jaller.Standard.Search;
 using Jaller.Standard.UserManagement;
 
@@ -32,6 +33,8 @@ public interface IJallerCore
     // ---------------- Properties ----------------
 
     IJallerBulkOperations BulkOperations { get; }
+
+    IJallerCanaryFileMonitor CanaryFileMonitor { get; }
 
     IJallerConfig Config { get; }
 

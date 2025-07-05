@@ -40,7 +40,7 @@ public interface IJallerCanaryFileMonitor
     /// 
     /// This method does NOT log anything.
     /// </summary>
-    void Refresh();
+    void Refresh( CancellationToken cancelToken );
 
     /// <summary>
     /// Checks for any files that are missing and updates <see cref="MissingFiles"/>.
@@ -48,5 +48,31 @@ public interface IJallerCanaryFileMonitor
     /// <see cref="MissingFiles"/> that are now back are removed.  Any changes to the list
     /// are logged in <see cref="JallerLogLevel.Fatal"/>, as a missing canary file is usually bad.
     /// </summary>
-    void RefreshAndLogMissingFiles();
+    void RefreshAndLogMissingFiles( CancellationToken cancelToken );
+}
+
+public static class IJallerCanaryFileMonitorExtensions
+{
+    /// <summary>
+    /// Checks for any files that are missing and updates <see cref="MissingFiles"/>.
+    /// Any files that are missing are added to <see cref="MissingFiles"/>, while any files in
+    /// <see cref="MissingFiles"/> that are now back are removed.
+    /// 
+    /// This method does NOT log anything.
+    /// </summary>
+    public static void Refresh( this IJallerCanaryFileMonitor monitor )
+    {
+        monitor.Refresh( CancellationToken.None );
+    }
+
+    /// <summary>
+    /// Checks for any files that are missing and updates <see cref="MissingFiles"/>.
+    /// Any files that are missing are added to <see cref="MissingFiles"/>, while any files in
+    /// <see cref="MissingFiles"/> that are now back are removed.  Any changes to the list
+    /// are logged in <see cref="JallerLogLevel.Fatal"/>, as a missing canary file is usually bad.
+    /// </summary>
+    public static void RefreshAndLogMissingFiles( this IJallerCanaryFileMonitor monitor )
+    {
+        monitor.RefreshAndLogMissingFiles( CancellationToken.None );
+    }
 }
