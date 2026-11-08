@@ -64,8 +64,7 @@ internal static class HostingExtensions
                 botToken: telegramBotToken,
                 chatId: telegramChatId,
                 dateFormat: "dd.MM.yyyy HH:mm:sszzz",
-                applicationName: nameof( Jaller ),
-                failureCallback: onTelegramFailure
+                applicationName: nameof( Jaller )
             );
             logger.WriteTo.Telegram(
                 telegramOptions,
