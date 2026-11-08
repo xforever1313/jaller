@@ -16,8 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System.Security.Cryptography.X509Certificates;
-using Jaller.Contracts.FolderManagement;
 using Jaller.Server.Extensions;
 using Jaller.Standard;
 using Jaller.Standard.FileManagement;
