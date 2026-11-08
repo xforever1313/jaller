@@ -31,6 +31,8 @@ namespace Jaller.Client
 
             using var httpClient = new HttpClient { BaseAddress = new Uri( builder.HostEnvironment.BaseAddress ) };
             builder.Services.AddScoped( sp => httpClient );
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddCascadingAuthenticationState();
 
             await builder.Build().RunAsync();
         }

@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Version>0.1.0</Version>
@@ -19,7 +19,6 @@
 	<PackageReference Include="LiteDB.Identity" />
 	<PackageReference Include="Markdig" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
     <PackageReference Include="Mono.Options" />
     <PackageReference Include="prometheus-net.AspNetCore" />

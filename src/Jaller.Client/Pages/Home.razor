@@ -17,6 +17,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 *@
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+
 @page "/"
 @inject HttpClient httpClient;
 @inject ILogger<Home> log;
@@ -26,4 +29,8 @@
 <FileTree />
 
 @code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
 }

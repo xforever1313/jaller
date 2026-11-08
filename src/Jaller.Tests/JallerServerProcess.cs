@@ -40,7 +40,7 @@ namespace Jaller.Tests
             this.csprojLocation = new FileInfo(
                 Path.Combine(
                     config.TestDirectory.FullName,
-                    "..", // Runtime Folder (e.g. net8.0)
+                    "..", // Runtime Folder (e.g. net10.0)
                     "..", // Debug
                     "..", // Bin
                     "..", // Jaller.Tests
