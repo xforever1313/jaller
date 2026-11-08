@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Jaller.Server.Pages
@@ -30,8 +31,9 @@ namespace Jaller.Server.Pages
 
         // ---------------- Methods ----------------
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            return RedirectToPage( "/Folder/Index" );
         }
     }
 }
